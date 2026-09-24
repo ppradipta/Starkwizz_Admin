@@ -1,0 +1,211 @@
+.page-container {
+    padding: 24px;
+    .customSegment {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0px 2px 12px #0a395a33;
+        overflow: hidden;
+        ion-segment {
+            max-width: 380px;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid #0A395A;
+            background: #fff;
+            margin: 0 auto;
+            ion-segment-button {
+                font-size: 14px;
+                font-weight: 500;
+                letter-spacing: 0;
+                color: #0A395A;
+                border-radius: 30px;
+                height: 38px;
+                min-height: unset;
+                min-width: unset;
+                margin: 0;
+                --indicator-height: 0;
+                --border-width: 0;
+                --color-checked: #fff;
+                &.segment-button-checked {
+                    color: #fff;
+                    background: #0A395A;
+                }
+                ion-label {
+                    margin: 0;
+                }
+            }
+        }
+    }
+    .card-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .custom-card {
+            margin: 12px 0;
+            border-radius: 10px;
+            width: calc(50% - 12px);
+            box-shadow: 0px 2px 12px #0a395a33;
+            overflow: hidden;
+            padding: 16px;
+            .card-heading {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                h4 {
+                    font-size: 24px;
+                    line-height: 26px;
+                    font-family: "Nunito-Bold";
+                    color: #0a395a;
+                    text-transform: capitalize;
+                    flex: 1;
+                    display: block;
+                    margin: 0 8px 0 0;
+                }
+                .status-badge {
+                    padding: 4px 6px;
+                    height: 24px;
+                    color: #fff;
+                    font-size: 13px;
+                    line-height: 18px;
+                    border-radius: 5px;
+                    font-family: "Nunito-SemiBold";
+                    &.started {
+                        background-color: #3880ff;
+                    }
+                    &.inprogress {
+                        background-color: #3dc2ff;
+                    }
+                    &.completed {
+                        background-color: #2dd36f;
+                    }
+                    &.rescheduled {
+                        background-color: #92949c;
+                    }
+                    &.evaluated {
+                        background-color: #ffc409;
+                    }
+                }
+            }
+            .subHeading {
+                font-size: 20px;
+                line-height: 22px;
+                font-family: "Nunito-SemiBold";
+                display: block;
+                color: #9c9c9c;
+                margin-bottom: 8px;
+            }
+            .card-detail {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                .section-row {
+                    margin: 8px 4px;
+                    display: flex;
+                    align-items: center;
+                    width: calc(50% - 8px);
+                    .section-label {
+                        font-size: 15px;
+                        line-height: 20px;
+                        font-family: "Nunito-Regular";
+                        display: block;
+                        margin-right: 4px;
+                        color: #727577;
+                    }
+                    .section-value {
+                        font-size: 16px;
+                        line-height: 20px;
+                        font-family: "Nunito-SemiBold";
+                        display: block;
+                        color: #0a395a;
+                    }
+                }
+            }
+        }
+    }
+}
+
+ion-header {
+    padding: 16px 20px;
+    background: #fff;
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .title {
+            font-size: 24px;
+            font-family: 'Nunito-SemiBold';
+            color: #0A395A;
+            margin: 0 20px 0 0;
+        }
+        .heading-right {
+            display: flex;
+            align-items: center;
+            ion-select {
+                min-width: 100px;
+                height: 34px;
+                --padding-end: 8px;
+                --padding-start: 8px;
+                margin-right: 6px;
+                font-family: 'Nunito-SemiBold';
+                font-size: 14px;
+                --placeholder-opacity: 0.7;
+            }
+            ::ng-deep ion-searchbar {
+                border-radius: 6px;
+                --border-radius: 0;
+                padding: 0;
+                height: 34px;
+                border: 1px solid #0A395A;
+                --background: #fff;
+                width: 220px;
+                input {
+                    padding-inline-start: 26px;
+                    padding-inline-end: 22px;
+                    font-size: 15px;
+                    font-family: 'Nunito-SemiBold';
+                }
+                .searchbar-search-icon.sc-ion-searchbar-ios {
+                    left: 5px;
+                    width: 18px;
+                }
+                .searchbar-clear-button.sc-ion-searchbar-ios {
+                    width: 24px;
+                }
+            }
+            ion-input {
+                width: 100px;
+                border: 1px solid #0A395A;
+                border-radius: 6px;
+                height: 34px;
+                --padding-end: 8px;
+                --padding-start: 8px;
+                --placeholder-opacity: 0.7;
+                margin-right: 20px;
+                font-family: 'Nunito-SemiBold';
+                font-size: 14px;
+            }
+            .search-btn {
+                --color: #fff;
+                --background: #0A395A;
+                margin: 0;
+                height: 34px;
+                letter-spacing: 0;
+                --box-shadow: none;
+            }
+        }
+    }
+}
+
+ion-popover {
+    --width: 320px !important;
+    --offset-x: -115px;
+}
+
+ion-content {
+    height: calc(100% - 66px);
+}

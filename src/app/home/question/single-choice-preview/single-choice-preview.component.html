@@ -1,0 +1,37 @@
+<!-- Singel choice -->
+<div class="question-list" *ngIf="question?.id">
+  <ion-button class="card-btn" (click)="onClickAddMoreQuestion()">Add More</ion-button>
+  <ion-button class="card-btn" (click)="onClickConfirmQuestion()">Confirm</ion-button>
+  <ion-button class="card-btn" (click)="onClickEditQuestion()">Edit</ion-button>
+  <ion-button class="card-btn" (click)="onClickDeleteQuestion()">Delete</ion-button>
+  <div class="tags">
+    <ion-badge>
+      <span>Board: {{question.board}}
+      </span>
+    </ion-badge>
+    <ion-badge>
+      <span>Class: {{question.class.displayName}}
+      </span>
+    </ion-badge>
+    <ion-badge>
+      <span>Subject: {{question.subject.displayName}}
+      </span>
+    </ion-badge>
+    <ion-badge>
+      <span>Module: {{question.module.displayName}}
+      </span>
+    </ion-badge>
+  </div>
+
+  <h5 class="question-label">{{question.text}}</h5>
+  <div class="question-option">
+    <ion-list>
+      <ion-radio-group [value]="question.answers[0]">
+        <ion-item *ngFor="let data of question.options">
+          <ion-label>{{data.text}}</ion-label>
+          <ion-radio slot="start" value="{{data.sequence}}" disabled></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  </div>
+</div>

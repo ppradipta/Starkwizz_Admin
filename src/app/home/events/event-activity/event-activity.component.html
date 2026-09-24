@@ -1,0 +1,97 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left d-flex align-items-center mb-3">
+      <ion-buttons slot="start">
+        <ion-button (click)="goBack()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <div class="d-flex justify-content-between w-100 pl-4">
+        <h4 class="title mr-2">Activity For {{event.eventName}}</h4>
+        <h4 class="title">Total {{eventActivities.length}}</h4>
+      </div>
+    </div>
+    <div class="heading-right">
+      <h4><b>Board :</b> {{event.boardName}}</h4>
+      <h4><b>Class :</b> {{event.className}}</h4>
+      <h4><b>Subject :</b> {{event.subjectName}}</h4>
+      <h4><b>Module name :</b> {{event.moduleName}} </h4>
+      <h4><b>mark :</b> {{event.eventMarks}}</h4>
+      <h4><b>Type :</b> {{event.applicableType}}</h4>
+      <h4><b>Start Date :</b> {{event.eventDate}}</h4>
+      <h4><b>End Date :</b> {{event.eventEndDate}}</h4>
+    </div>
+  </div>
+</ion-header>
+<ion-button class="search-btn" (click)="showAllActivities()">Show All</ion-button>
+<ion-content>
+
+  <div class="card-container">
+    <ion-card *ngFor="let useractivity of  eventActivities">
+      <ion-button class="search-btn" (click)="deleteActivities(useractivity)">Delete</ion-button>
+      <ion-item>
+        <!-- <ion-avatar slot="start"></ion-avatar> -->
+        <ion-label>
+          <h3> {{useractivity?.userDisplayName}}</h3>
+          <p>Mobile No : {{useractivity?.mobileNo}}</p>
+          <p>Appear Date : {{useractivity?.appearedDate}}</p>
+        </ion-label>
+        <ion-button class="search-btn" (click)="evealuateQuestionAns(useractivity)"
+        *ngIf="useractivity?.isSubjectiveEvaluationPending">Evaluate</ion-button>
+      </ion-item>
+      <ion-card-content>
+        <div class="eventInfo-container">
+          <div class="event-info">
+            <span>State :</span>
+            <ion-label class="card-label">{{useractivity?.stateName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>District :</span>
+            <ion-label class="card-label">{{useractivity?.districtName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>City :</span>
+            <ion-label class="card-label">{{useractivity?.cityName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>School :</span>
+            <ion-label class="card-label">{{useractivity?.schoolName}}</ion-label>
+          </div>
+          <div class="event-info w-100 mt-3">
+            <span class="head">Exam Details</span>
+          </div>
+          <div class="event-info">
+            <span>Mark :</span>
+            <ion-label class="card-label">{{useractivity?.totalSecuredMark}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Attemped :</span>
+            <ion-label class="card-label">{{useractivity?.totalAppearQuesiton}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Correct :</span>
+            <ion-label class="card-label">{{useractivity?.totalCorrect}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Skiped :</span>
+            <ion-label class="card-label">{{useractivity?.totalSkipQuestions}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>InCorrect :</span>
+            <ion-label class="card-label">{{useractivity?.totalInCorrect}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Time Taken :</span>
+            <ion-label class="card-label">{{useractivity?.totalExamTimeDisplay}}</ion-label>
+          </div>
+        </div>
+        <!-- <ion-button class="search-btn" (click)="evealuateQuestionAns(useractivity)"
+          *ngIf="useractivity?.isSubjectiveEvaluationPending">Evaluate</ion-button> -->
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ion-infinite-scroll (ionInfinite)="findNext($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

@@ -1,0 +1,184 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">User Events</h4>
+    </div>
+    <div class="heading-right">
+      <ion-select  placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-input value="{{ eventDate | date: 'dd-MM-YYYY' }}" id="date" placeholder="Date"></ion-input>
+      <ion-popover trigger="date" size="cover">
+        <ng-template>
+          <ion-datetime presentation="date" [ngModel]="eventDate" (ngModelChange)="eventDate=$event" name="dateOfBirth" required></ion-datetime>
+        </ng-template>
+      </ion-popover>
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="tabChanged($event)" [value]="segmentValue">
+        <ion-segment-button mode="md" value="EXAMS">
+          <ion-label>EXAMS</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" class="segmentBtn" value="EVENTS">
+          <ion-label>EVENTS</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <div class="card-container" *ngIf="segmentValue === 'EXAMS'">
+
+      <div class="customSegment">
+        <ion-segment mode="md" (ionChange)="examTabChanged($event)" [value]="examSegmentValue">
+          <!-- <ion-segment-button mode="md" value="STARTED">
+            <ion-label>STARTED</ion-label>
+          </ion-segment-button>
+          <ion-segment-button mode="md" value="INPROGRESS">
+            <ion-label>INPROGRESS</ion-label>
+          </ion-segment-button> -->
+          <ion-segment-button mode="md" value="COMPLETED">
+            <ion-label>COMPLETED</ion-label>
+          </ion-segment-button>
+          <ion-segment-button mode="md" class="segmentBtn" value="RESCHEDULED">
+            <ion-label>RESCHEDULED</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <div class="custom-card" *ngFor="let event of examDetails">
+        <div class="card-heading">
+          <h4>{{event?.eventName}}</h4>
+          <ion-label class="status-badge started" *ngIf="event?.status =='STARTED'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge inprogress" *ngIf="event?.status =='INPROGRESS'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge completed" *ngIf="event?.status =='COMPLETED'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge rescheduled" *ngIf="event?.status =='RESCHEDULED'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge evaluated" *ngIf="event?.status =='EVALUATED'">{{event?.status}}</ion-label>
+        </div>
+        <ion-label class="subHeading">{{event?.moduleName}}</ion-label>
+        <div class="card-detail">
+          <div class="section-row">
+            <ion-label class="section-label">Event Date:</ion-label>
+            <ion-label class="section-value">{{event?.eventDate}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Appeared Date:</ion-label>
+            <ion-label class="section-value">{{event?.appearedDate}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Score:</ion-label>
+            <ion-label class="section-value">{{event?.totalScore}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Questions:</ion-label>
+            <ion-label class="section-value">{{event?.questions.length}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Correct Answers:</ion-label>
+            <ion-label class="section-value">{{event?.correctAnswers}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total In-Correct Answers:</ion-label>
+            <ion-label class="section-value">{{event?.inCorrectAnswers}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Skipped Answers:</ion-label>
+            <ion-label class="section-value">{{event?.skippedQuestions}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Time Taken:</ion-label>
+            <ion-label class="section-value">{{event?.totalEventAppearTime}} mins</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">User Name:</ion-label>
+            <ion-label class="section-value">{{event?.userName}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Board Name:</ion-label>
+            <ion-label class="section-value">{{event?.boardName}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Class Name:</ion-label>
+            <ion-label class="section-value">{{event?.className}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Categroy:</ion-label>
+            <ion-label class="section-value">{{event?.category}}</ion-label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-------------------------------------------------------------------------------------------------------------->
+ 
+    <div class="card-container" *ngIf="segmentValue === 'EVENTS'">
+      <div class="custom-card" *ngFor="let event of eventDetails">
+        <div class="card-heading">
+          <h4>{{event?.eventName}}</h4>
+          <ion-label class="status-badge started" *ngIf="event?.status =='STARTED'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge inprogress" *ngIf="event?.status =='INPROGRESS'">{{event?.status}}</ion-label>
+          <ion-label class="status-badge completed" *ngIf="event?.status =='COMPLETED'">{{event?.status}}</ion-label>
+        </div>
+        <ion-label class="subHeading">{{event?.moduleName}}</ion-label>
+        <div class="card-detail">
+          <div class="section-row">
+            <ion-label class="section-label">Event Date:</ion-label>
+            <ion-label class="section-value">{{event?.eventDate}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Appeared Date:</ion-label>
+            <ion-label class="section-value">{{event?.appearedDate}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Score:</ion-label>
+            <ion-label class="section-value">{{event?.totalScore}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Questions:</ion-label>
+            <ion-label class="section-value">{{event?.questions.length}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Correct Answers:</ion-label>
+            <ion-label class="section-value">{{event?.correctAnswers}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total In-Correct Answers:</ion-label>
+            <ion-label class="section-value">{{event?.inCorrectAnswers}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Skipped Answers:</ion-label>
+            <ion-label class="section-value">{{event?.skippedQuestions}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Total Time Taken:</ion-label>
+            <ion-label class="section-value">{{event?.totalEventAppearTime}} mins</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">User Name:</ion-label>
+            <ion-label class="section-value">{{event?.userName}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Board Name:</ion-label>
+            <ion-label class="section-value">{{event?.boardName}}</ion-label>
+          </div>
+          <div class="section-row">
+            <ion-label class="section-label">Class Name:</ion-label>
+            <ion-label class="section-value">{{event?.className}}</ion-label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

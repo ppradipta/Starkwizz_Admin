@@ -1,0 +1,301 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Add Event
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="eventDetailForm" #eventDetailForm="ngForm" autocomplete="off">
+      <ion-row>
+        <ion-col size="3">
+          <div class="custom-input">
+            <ion-label>Select Event Type<span>*</span></ion-label>
+            <ion-select mode="md" id="eventType" name="eventType" placeholder="Select Event Type"
+              (click)="selectEventType()" [(ngModel)]="eventDetails.typeId">
+              <ion-select-option *ngFor="let eventt of eventTypes" [value]="eventt.id">{{eventt.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="8">
+          <div class="custom-input">
+            <ion-label>Event Name<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="eventDetails.eventName" name="name" type="text" required
+              placeholder="Enter Event Name">
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <!-- <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Event Discription<span>*</span></ion-label>
+            <ion-textarea id="disc" [(ngModel)]="eventDetails.description" name="disc" type="text" row="2" required
+              placeholder="Enter Event Description">
+            </ion-textarea>
+          </div>
+        </ion-col> -->
+        <!-- <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Event Info<span>*</span></ion-label>
+            <ion-textarea id="disc" [(ngModel)]="eventDetails.eventInfo" name="disc" type="text" row="2" required
+              placeholder="Enter Event Information">
+            </ion-textarea>
+          </div>
+        </ion-col> -->
+        <ion-col size="4">
+          <ion-label>Select Event Category<span>*</span></ion-label>
+          <ion-select mode="md" id="eventCategory" name="eventCategory" placeholder="Select Event Category"
+            (click)="seleEventCategory()" [(ngModel)]="eventDetails.eventCategoryId">
+            <ion-select-option *ngFor="let evtcategory of eventCategories" [value]="evtcategory.id">
+              {{evtcategory.displayName}}</ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Select Category<span>*</span></ion-label>
+            <ion-select mode="md" id="class" name="category" [(ngModel)]="eventDetails.categoryId"
+              placeholder="Select Event Category" (click)="selectCategory()">
+              <ion-select-option *ngFor="let cat of categories" [value]="cat.id">{{cat?.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Select Board<span>*</span></ion-label>
+            <ion-select mode="md" id="board" name="board" placeholder="Select Board" (click)="selectBoard($event)"
+              [(ngModel)]="eventDetails.boardId">
+              <ion-select-option *ngFor="let board of boardDetails" [value]="board.id">{{board.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ng-container *ngIf="eventDetails.typeId == 'dynamoexam' || eventDetails.typeId == 'quizwhizz2exam'">
+          <ion-col size="3">
+            <div class="custom-input" (click)="selectState($event)">
+              <ion-label>State<span>*</span></ion-label>
+              <ion-select name="state" [(ngModel)]="eventDetails.stateId" placeholder="Please Select State Name"
+              [interfaceOptions]="actionSheetState" (click)="selectState($event)">
+                <ion-select-option *ngFor="let state of stateList" [value]="state.id">{{state.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="custom-input" (click)="selectDistrict($event)">
+              <ion-label>District<span>*</span></ion-label>
+              <ion-select name="district" [(ngModel)]="eventDetails.districtId" [interfaceOptions]="actionSheetDistrict"
+                placeholder="Please Select District Name" (click)="selectDistrict($event)">
+                <ion-select-option *ngFor="let dist of districts" [value]="dist.id">{{dist.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="custom-input" (click)="selectCity($event)">
+              <ion-label>City / Block Name<span>*</span></ion-label>
+              <ion-select name="city" [(ngModel)]="eventDetails.cityId" placeholder="Please Select City/Block Name"
+              [interfaceOptions]="actionSheetCity" (click)="selectCity($event)">
+                <ion-select-option *ngFor="let city of cities" [value]="city.id">{{city.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+
+          <ion-col size="3">
+            <div class="custom-input" (click)="selectSchool($event)">
+              <ion-label>School Name<span>*</span></ion-label>
+              <ion-select name="school" [(ngModel)]="eventDetails.schoolId" placeholder="Please Select School"
+              [interfaceOptions]="actionSheetSchool" (click)="selectSchool($event)">
+                <ion-select-option *ngFor="let school of schools" [value]="school.id">{{school.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ng-container>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Select Class<span>*</span></ion-label>
+            <ion-select mode="md" id="class" name="class" placeholder="Select Class" (click)="selectClass($event)"
+              [(ngModel)]="eventDetails.classId">
+              <ion-select-option *ngFor="let class of classDetails" [value]="class.id">{{class.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Select Subject<span>*</span></ion-label>
+            <ion-select mode="md" id="subject" name="subject" placeholder="Select Subject"
+              (click)="selectSubject($event)" [(ngModel)]="eventDetails.subjectId">
+              <ion-select-option *ngFor="let subject of subjectDetails" [value]="subject.id">{{subject.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Select Module </ion-label>
+            <ion-select mode="md" id="module" name="module" placeholder="Select Modul" (click)="selectModule($event)"
+              [(ngModel)]="eventDetails.moduleId">
+              <ion-select-option *ngFor="let module of moduleDetails" [value]="module.id">{{module.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Price<span>*</span></ion-label>
+            <ion-input [(ngModel)]="eventDetails.price" id="price" name="price" type="number" autofocus
+              inputmode="number" required class="p-1" placeholder="Price For Event"></ion-input>
+          </div>
+        </ion-col>
+
+
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Total Time(sec)<span>*</span></ion-label>
+            <ion-input id="totalHour" [(ngModel)]="eventDetails.totalHour" name="totalHour" type="text" required
+              placeholder="Enter Time in Seconds">
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Question Time(sec)<span>*</span></ion-label>
+            <ion-input id="perQuestionHour" [(ngModel)]="eventDetails.perQuestionHour" name="perQuestionHour"
+              type="text" required placeholder="Enter Time in Seconds">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Question Pattern<span>*</span></ion-label>
+            <ion-select mode="md" id="questionpattern" name="questionpattern" placeholder="Question Pattern"
+              (click)="selectQuestionPattern($event)" [(ngModel)]="eventDetails.questionPattern">
+              <ion-select-option *ngFor="let qpattern of questionPatterns" [value]="qpattern.id">
+                {{qpattern.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Question To Attemp<span>*</span></ion-label>
+            <ion-input id="questionToAttemp" [(ngModel)]="eventDetails.questionToAttemp" name="questionToAttemp"
+              type="text" required placeholder="Allow Question To Attemp">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Applicable Type<span>*</span></ion-label>
+            <ion-select mode="md" id="applicableType" name="applicableType" placeholder="Applicable Type"
+              (click)="selectApplicableType($event)" [(ngModel)]="eventDetails.applicableType">
+              <ion-select-option *ngFor="let atype of applicableTypes" [value]="atype.id">
+                {{atype.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Event Marks<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="eventDetails.eventMarks" name="mark" type="text" required
+              placeholder="Enter total mark">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Pass Marks(Question Count)<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="eventDetails.passMark" name="passmark" type="text" required
+              placeholder="Enter Qualify Question Count">
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Select Test</ion-label>
+            <ion-radio-group [(ngModel)]="eventDetails.testType" [ngModelOptions]="{standalone: true}">
+              <ion-item>
+                <ion-label class="m-0">INITIAL-TEST</ion-label>
+                <ion-radio slot="start" value="INITIAL-TEST"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label class="m-0">TERMINAL-TEST</ion-label>
+                <ion-radio slot="start" value="TERMINAL-TEST"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </div>
+        </ion-col>
+
+        <ion-col size="4">
+          <ion-item id="open-modal-event-start">
+            <ion-icon icon="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              Event Start Date
+            </ion-label>
+            <ion-text slot="end">{{eventDetails.eventStartDate}}</ion-text>
+          </ion-item>
+
+          <ion-modal trigger="open-modal-event-start" class="date-modal" mode="md">
+            <ng-template>
+              <ion-content class="date-content">
+                <ion-datetime #inputdate presentation="date" size="cover" [(ngModel)]="eventDetails.eventStartDate"
+                  (ionChange)="eventStartDateChange(inputdate.value)" showDefaultButtons="true" [max]="maxDate"
+                  [min]="minDate" [ngModelOptions]="{standalone: true}">
+                </ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item id="open-modal-event-end">
+            <ion-icon icon="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              Event End Date
+            </ion-label>
+            <ion-text slot="end">{{eventDetails.eventEndDate}}</ion-text>
+          </ion-item>
+
+          <ion-modal trigger="open-modal-event-end" class="date-modal" mode="md">
+            <ng-template>
+              <ion-content class="date-content">
+                <ion-datetime #inputdate presentation="date" size="cover" [(ngModel)]="eventDetails.eventEndDate"
+                  (ionChange)="eventEndDateChange(inputdate.value)" showDefaultButtons="true" [max]="maxDate"
+                  [min]="minDate" [ngModelOptions]="{standalone: true}">
+                </ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button [disabled]="!eventDetailForm.valid" mode="md" class="okay-btn" (click)="saveEvent()">Save</ion-button>
+  </div>
+</ion-footer>

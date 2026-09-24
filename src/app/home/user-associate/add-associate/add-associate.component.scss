@@ -1,0 +1,112 @@
+ion-header {
+    padding: 16px 20px;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            font-size: 24px;
+            font-family: 'Nunito-SemiBold';
+            color: #0A395A;
+            margin: 0 20px 0 0;
+        }
+    }
+
+    ion-button {
+        --color: #fff;
+        --background: #0A395A;
+        margin: 0;
+        height: 34px;
+        letter-spacing: 0;
+        --box-shadow: none;
+    }
+}
+
+.date-ion-content {
+    --keyboard-offset: 0px !important;
+}
+
+.input-content {
+    .select-input {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        ion-select {
+            max-width: 50%;
+            width: calc(50% - 8px);
+            border: 1px solid #0a395a;
+            border-radius: 6px;
+            --padding-end: 12px;
+            --padding-start: 12px;
+            height: 42px;
+            --placeholder-opacity: 0.6;
+            font-size: 15px;
+            font-family: "Nunito-SemiBold";
+            margin-bottom: 13px;
+        }
+    }
+
+    // ion-list {
+    //     padding: 0;
+    //     margin-bottom: 8px;
+
+    //     ion-label {
+    //         font-size: 15px;
+    //         line-height: 20px;
+    //         color: #0a395a;
+    //         margin-bottom: 6px;
+    //         display: block;
+    //         font-family: 'Nunito-Bold';
+    //     }
+
+    //     ion-radio-group {
+    //         display: flex;
+    //         justify-content: space-between;
+
+    //         ion-item {
+    //             width: calc(50% - 10px);
+    //             border: 1px solid #0a395a;
+    //             border-radius: 6px;
+    //             --padding-end: 12px;
+    //             --padding-start: 12px;
+    //             --min-height: 42px;
+    //             --inner-border-width: 0;
+    //             text-align: center;
+
+    //             &.item-radio-checked {
+    //                 --background: #0a395a;
+
+    //                 ion-label {
+    //                     color: #fff;
+    //                 }
+    //             }
+
+    //             ion-label {
+    //                 margin: 0;
+    //                 font-size: 18px;
+    //                 font-family: 'Nunito-Bold';
+    //             }
+
+    //             ion-radio {
+    //                 margin: 0;
+    //                 width: 0;
+    //                 opacity: 0;
+    //             }
+    //         }
+    //     }
+    // }
+
+    h4 {
+        font-size: 15px;
+        line-height: 20px;
+        color: #0a395a;
+        margin: 16px 0 6px;
+        font-family: 'Nunito-Bold';
+    }
+}

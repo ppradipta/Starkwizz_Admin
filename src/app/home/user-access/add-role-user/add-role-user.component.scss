@@ -1,0 +1,38 @@
+ion-header {
+    padding: 10px 20px;
+
+    ion-title {
+        padding: 0;
+    }
+}
+
+.input-content {
+    .login-input {
+        position: relative;
+
+        .hideShowIcon {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            color: #94a3b8;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            z-index: 5;
+
+            &:hover {
+                background-color: #efefef;
+            }
+        }
+
+        ion-select {
+            max-width: 100%;
+            margin-bottom: 6px;
+        }
+    }
+}

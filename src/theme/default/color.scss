@@ -1,0 +1,130 @@
+/*----dashboard----*/
+.background {
+    background: #003a51;
+}
+
+#container p { 
+    color: #8c8c8c;  
+} 
+
+.common-top-header{
+    .heading {
+        color: #fff; 
+        background: #003a51; 
+    } 
+    .title { 
+        color: #424242;
+    } 
+    .background {
+        background: #003a51; 
+    } 
+    .big-circle { 
+        background: rgba(57, 103, 122, 0.19);
+        box-shadow: 0px 3px 6px -5px #00000029;
+    } 
+    .big-circle1 { 
+        background: rgba(57, 103, 122, 0.19);
+        box-shadow: 0px 3px 6px -5px #00000029; 
+    }
+    
+    .small-circle {  
+        background: rgba(57, 103, 122, 0.19); 
+    }  
+    .profile-icon {
+        box-shadow: 0 10px 132px #0000000d; 
+        border: 2px solid white; 
+        background: #fff; 
+    }
+    .button-text { 
+        color: #003a51;  
+    }
+   
+      
+}
+.manager-dashboard{
+    .col-cards { 
+        background: #ffffff; 
+        box-shadow: 0px 6px 22px #00000014; 
+    }  
+}
+
+/*----theme css for employee scheduling manager ----*/
+.empl-sch{
+    --background:#fff imp !important; 
+  
+  .content { 
+      background-color: #ffffff;  
+  }
+  ion-datetime { 
+      border: 1px solid lightgray;
+  }
+  ion-input {
+      border: 1px solid lightgray; 
+  }
+  
+  .bor-select{
+      border: 1px solid lightgray;
+  }
+  .days { 
+      border: 1px dashed #4CAF50; 
+    }
+  
+    .uncheck {
+      color: gray;
+    }
+    .check {
+      color: forestgreen;
+    } 
+  
+  
+  .employee-tag {
+      background: gainsboro; 
+  }
+  .close-icon { 
+      background: #000; 
+  } 
+   
+     
+  
+  .speacial-date{
+      --background: none; 
+    }
+    .speial-card-menu{ 
+      background: none;
+        ion-label{
+          color: #000; 
+        }
+        .multi-search{
+          border: 1px solid #758D9B; 
+          background: #fff;
+          
+          input{
+            background: #fff; 
+          }
+        }
+        ion-searchbar{
+          --background: #fff; 
+        }
+        ion-chip{ 
+          background: #FFEDD5;
+          border: 1px solid #C6A06D; 
+          ion-label{
+            color:#000; 
+          }
+        }
+        .allergies-span{ 
+          background: #C9FFF0;
+          border: 1px solid #8CD1BE; 
+          ion-label{
+            color:#000; 
+          }
+           
+        }
+    }
+    .searchResult { 
+      border: 1px solid lightgray; 
+      box-shadow:  0px 4px 4px 0 #0000001c;
+    }
+  }
+  
+  /*----theme css for employee scheduling manager ----*/

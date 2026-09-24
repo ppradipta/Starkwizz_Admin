@@ -1,0 +1,90 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Notification</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="page-container">
+    <div class="d-flex justify-content-end mb-3">
+      <ion-button mode="md" fill="outline" class="add-btn" (click)="onClickAddEdit()">Add Notification</ion-button>
+    </div>
+    <div class="main-card" *ngFor="let noti of notifications">
+      <div class="card-left">
+        <div class="date">
+          <ion-icon name="calendar-outline"></ion-icon>{{noti.createDate | date: 'dd-MM-YYYY' }}
+          <ion-icon name="time-outline" class="ms-3"></ion-icon>{{noti.createDate | date: 'HH:mm A' }}
+        </div>
+
+        <div *ngIf="noti.name">
+          <ion-label class="card-label">{{noti.name}}({{noti.functionType}})</ion-label>
+        </div>
+        <div class="d-flex flex-wrap mb-2">
+          <div class="event-info" *ngIf="noti.stateName">
+            <span>State:</span>
+            <ion-label class="card-label">{{noti.stateName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.districtName">
+            <span>District:</span>
+            <ion-label class="card-label">{{noti.districtName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.cityName">
+            <span>City:</span>
+            <ion-label class="card-label">{{noti.cityName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.boardName">
+            <span>Board:</span>
+            <ion-label class="card-label">{{noti.boardName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.schoolName">
+            <span>school:</span>
+            <ion-label class="card-label">{{noti.schoolName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.className">
+            <span>Class:</span>
+            <ion-label class="card-label">{{noti.className}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.subjectName">
+            <span>Subject:</span>
+            <ion-label class="card-label">{{noti.subjectName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.moduleName">
+            <span>Module:</span>
+            <ion-label class="card-label">{{noti.moduleName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.type">
+            <span>Type:</span>
+            <ion-label class="card-label">{{noti.type}}</ion-label>
+          </div>
+        </div>
+        <div class="p-2" *ngIf="noti.msg">
+          <p>{{noti.msg}}
+          </p>
+        </div>
+        <div class="d-flex flex-wrap mb-2">
+          <div class="event-info" *ngIf="noti.sucesscount">
+            <span>Sucess Count:</span>
+            <ion-label class="card-label">{{noti.sucesscount}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.failCount">
+            <span>Fail Count:</span>
+            <ion-label class="card-label">{{noti.failCount}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="noti.lastProcessDate">
+            <span>Last Send date:</span>
+            <ion-label class="card-label">{{noti.lastProcessDate}}</ion-label>
+          </div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div class="mb-2">
+          <ion-button class="card-btn mb-3" (click)="sendNotifications(noti)">Send</ion-button>
+          <ion-button class="card-btn mb-3" (click)="editNotifications(noti)">Edit</ion-button>
+          <ion-button class="card-btn button-outline" (click)="deleteNotifications(noti)">Delete</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

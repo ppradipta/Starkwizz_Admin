@@ -1,0 +1,57 @@
+<div class="custom-card">
+<div class="mb-4">
+  <ion-textarea type="text" name="question" id="question" placeholder="Enter Question" rows="3"></ion-textarea>
+  <div class="input-container">
+    <ion-input type="text" name="hint" id="hint" placeholder="Hint (optional)"></ion-input>
+    <ion-input class="file-input" type="file" name="file" id="file" multiple="true"></ion-input>
+  </div>
+</div>
+
+<div class="mb-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h4 class="title">Option</h4>
+    <ion-button class="option-btn">Add Option</ion-button>
+  </div>
+  <div>
+    <div class="custom-input">
+      <ion-input type="text" name="options" id="options" placeholder="Enter Option"></ion-input>
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </div>
+    <div class="custom-input">
+      <ion-input type="text" name="options" id="options" placeholder="Enter Option"></ion-input>
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </div>
+    <div class="custom-input">
+      <ion-input type="text" name="options" id="options" placeholder="Enter Option"></ion-input>
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </div>
+    <div class="custom-input">
+      <ion-input type="text" name="options" id="options" placeholder="Enter Option"></ion-input>
+      <ion-icon class="close-icon" name="close"></ion-icon>
+    </div>
+  </div>
+</div>
+<div class="d-flex align-items-center justify-content-between">
+  <div class="correct-option">
+    <ion-label>Select Correct Option</ion-label>
+    <ion-select mode="md" name="class" placeholder="Select Correct Option" multiple="true">
+      <ion-select-option value="optionA">Option A</ion-select-option>
+      <ion-select-option value="optionB">Option B</ion-select-option>
+      <ion-select-option value="optionC">Option C</ion-select-option>
+      <ion-select-option value="optionD">Option D</ion-select-option>
+    </ion-select>
+  </div>
+  <div class="correct-option">
+    <ion-label>Mark</ion-label>
+    <ion-input type="number" name="mark" id="mark" placeholder="Enter mark"></ion-input>
+  </div>
+  <div class="correct-option">
+    <ion-label>Point</ion-label>
+    <ion-input type="number" name="point" id="point" placeholder="Enter point"></ion-input>
+  </div>
+</div>
+<div class="footer-toolbar">
+  <ion-button mode="md" fill="outline" class="cancel-btn">Cancel</ion-button>
+  <ion-button mode="md" class="okay-btn">Save</ion-button>
+</div>
+</div>

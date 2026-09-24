@@ -1,0 +1,683 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Subscription</ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div>
+      <div class="custom-card">
+        <div class="card-title">
+          <h4>Dynamo Subscription</h4>
+          <div class="content-right">
+            <div>
+              <ion-button class="downLoad" (click)="downloadDynamoSubscription()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+            <div>
+              <ion-text class="inputLabel">Board</ion-text>
+              <ion-select placeholder="Board" mode="ios" (ionChange)="onSelectBoard($event)">
+                <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <div>
+              <ion-text class="inputLabel">Class</ion-text>
+              <ion-select placeholder="Class" mode="ios" (ionChange)="onSelectClass($event)">
+                <ion-select-option *ngFor="let class of classes"
+                  [value]="class">{{class.displayName}}</ion-select-option>
+              </ion-select>
+            </div>
+            <div>
+              <ion-text class="inputLabel">Subscription</ion-text>
+              <ion-input value="{{ dynamoSubscriptionDate | date: 'dd-MM-YYYY' }}" id="dynamoSubscriptionDate"
+                placeholder="subscription Date"></ion-input>
+              <ion-popover trigger="dynamoSubscriptionDate" size="cover">
+                <ng-template>
+                  <ion-datetime presentation="dynamoSubscriptionDate" [(ngModel)]="dynamoSubscriptionDate"
+                    name="dynamoSubscriptionDate"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </div>
+            <!-- <div>
+              <ion-text class="inputLabel">Expiry</ion-text>
+              <ion-input value="{{ dynamoSubscriptionExpDate | date: 'dd-MM-YYYY' }}" id="dynamoSubscriptionExpDate"
+                placeholder="expiry Date"></ion-input>
+              <ion-popover trigger="dynamoSubscriptionExpDate" size="cover">
+                <ng-template>
+                  <ion-datetime presentation="dynamoSubscriptionExpDate" [(ngModel)]="dynamoSubscriptionExpDate"
+                    name="dynamoSubscriptionExpDate"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </div> -->
+            <ion-button class="search-btn" (click)="searchDynamoSubscription()">Search</ion-button>
+          </div>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="dataSource6Filter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource6" matSort>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+              <td mat-cell *matCellDef="let row">
+                <ion-button class="clear-btn" fill="clear"
+                  (click)="viewUserDetails(row.userId)">{{row?.userDetails?.displayName}}</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="mobileNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile No </th>
+              <td mat-cell *matCellDef="let row"> {{row?.userDetails?.mobileNo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="className">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+              <td mat-cell *matCellDef="let row">{{row?.className}} </td>
+            </ng-container>
+            <ng-container matColumnDef="subscribedDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Subscribe Date </th>
+              <td mat-cell *matCellDef="let row">{{row?.subscribedDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="expiryDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date </th>
+              <td mat-cell *matCellDef="let row">{{row?.expiryDate}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="dynamoSubscriptionColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: dynamoSubscriptionColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator6></mat-paginator>
+        </div>
+      </div>
+      <div class="custom-card">
+        <div class="card-title">
+          <h4>Event Subscription</h4>
+          <div class="content-right">
+            <div>
+              <ion-button class="downLoad" (click)="downloadEventSubscription()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+            <!-- <div>
+              <ion-text class="inputLabel">Board</ion-text>
+              <ion-select placeholder="Board" mode="ios" (ionChange)="onSelectBoard($event)">
+                <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div> -->
+            <!-- <div>
+              <ion-text class="inputLabel">Class</ion-text>
+              <ion-select placeholder="Class" mode="ios" (ionChange)="onSelectClass($event)">
+                <ion-select-option *ngFor="let class of classes"
+                  [value]="class">{{class.displayName}}</ion-select-option>
+              </ion-select>
+            </div> -->
+            <div>
+              <ion-text class="inputLabel">Subscription</ion-text>
+              <ion-input value="{{ eventSubscriptionDate | date: 'dd-MM-YYYY' }}" id="eventSubscriptionDate"
+                placeholder="subscription Date"></ion-input>
+              <ion-popover trigger="eventSubscriptionDate" size="cover">
+                <ng-template>
+                  <ion-datetime presentation="eventSubscriptionDate" [(ngModel)]="eventSubscriptionDate"
+                    name="eventSubscriptionDate" required></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </div>
+            <!-- <div>
+              <ion-text class="inputLabel">Expiry</ion-text>
+              <ion-input value="{{ eventSubscriptionExpDate | date: 'dd-MM-YYYY' }}" id="eventSubscriptionExpDate"
+                placeholder="expiry Date"></ion-input>
+              <ion-popover trigger="eventSubscriptionExpDate" size="cover">
+                <ng-template>
+                  <ion-datetime presentation="eventSubscriptionExpDate" [(ngModel)]="eventSubscriptionExpDate"
+                    name="eventSubscriptionExpDate" required></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </div> -->
+            <ion-button class="search-btn" (click)="searchEventSubscription()">Search</ion-button>
+          </div>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="dataSource5Filter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource5" matSort>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+              <td mat-cell *matCellDef="let row">
+                <ion-button class="clear-btn" fill="clear"
+                  (click)="viewUserDetails(row.userId)">{{row?.userDetails?.displayName}}</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="mobileNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile No </th>
+              <td mat-cell *matCellDef="let row"> {{row?.userDetails?.mobileNo}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="className">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+              <td mat-cell *matCellDef="let row">{{row?.className}} </td>
+            </ng-container> -->
+            <ng-container matColumnDef="subscribedDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Subscribe Date </th>
+              <td mat-cell *matCellDef="let row">{{row?.subscribedDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="expiryDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiry Date </th>
+              <td mat-cell *matCellDef="let row">
+                <div class="d-flex align-items-center ms-3">
+                {{row?.expiryDate}}
+                <ion-button class="downLoad ms-2" (click)="downloadSubscriberEvents(row.userId)" style="height: 30px;">
+                  <ion-icon name="cloud-download-outline" class="m-0" slot="start"></ion-icon>
+                  <!-- Download -->
+                </ion-button>
+              </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="eventSubscriptionColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: eventSubscriptionColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator5></mat-paginator>
+        </div>
+      </div>
+    </div>
+    <div class="card-container">
+
+      <div class="custom-card">
+        <div class="card-title">
+          <h4>Boards</h4>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="boardName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Board Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="students">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Students </th>
+              <td mat-cell *matCellDef="let row">
+                <ion-button class="clear-btn" fill="clear"
+                  (click)="viewStudentsDetailsForBoard(row)">Students</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="events">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Events </th>
+              <td mat-cell *matCellDef="let row">
+                <ion-button class="clear-btn" fill="clear" (click)="viewEeventsDetailsForBoard(row)">Event</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="exams">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Exams </th>
+              <td mat-cell *matCellDef="let row">
+                <ion-button class="clear-btn" fill="clear" (click)="viewExamDetailsForBoard(row)">Exam</ion-button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator1></mat-paginator>
+        </div>
+      </div>
+
+      <div class="custom-card" *ngIf="currentSelectReport">
+        <div class="card-title">
+          <h4>{{currentSelectReport}}</h4>
+          <div class="content-right">
+            <div *ngIf="currentSelectReport == 'Students'">
+              <ion-button class="downLoad" (click)="downloadStudents()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+            <div *ngIf="currentSelectReport == 'Events'">
+              <ion-button class="downLoad" (click)="downloadEvents()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+
+            <div *ngIf="currentSelectReport == 'Exams'">
+              <ion-button class="downLoad" (click)="downloadExams()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+            <div>
+              <ion-text class="inputLabel">Board</ion-text>
+              <ion-select placeholder="Board" mode="ios" (ionChange)="onSelectBoard($event)">
+                <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <div>
+              <ion-text class="inputLabel">Class</ion-text>
+              <ion-select placeholder="Class" mode="ios" (ionChange)="onSelectClass($event)">
+                <ion-select-option *ngFor="let class of classes"
+                  [value]="class">{{class.displayName}}</ion-select-option>
+              </ion-select>
+            </div>
+            <div *ngIf="currentSelectReport !== 'Students'">
+              <ion-text class="inputLabel">Subject</ion-text>
+              <ion-select placeholder="Subject" mode="ios" (ionChange)="onSelectSubject($event)">
+                <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+              </ion-select>
+            </div>
+            <div *ngIf="currentSelectReport === 'Students'">
+              <ion-text class="inputLabel">State</ion-text>
+              <ion-select placeholder="State" mode="ios" (ionChange)="selectState($event)">
+                <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <div *ngIf="currentSelectReport === 'Students'">
+              <ion-text class="inputLabel">Disctrict</ion-text>
+              <ion-select placeholder="Disctrict" mode="ios" (ionChange)="selectDistrict($event)">
+                <ion-select-option *ngFor="let district of allDistricts" [value]="district">{{district.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+            <div *ngIf="currentSelectReport === 'Students'">
+              <ion-text class="inputLabel">Cities</ion-text>
+              <ion-select placeholder="Cities" mode="ios" (ionChange)="selectCities($event)">
+                <ion-select-option *ngFor="let cities of allCities" [value]="cities">{{cities.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+
+            <div *ngIf="currentSelectReport === 'Students'">
+              <ion-text class="inputLabel">School</ion-text>
+              <ion-select placeholder="School" mode="ios" (ionChange)="selectSchool($event)">
+                <ion-select-option *ngFor="let scl of schools" [value]="scl">{{scl.displayName}}</ion-select-option>
+              </ion-select>
+            </div>
+            <!-- <div *ngIf="currentSelectReport !== 'Students'">
+              <ion-text class="inputLabel">Type</ion-text>
+              <ion-select placeholder="Type" mode="ios" (ionChange)="selectType($event)">
+                <ion-select-option *ngFor="let typ of accountTypes" [value]="accountType">{{typ.displayName}}</ion-select-option>
+              </ion-select>
+            </div> -->
+            <!-- <div *ngIf="currentSelectReport !== 'Students'">
+              <ion-text class="inputLabel">Date</ion-text>
+              <ion-input value="{{ Date | date: 'dd-MM-YYYY' }}" id="date2" placeholder="Date"></ion-input>
+              <ion-popover trigger="date2" size="cover">
+                <ng-template>
+                  <ion-datetime presentation="date2" [ngModel]="Date" (ngModelChange)="Date=$event" name="Date"
+                    required></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </div> -->
+            <ion-button class="search-btn" (click)="searchAccodingToReprotType(currentSelectReport)">Search</ion-button>
+          </div>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="dataSource2Filter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource2" matSort *ngIf="currentSelectReport === 'Students'">
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index" style="white-space: nowrap;"> {{i+1}}
+                <ion-button class="clear-btn" fill="clear" (click)="viewActivityDetails(row)">Activity</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.firstName}} {{row.lastName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="class">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+              <td mat-cell *matCellDef="let row"> {{row.className}}</td>
+            </ng-container>
+            <ng-container matColumnDef="mobile">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile No </th>
+              <td mat-cell *matCellDef="let row"> {{row.mobileNo}}</td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="profileType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> ProfileType </th>
+              <td mat-cell *matCellDef="let row"> {{row.profileType}}</td>
+            </ng-container> -->
+            <!-- <ng-container matColumnDef="city">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> City </th>
+              <td mat-cell *matCellDef="let row"> {{row.cityName}}</td>
+            </ng-container> -->
+            <!-- <ng-container matColumnDef="state">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
+              <td mat-cell *matCellDef="let row"> {{row.stateName}}</td>
+            </ng-container> -->
+            <ng-container matColumnDef="schoolName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> School Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.schoolName}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="studentColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: studentColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <table mat-table [dataSource]="dataSource2" matSort *ngIf="currentSelectReport === 'Events'">
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index" style="white-space: nowrap;"> {{i+1}}
+                <ion-button class="clear-btn" fill="clear"
+                  (click)="viewActivityDetailsForEvent(row)">Activity</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="class">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+              <td mat-cell *matCellDef="let row"> {{row.className}}</td>
+            </ng-container>
+            <ng-container matColumnDef="subject">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+              <td mat-cell *matCellDef="let row"> {{row.subjectName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let row"> {{row.status}}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let row"> {{row.applicableType}}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+              <td mat-cell *matCellDef="let row"> {{row.price}}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+              <td mat-cell *matCellDef="let row"> {{row.category}}</td>
+            </ng-container>
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventStartDate}}</td>
+            </ng-container>
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventEndDate}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="eventColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: eventColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <table mat-table [dataSource]="dataSource2" matSort *ngIf="currentSelectReport === 'Exams'">
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index" style="white-space: nowrap;"> {{i+1}}
+                <ion-button class="clear-btn" fill="clear" (click)="viewActivityDetails(row)">Activity</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="class">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+              <td mat-cell *matCellDef="let row"> {{row.className}}</td>
+            </ng-container>
+            <ng-container matColumnDef="subject">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+              <td mat-cell *matCellDef="let row"> {{row.subjectName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let row"> {{row.status}}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let row"> {{row.applicableType}}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount </th>
+              <td mat-cell *matCellDef="let row"> {{row.price}}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+              <td mat-cell *matCellDef="let row"> {{row.category}}</td>
+            </ng-container>
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventStartDate}}</td>
+            </ng-container>
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventEndDate}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="eventColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: eventColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator2></mat-paginator>
+        </div>
+      </div>
+
+      <div class="custom-card" *ngIf="selectedUser">
+        <div class="card-title align-items-start">
+          <div class="mb-3 d-block">
+            <h4>Activity of {{selectedUser.firstName}} {{selectedUser.lastName}}</h4>
+            <h4>Class : {{selectedUser.className}}, Board : {{selectedUser.boardName}}</h4>
+            <h4>School : {{selectedUser.schoolName}} </h4>
+            <h4>State : {{selectedUser.stateName}} , City : {{selectedUser.cityName}}</h4>
+          </div>
+          <div class="content-right">
+            <div *ngIf="selectedUser">
+              <ion-button class="downLoad m-0" (click)="downloadActivities()">
+                <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+                Download
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="dataSource3Filter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource3" matSort>
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+              <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.eventName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="subject">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+              <td mat-cell *matCellDef="let row"> {{row.subjectName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="score">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Score </th>
+              <td mat-cell *matCellDef="let row">{{row.totalSecuredMark}} </td>
+            </ng-container>
+            <ng-container matColumnDef="appearDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Appear Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.appearedDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="startTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> StartTime </th>
+              <td mat-cell *matCellDef="let row"> {{row.examStartTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="endTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> EndTime </th>
+              <td mat-cell *matCellDef="let row"> {{row.examEndTime}} </td>
+            </ng-container>
+            <ng-container matColumnDef="correct">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Correct </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalCorrect}} </td>
+            </ng-container>
+            <ng-container matColumnDef="inCorrect">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> In-Correct </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalInCorrect}} </td>
+            </ng-container>
+            <ng-container matColumnDef="skip">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Skip </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalSkipQuestions}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator3></mat-paginator>
+        </div>
+      </div>
+
+      <div class="custom-card" *ngIf="selectedEvent">
+        <div class="card-title mb-3 d-block">
+          <h4>Activity For {{selectedEvent.eventName}} </h4>
+          <h4>Class : {{selectedEvent.className}}, Board : {{selectedEvent.boardName}}</h4>
+          <h4>Subject : {{selectedEvent.subjectName}} ,Module name :{{selectedEvent.moduleName}} </h4>
+          <h4>Total mark : {{selectedEvent.eventMarks}} , Type : {{selectedEvent.applicableType}}</h4>
+          <h4>Start Date : {{selectedEvent.eventDate}} , End Date : {{selectedEvent.eventEndDate}}</h4>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="dataSource4Filter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource4" matSort>
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="userName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+              <td mat-cell *matCellDef="let row"> {{row.userDisplayName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+            </ng-container>
+            <ng-container matColumnDef="score">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Score </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalSecuredMark}} </td>
+            </ng-container>
+            <ng-container matColumnDef="appearDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Appear Date </th>
+              <td mat-cell *matCellDef="let row"> {{row.appearedDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="startTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> StartTime </th>
+              <td mat-cell *matCellDef="let row"> {{row.examStartTime}}</td>
+            </ng-container>
+            <ng-container matColumnDef="endTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> EndTime </th>
+              <td mat-cell *matCellDef="let row"> {{row.examEndTime}} </td>
+            </ng-container>
+            <ng-container matColumnDef="correct">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Correct </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalCorrect}} </td>
+            </ng-container>
+            <ng-container matColumnDef="inCorrect">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> In-Correct </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalInCorrect}} </td>
+            </ng-container>
+            <ng-container matColumnDef="skip">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Skip </th>
+              <td mat-cell *matCellDef="let row"> {{row.totalSkipQuestions}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="selectedEventColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: selectedEventColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"
+            #MatPaginator4></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-modal #modal class="selectBottomSheet" [isOpen]="isUserDetailModalOpen" [initialBreakpoint]="0.6"
+  [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>User Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="event-info">
+            <span>Full Name : </span>
+            <ion-label class="card-label"> {{userDetail?.displayName}}</ion-label>
+          </div>
+          <ion-chip>{{userDetail?.userType}}</ion-chip>
+        </div>
+        <div class="event-info">
+          <span>Mobill No : </span>
+          <ion-label class="card-label"> {{userDetail?.mobileNo}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Email Id : </span>
+          <ion-label class="card-label"> {{userDetail?.emailId}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Date of Birth : </span>
+          <ion-label class="card-label"> {{userDetail?.dateOfBirth}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Board Name : </span>
+          <ion-label class="card-label"> {{userDetail?.boardName}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Class Name : </span>
+          <ion-label class="card-label"> {{userDetail?.className}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>School Name : </span>
+          <ion-label class="card-label"> {{userDetail?.schoolName}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Place : </span>
+          <ion-label class="card-label"> {{userDetail?.cityName}}, {{userDetail?.districtName}},
+            {{userDetail?.stateName}}</ion-label>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

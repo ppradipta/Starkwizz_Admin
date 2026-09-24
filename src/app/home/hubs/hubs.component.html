@@ -1,0 +1,73 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Hub</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="d-flex justify-content-end">
+      <ion-button mode="md" fill="outline" class="add-btn" (click)="createHubs()">Add Hub</ion-button>
+    </div>
+    <div class="card-container">
+      <div class="custom-card" *ngFor="let data of hubsDetails">
+        <div class="card-img">
+          <ion-img src="{{data.imgUrl}}"></ion-img>
+          <div class="camera-icons">
+            <label class="fileButton">
+              <ion-icon name="camera">
+                <ion-input type="file" (change)="fileChangeEvent($event, data)"></ion-input>
+              </ion-icon>
+            </label>
+          </div>
+          <div class="card-icon">
+            <div class="icon-container">
+              <div class="footer-icon edit-icon" (click)="editHub(data)">
+                <ion-icon name="create-outline"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click) = "deleteHubAlert(data)"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h4 class="card-heading">{{data.displayName}}</h4>
+          <label class="card-desc">{{data.dealsIn}}</label>
+          <label class="card-desc">{{data.description}}</label>
+          <div class="eventInfo-container">
+            <!-- <div class="event-info">
+              <span>Address:</span>
+              <ion-label class="card-label">{{data.locationText}}</ion-label>
+            </div> -->
+            <div class="event-info">
+              <span>Phone Number:</span>
+              <ion-label class="card-label">{{data.phoneNumber}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Whatsapp Number:</span>
+              <ion-label class="card-label">{{data.whatsappNumber}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Website:</span>
+              <ion-label class="card-label">{{data.website}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Rating:</span>
+              <ion-label class="card-label">{{data.rating}}</ion-label>
+            </div>
+            <div class="event-info">
+              <ion-label *ngIf ="data.status == 'CREATED' || data.status == 'MODIFIED'"  class="card-label" (click)="approvalAlert(data)">Approval Pending</ion-label>
+              <ion-label *ngIf ="data.status == 'APPROVED'"  class="card-label" (click)="approvalAlert(data)">{{data.status}}</ion-label>
+            
+            </div>
+            <ion-button  mode="md" class="okay-btn" (click)="addOffers(data)">Add Offers</ion-button>
+            <ion-button  mode="md" class="okay-btn" (click)="addNotice(data)">Add Notice</ion-button>
+            <ion-button  mode="md" class="okay-btn" (click)="addNotice(data)">Add Photos</ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,108 @@
+.question-list {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #d4d4d4;
+}
+.question-label {
+    font-size: 18px;
+    font-family: "Nunito-SemiBold";
+    color: #212121;
+    margin-bottom: 14px;
+}
+ion-item {
+    width: 100%;
+    margin-bottom: 12px;
+    --min-height: 42px;
+    --border-style: none;
+    border-radius: 10px;
+    border: 2px dashed #dce2e7;
+    --ripple-color: #0a395a;
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
+    &.item-radio-checked {
+        border-color: #51c0e9;
+    }
+    &.item-checkbox-checked {
+        border-color: #51c0e9;
+    }
+    ion-label {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #353636;
+    }
+    ion-radio {
+        margin: 0;
+        margin-right: 10px;
+        --color-checked: #51c0e9;
+        --color: #dce2e7;
+    }
+    ion-checkbox {
+        margin: 0;
+        margin-right: 10px;
+        --size: 20px;
+        --border-color: #cad1d7;
+        --background-checked: #51c0e9;
+        --border-color-checked: #51c0e9;
+        --checkmark-color: #fff;
+        --background: transparent;
+    }
+}
+.picture-option {
+    .option-img {
+        width: 100%;
+    }
+    ion-item {
+        margin-right: 12px;
+        position: relative;
+        width: 240px;
+        border-radius: 6px;
+        border: none;
+        --ripple-color: transparent;
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        ion-label {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #353636;
+        }
+        ion-radio {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            height: 26px;
+            --border-top: 2px solid transparent;
+            --border-bottom: 2px solid transparent;
+            padding-bottom: 3px;
+            width: 24px;
+            background: #ffffff80;
+            border-radius: 4px;
+            --color-checked: #fff;
+        }
+    }
+}
+.questionTags {
+    display: flex;
+    flex-direction: column;
+}
+.tagSelection {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tags {
+    display: flex;
+    margin: 10px 0 15px 0;
+}
+
+.tags ion-badge {
+    margin: 0 10px;
+    background: #fda608;
+    padding: 5px;
+}
+
+.deleteBtn{
+    margin-left: 5px;
+    cursor: pointer;
+}

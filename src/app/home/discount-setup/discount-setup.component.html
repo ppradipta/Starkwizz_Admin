@@ -1,0 +1,77 @@
+<ion-header>
+  <div class="heading">
+    <h4 class="m-0">Setup Discounts</h4>
+  </div>
+</ion-header>
+<ion-content class="date-ion-content">
+  <div class="page-container">
+    <div class="input-content">
+      <div class="login-input">
+        <ion-label class="code">Code : {{discountSetp?.code}}</ion-label>
+      </div>
+      <div class="login-input">
+        <ion-input type="text" name="discountName" id="discountName" [(ngModel)]="discountSetp.name"
+          placeholder="Discount Name" required></ion-input>
+      </div>
+      <div class="custom-input">
+        <ion-label>Discount For<span>*</span></ion-label>
+        <ion-select mode="md" [(ngModel)]="discountSetp.applicableFor" id="role" name="category" #category="ngModel"
+          placeholder="Select DIscount For" (ionChange)="onDiscountForChange($event)" required>
+          <ion-select-option *ngFor="let da of discountApplicables" [value]="da">
+            {{da}}</ion-select-option>
+        </ion-select>
+      </div>
+
+      <div class="d-flex mt-3" *ngIf="discountSetp.applicableFor == 'DYNAMO EXAM' || discountSetp.applicableFor == 'QUIZWHIZZ EXAM'">
+        <div class="custom-input d-block me-3">
+          <ion-label>Select Board<span>*</span></ion-label>
+          <ion-select mode="md" id="board" name="board" placeholder="Select Board"
+            [(ngModel)]="discountSetp.boardId">
+            <ion-select-option *ngFor="let board of boardDetails" [value]="board.id">{{board.displayName}}
+            </ion-select-option>
+          </ion-select>
+        </div>
+     
+        <div class="custom-input d-block">
+          <ion-label>Select Class<span>*</span></ion-label>
+          <ion-select mode="md" id="class" name="class" placeholder="Select Class" (click)="selectClass($event)"
+            [(ngModel)]="discountSetp.classId">
+            <ion-select-option *ngFor="let class of classDetails" [value]="class.id">{{class.displayName}}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <ion-list class="checkbox-list">
+        <ion-label>Select Discount Type<span>*</span></ion-label>
+        <ion-radio-group  name="type" [(ngModel)]="discountSetp.type" required>
+          <ion-item class="me-3">
+            <ion-label>FLAT</ion-label>
+            <ion-radio slot="start" mode="ios" value="FLAT"></ion-radio>
+          </ion-item>
+          <ion-item *ngIf="discountSetp.applicableFor != 'QUIZWHIZZ EXAM'">
+            <ion-label>PERCENTAGE</ion-label>
+            <ion-radio slot="start" mode="ios" value="PERCENTAGE"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
+      <div class="login-input">
+        <ion-input type="number" name="amount" id="amount" placeholder="Type Value" [(ngModel)]="discountSetp.typeValue"
+          required></ion-input>
+      </div>
+      <div class="login-input">
+        <ion-input type="text" name="description" id="description" placeholder="Description"
+          [(ngModel)]="discountSetp.description" required></ion-input>
+      </div>
+
+    </div>
+    <div class="btn-group">
+      <ion-button class="secondary-btn" (click)="createDiscounts()">Proceed
+      </ion-button>
+      <ion-button class="secondary-btn" (click)="close()" color="warning">Cancel
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

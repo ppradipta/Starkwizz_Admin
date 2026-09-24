@@ -1,0 +1,189 @@
+<ion-header>
+  <h4 class="title">BDA Activity</h4>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="custom-card">
+      <div class="card-title">
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="login-input">
+          <ion-select name="post" [(ngModel)]="selctedType" placeholder="Search by BDA type" mode="ios"
+          (ionChange)="selectAssociateType()">
+            <ion-select-option *ngFor="let post of postList" [value]="post.id">{{post.displayName}}
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="w-100 overflow-auto">
+        <table mat-table [dataSource]="dataSourceActivity" matSort>
+          <ng-container matColumnDef="#">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+            <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+          </ng-container>
+          <ng-container matColumnDef="postName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="pe-2"> Sel. </th>
+            <td mat-cell class="ser pe-2"  *matCellDef="let row">
+              <ion-checkbox [(ngModel)]="row.isSelected"
+              (click)="onCheckboxChange(row.isSelected, row)"></ion-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> UI Code </th>
+            <!-- <ion-checkbox [(ngModel)]="row.isSelected"></ion-checkbox> -->
+            <td mat-cell *matCellDef="let row">{{row?.code}}</td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row?.firstName}} {{row?.lastName}}</td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="CouponCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> UIC Code </th>
+            <td mat-cell *matCellDef="let row" (click)="viewLinkUsers(row)">
+              <ion-button class="clear-btn" fill="clear">
+                <ion-icon  name="eye" style="font-size: 16px; margin: 0 4px 4px 0;"></ion-icon>
+                {{row?.discount?.code}}
+              </ion-button>
+            </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="referenceUID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> UR Code </th>
+            <td mat-cell *matCellDef="let row"> {{row?.referenceUID}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="creationdate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> D.O.C </th>
+            <td mat-cell *matCellDef="let row"> {{row?.creationdate | date:'dd-MM-yyyy'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="mobileNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Other Details </th>
+            <td mat-cell *matCellDef="let row">
+              <ion-button class="clear-btn" fill="clear" (click)="viewActivity(row, 'USER')">
+                <ion-icon name="eye"></ion-icon>
+              </ion-button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref. Details </th>
+            <td mat-cell *matCellDef="let row">
+              <ion-button class="clear-btn" fill="clear" (click)="viewActivity(row, 'REF')">
+                <ion-icon name="eye"></ion-icon>
+              </ion-button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="postId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> View Business </th>
+            <td mat-cell *matCellDef="let row">
+              <!-- <ion-button class="clear-btn" fill="clear" (click)="viewSubscription(row)"> -->
+                <ion-button class="clear-btn" fill="clear" (click)="viewActivity(row)">
+                <ion-icon name="eye"></ion-icon>
+              </ion-button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsActivity"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsActivity;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input?.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 30,50,100]" aria-label="Select page of userAssocates"
+          #MatPaginatorAssociate></mat-paginator>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-modal #viewAssociatesModal class="selectBottomSheet viewAssociate" [isOpen]="isViewAssociatesOpen" [initialBreakpoint]="0.6"
+  [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{associateType == 'USER' ? 'Other Details' : 'Reference Person Details'}}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="viewModalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="w-100 overflow-auto">
+        <table class="table-bordered" *ngIf="associateType == 'USER'">
+          <tbody>
+            <tr>
+              <td>Title</td>
+              <td>{{viewDetail.code}}</td>
+            </tr>
+            <tr>
+              <td>Name</td>
+              <td>{{viewDetail.firstName}} {{viewDetail.lastName}}</td>
+            </tr>
+            <tr>
+              <td>Gender</td>
+              <td>{{viewDetail.gender}}</td>
+            </tr>
+            <tr>
+              <td>Mobile No</td>
+              <td>{{viewDetail.mobileNo}}</td>
+            </tr>
+            <tr>
+              <td>Email ID</td>
+              <td>{{viewDetail.email}}</td>
+            </tr>
+            <tr>
+              <td>Aadhar No</td>
+              <td>{{viewDetail.aadharNo}}</td>
+            </tr>
+            <tr>
+              <td>Pan No</td>
+              <td>{{viewDetail.panNo}}</td>
+            </tr>
+            <tr>
+              <td>Address</td>
+              <td>{{viewDetail.address}}</td>
+            </tr>
+            <tr>
+              <td>State</td>
+              <td>{{viewDetail.stateName}}</td>
+            </tr>
+            <tr>
+              <td>District</td>
+              <td>{{viewDetail.districtName}}</td>
+            </tr>
+            <tr>
+              <td>City</td>
+              <td>{{viewDetail.cityName}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+        <table class="table-bordered" *ngIf="associateType == 'REF'">
+          <tbody>
+            <tr>
+              <td>Name</td>
+              <td>{{viewDetail.referenceName}}</td>
+            </tr>
+            <tr>
+              <td>Code</td>
+              <td>{{viewDetail.referenceUID}}</td>
+            </tr>
+            <tr>
+              <td>Title</td>
+              <td>{{viewDetail.referencePostId}}</td>
+            </tr>
+            <tr>
+              <td>Mobile No</td>
+              <td>{{viewDetail.referenceMobile}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

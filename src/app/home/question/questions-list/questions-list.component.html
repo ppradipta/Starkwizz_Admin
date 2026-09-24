@@ -1,0 +1,76 @@
+
+<ion-header>
+  <div class="header">
+    <ion-title>Question List</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="main-card custom-card">
+      <div class="card-left">
+        <div class="card-title mb-3">
+          <h4>Questions</h4>
+          <div class="d-flex align-items-center">
+            <ion-button mode="end" class="tab-btn">
+              Download
+              <!-- <ion-icon name="cloud-download"></ion-icon> -->
+            </ion-button>
+            <ion-button mode="end" class="tab-btn" (click)="uploadQuestion()">
+              Upload Question
+              <ion-icon name="cloud-upload"></ion-icon>
+            </ion-button>
+            <ion-button mode="end" class="tab-btn" (click)="onClickAdd()">
+              Add Question
+              <ion-icon name="add-circle"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="table-responsive">
+
+          <!--Table-->
+          <table class="table">
+
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="th-sm">Question</th>
+                <th class="th-sm">Board</th>
+                <th class="th-sm">Class</th>
+                <th class="th-sm">Subject</th>
+                <th class="th-sm">Module</th>
+                <th class="th-sm">Type</th>
+                <th class="th-sm">Category</th>
+                <th class="th-sm">Options</th>
+                <th class="th-sm">Edit</th>
+
+
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody *ngFor="let question of questions">
+              <tr>
+                <th scope="row">1</th>
+                <td>{{question?.text}}</td>
+                <td>{{question?.board}}</td>
+                <td>{{question?.class?.displayName}}</td>
+                <td>{{question?.subject?.displayName}}</td>
+                <td>{{question?.module?.displayName}}</td>
+                <td>{{question?.questionType}}</td>
+                <td>{{question.subjectName}}</td>
+                <td><ion-button class="card-btn" (click)="viewOptions(question)">View Options</ion-button></td>
+                <td><ion-button class="card-btn" (click)="onClickEdit()">Edit</ion-button></td>
+              </tr>
+            </tbody>
+            <!--Table body-->
+
+          </table>
+          <!--Table-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

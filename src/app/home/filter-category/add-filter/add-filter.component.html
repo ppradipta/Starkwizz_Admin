@@ -1,0 +1,33 @@
+<ion-header>
+
+  <div class="heading-left">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Add Filter {{type}} | {{filterType?.displayName}}</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-label>Filter Name<span>*</span></ion-label>
+      <ion-input [(ngModel)]="filterName" id="name" name="name" type="text" pattern="[A-Za-z0-9]+" autofocus
+        inputmode="text" required placeholder="Enter Filter Name">
+      </ion-input>
+    </div>
+    <div class="customSegment">
+      <ion-label>Description<span>*</span></ion-label>
+      <ion-textarea id="disc" [(ngModel)]="description" name="disc" type="text" row="4" required
+        placeholder="Know More Information about filter">
+      </ion-textarea>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="addFilterName()">Save</ion-button>
+  </div>
+</ion-footer>

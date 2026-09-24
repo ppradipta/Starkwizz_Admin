@@ -1,0 +1,32 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Options
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="modal-inner">
+    <div class="option-list">
+      <div class="option" *ngFor="let option of question?.options"
+        [ngClass]="{'answer': question?.answers.includes(option.sequence)}">
+        <p *ngIf="option?.text">{{option.text}}</p>
+        <div class="option-img" *ngIf="option?.url">
+          <ion-img [src]="option?.url"> </ion-img>
+          <!-- <p>Path : {{option.url}}</p> -->
+          <p><a href={{option?.url}} target="_blank">Option url</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">ok</ion-button>
+  </div>
+</ion-footer>

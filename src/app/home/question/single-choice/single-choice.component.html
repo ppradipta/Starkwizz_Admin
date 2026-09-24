@@ -1,0 +1,102 @@
+<div class="custom-card">
+  <div class="mb-4">
+    <ion-textarea type="text" name="question" id="question" placeholder="Enter Question" rows="3"
+      [(ngModel)]="newQuestion.text"></ion-textarea>
+    <div class="input-container">
+      <ion-input type="text" name="hint" id="hint" placeholder="Hint (optional)" [(ngModel)]="newQuestion.hint">
+      </ion-input>
+      <ion-input class="file-input" type="file" name="file" id="file" (change)="uploadQuestionImage($event)"></ion-input>
+    </div>
+  </div>
+  <div class="mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h4 class="title">Option</h4>
+      <ion-button class="option-btn" (click)="addOption()">Add Option</ion-button>
+    </div>
+    <div>
+      <div class="custom-input" *ngFor="let opt of newQuestion.options">
+        {{opt.sequence}}
+        <ion-input type="text" name="options" id="options" placeholder="Enter Option" [(ngModel)]="opt.text">
+        </ion-input>
+        <input class="file-input" type="file" name="file" id="file" (change)="uploadQuestionOptionImage($event,opt)">
+        <ion-icon class="close-icon" name="close" (click)="removeOption(opt)"></ion-icon>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="correct-option">
+      <ion-label>Select Correct Option</ion-label>
+      <ion-select mode="md" name="class" placeholder="Select Correct Option"  (click)="selectAnswer()" [(ngModel)]="answer" [multiple]="true">
+        <ion-select-option *ngFor="let opt of newQuestion.options" [value]="opt.sequence">Option {{opt.sequence}}
+        </ion-select-option>
+      </ion-select>
+    </div>
+    <div class="correct-option">
+      <ion-label>Mark</ion-label>
+      <ion-input type="number" name="mark" id="mark" placeholder="Enter mark" [(ngModel)]="newQuestion.mark">
+      </ion-input>
+    </div>
+    <div class="correct-option">
+      <ion-label>Time(in seconds)</ion-label>
+      <ion-input type="number" name="perQuestionTimer" id="perQuestionTimer" placeholder="Enter Time in seconds"
+        [(ngModel)]="newQuestion.perQuestionTimer"></ion-input>
+    </div>
+  </div>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="clearQuestion()">clear</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="previewQuestion()">Preview</ion-button>
+  </div>
+</div>
+
+<div class="custom-card" *ngIf="viewType=='PREVIEW'">
+  <div class="questions-Preview">
+    <div class="question-list">
+      <div class="d-flex align-items-center justify-content-between mb-3 px-2">
+        <div class="tags">
+          <ion-badge>
+            <span>Board: {{newQuestion.board}}</span>
+          </ion-badge>
+          <ion-badge>
+            <span>Class: {{newQuestion.class.displayName}}</span>
+          </ion-badge>
+          <ion-badge>
+            <span>Subject: {{newQuestion.subject.displayName}}</span>
+          </ion-badge>
+          <ion-badge>
+            <span>Module: {{newQuestion.module.displayName}}</span>
+          </ion-badge>
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+          <ion-button class="card-btn" (click)="onClickAddMoreQuestion()">Add More</ion-button>
+          <ion-button class="card-btn" (click)="onClickConfirmQuestion()">Confirm</ion-button>
+          <ion-button class="card-btn" (click)="onClickEditQuestion()">Edit</ion-button>
+          <ion-button class="card-btn" (click)="onClickDeleteQuestion()">Delete</ion-button>
+        </div>
+      </div>
+      <h5 class="question-label px-2">{{newQuestion?.text}}</h5>
+      <div class="preview-img" *ngIf="newQuestion?.url">
+        <ion-img [src]="newQuestion?.url"></ion-img>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-2 ps-2">
+        <span class="hint">Hints : {{newQuestion?.hint}}</span>
+        <div class="tags">
+          <ion-badge>
+            <span>Mark: {{newQuestion.mark}}</span>
+          </ion-badge>
+          <ion-badge>
+            <span>Time: {{newQuestion.perQuestionTimer}}</span>
+          </ion-badge>
+        </div>
+      </div>
+      <div class="option-list">
+        <div class="option" *ngFor="let data of newQuestion.options"
+          [ngClass]="{'answer': newQuestion.answers.includes(data.sequence)}">
+          <p *ngIf="data?.text">{{data.text}}</p>
+          <div class="option-img" *ngIf="data?.url">
+            <ion-img [src]="data?.url"> </ion-img>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

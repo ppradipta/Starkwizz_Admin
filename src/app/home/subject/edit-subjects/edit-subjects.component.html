@@ -1,0 +1,94 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Edit Subject
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="personalInfoForm">
+
+      <ion-row>
+
+        
+        <!-- <ion-col size="12">
+          <div class="avatar-img">
+            <ion-avatar class="w-100 h-100 emp-avatar" *ngIf="selectedSubject?.imageURL">
+              <ion-img class="w-100 h-100" [src]="selectedSubject.imageURL">
+              </ion-img>
+            </ion-avatar>
+            <div class="select-icon">
+              <input type="file" (change)="imageSelected($event)" accept=".png,.jpg" />
+            </div>
+          </div>
+        </ion-col> -->
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Subject Name<span>*</span></ion-label>
+            <ion-input [(ngModel)]="selectedSubject.displayName" id="name" name="name"
+              type="text" pattern="[A-Za-z0-9]+" autofocus inputmode="text" required class="p-1"
+              placeholder="Enter Subject Name">
+            </ion-input>  
+          </div>
+        </ion-col>
+
+        <!-- <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Color Code<span>*</span></ion-label>
+            <ion-input [(ngModel)]="selectedSubject.colorCode" id="colorCode" name="colorCode" type="text" pattern="[A-Za-z0-9]+"
+              autofocus inputmode="text" required placeholder="Enter Color Code">
+            </ion-input>
+          </div>
+        </ion-col> -->
+
+        <ion-col size="12" *ngIf="classesList.length > 0">
+          <div class="custom-input">
+            <ion-label>Select Class<span>*</span></ion-label>
+            <ion-select mode="md" (ionChange)="classChanged($event)" [(ngModel)]="selectedSubject.className" id="name" name="category" #category="ngModel"
+              placeholder="Select Class Name" required>
+              <ion-select-option *ngFor="let class of classesList" [value]="class.name">
+                {{class.displayName}}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Select Category<span>*</span></ion-label>
+            <ion-select mode="md" [(ngModel)]="selectedSubject.category" id="name" name="category" #category="ngModel"
+              placeholder="Select Class Name" required>
+              <ion-select-option *ngFor="let category of categoryList" [value]="category.displayName">
+                {{category.displayName}}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Price (per month)<span>*</span></ion-label>
+            <ion-input [(ngModel)]="selectedSubject.price" id="price" name="price"
+              type="number" autofocus inputmode="number" required class="p-1"
+              placeholder="Enter Price per month">
+            </ion-input>  
+          </div>
+        </ion-col>
+
+
+      </ion-row>
+    
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar"> 
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button> 
+    <ion-button mode="md" class="okay-btn" (click)="updateSubject()">Update</ion-button>
+  </div>
+</ion-footer> 

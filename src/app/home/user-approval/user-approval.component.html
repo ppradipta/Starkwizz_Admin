@@ -1,0 +1,95 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">User Approvals</h4>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="eventTabChanged($event)" [value]="segmentValue">
+        <ion-segment-button mode="md" value="PENDING">
+          <!--future date -->
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="APPROVED">
+          <!--future date -->
+          <ion-label>Approved</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <div class="card-container" *ngIf="segmentValue==='PENDING'">
+      <div class="custom-card" *ngFor="let pending of pendingApprovals">
+        <div class="card-body">
+          <ion-label class="user-name">{{pending.displayName}}</ion-label>
+          <p class="card-desc">Phone No: {{pending.mobileNo}}</p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Current Board:</span>
+              <ion-label class="card-label">{{pending?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>New Board:</span>
+              <ion-label class="card-label">{{pending?.changeDetails?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Current Class:</span>
+              <ion-label class="card-label">{{pending?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>New Class:</span>
+              <ion-label class="card-label">{{pending?.changeDetails?.className}}</ion-label>
+            </div>
+            <div class="event-info w-100">
+              <span>Reason:</span>
+              <ion-label class="card-label">{{pending?.reasone}}</ion-label>
+            </div>
+          </div>
+        </div>
+        <ion-button (click)="checkForDynamoSubscription(pending)">Check Dynamo Subscription</ion-button>
+        <ion-button (click)="checkForEventSubscription(pending)">Check Event Subscription</ion-button>
+        <div class="card-footer">
+          <ion-button class="delete" (click)="declineUserProfile(pending)">Decline</ion-button>
+          <ion-button (click)="approveUserProfile(pending)">Approve</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-container" *ngIf="segmentValue==='APPROVED'">
+      <div class="custom-card" *ngFor="let approv of approved">
+        <div class="card-body">
+          <ion-label class="user-name approv">{{approv.displayName}}</ion-label>
+          <p class="card-desc">Phone No: {{approv.mobileNo}}</p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Current Board:</span>
+              <ion-label class="card-label">{{approv?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>New Board:</span>
+              <ion-label class="card-label">{{approv?.changeDetails?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Current Class:</span>
+              <ion-label class="card-label">{{approv?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>New Class:</span>
+              <ion-label class="card-label">{{approv?.changeDetails?.className}}</ion-label>
+            </div>
+            <div class="event-info w-100">
+              <span>Reason:</span>
+              <ion-label class="card-label">{{approv?.reasone}}</ion-label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <ion-button class="delete" (click)="deleteUserApproval(approv)">Delete</ion-button>
+          <ion-button (click)="goToUserApproval(approv)">View Details</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,102 @@
+<!-- Singel choice -->
+<ion-header>
+  <div class="heading">
+    <div class="d-flex">
+      <ion-button slot="start" (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+      <h4 class="title">Question</h4>
+    </div>
+
+    <div class="checkBox">
+      <ion-checkbox color="primary" name="list_name" value="m1" (ionChange)="checkUncheckAll($event)"> </ion-checkbox>
+      <strong>Select/ Unselect All</strong>
+    </div>
+  </div>
+  <div class="heading-right">
+    <div class="tags">
+      <span>Name : {{eventData?.eventName}}
+      </span>
+      <ion-badge>
+        <span>Board: {{eventData?.boardName}}
+        </span>
+      </ion-badge>
+      <ion-badge>
+        <span>Class: {{eventData?.className}}
+        </span>
+      </ion-badge>
+      <ion-badge>
+        <span>Subject: {{eventData?.subjectName}}
+        </span>
+      </ion-badge>
+      <ion-badge>
+        <span>Module: {{eventData?.moduleName}}
+        </span>
+      </ion-badge>
+    </div>
+    <ion-button class="card-btn" (click)="viewQuestionRelatedToEvent()">View Questions</ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="custom-card" *ngIf="questionList?.length>0">
+      <div class="d-flex align-items-center justify-content-end pe-3">
+        <ion-button class="save-btn" *ngIf="isClicked" (click)="save()">save</ion-button>
+      </div>
+      <div class="question-list" *ngFor="let question of questionList; let i=index">
+        <div class="d-flex justify-content-between align-items-start">
+          <h5 class="question-label">{{i+1}}. {{question.text}}</h5>
+          <ion-checkbox color="primary" [(ngModel)]="question.isSelected"
+            (ionChange)="selectQuestion($event, question)">
+          </ion-checkbox>
+          <div class="tags">
+            <ion-badge *ngIf="question?.type=='MULTI_CHOICE_OPTION'">
+              <span>Multi Option</span>
+            </ion-badge>
+            <ion-badge *ngIf="question?.type=='SINGLE_CHOICE_OPTION'">
+              <span>Single Option</span>
+            </ion-badge>
+            <ion-badge *ngIf="question?.type=='SUBJECTIVE_NO_OPTION'">
+              <span>Subjective</span>
+            </ion-badge>
+            <ion-badge *ngIf="question?.board">
+              <span>{{question?.board}}
+              </span>
+            </ion-badge>
+
+            <ion-badge *ngIf="question?.class?.id">
+              <span>Class {{question?.class?.displayName}}
+              </span>
+            </ion-badge>
+            <ion-badge *ngIf="question?.subject?.id">
+              <span>{{question?.subject?.displayName}}
+              </span>
+            </ion-badge>
+            <ion-badge *ngIf="question?.module?.id">
+              <span>{{question?.module?.displayName}}
+              </span>
+            </ion-badge>
+          </div>
+        </div>
+        <!-- <ion-list>
+              <ion-radio-group [value]="question.answers[0]">
+                <ion-item *ngFor="let data of question.options">
+                  <ion-label>{{data.text}}</ion-label>
+                  <ion-radio slot="start" value="{{data.sequence}}" disabled></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list> -->
+        <div class="option-list" *ngIf="question.type!='SUBJECTIVE_NO_OPTION'">
+          <div class="option" *ngFor="let option of question?.options"
+            [ngClass]="{'answer': question?.answers.includes(option.sequence)}">
+            <p *ngIf="option?.text">{{option.text}}</p>
+            <div class="option-img" *ngIf="option?.url">
+              <ion-img [src]="option?.url"> </ion-img>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ion-content>

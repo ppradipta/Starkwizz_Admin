@@ -1,0 +1,29 @@
+ion-textarea {
+    width: 100%;
+    --placeholder-opacity: 0.6;
+    font-size: 15px;
+    font-family: "Nunito-SemiBold";
+    border: 1px solid #0A395A;
+    border-radius: 6px;
+    --padding-top: 6px;
+    --padding-end: 12px;
+    --padding-bottom: 10px;
+    --padding-start: 12px;
+    text-align: left;
+}
+
+.custom-input {
+    ion-radio-group {
+        display: flex;
+
+        ion-item {
+            width: 50%;
+            --padding-start: 0;
+            --inner-border-width: 0;
+
+            ion-radio {
+                margin: 0px 10px 0 4px;
+            }
+        }
+    }
+}

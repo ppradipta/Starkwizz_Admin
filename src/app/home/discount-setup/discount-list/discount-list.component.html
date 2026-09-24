@@ -1,0 +1,124 @@
+<ion-header>
+  <div class="heading">
+    <ion-title>Discounts List</ion-title>
+    <ion-button class="card-btn" fill="outline" (click)="addDiscounts('ADD')">Add Discount</ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <ion-list class="card-list">
+      <ion-item *ngFor="let discount of discounts; let i=index">
+        <div class="sub-card">
+          <div class="card-body">
+            <h4 class="card-heading">{{discount.code}}</h4>
+            <div class="event-info border-none">
+              <span class="me-1">Name : </span>
+              <ion-label class="card-label">{{discount.name}}</ion-label>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="event-info border-none">
+                <span class="me-1">Applicable For : </span>
+                <ion-label class="card-label">{{discount.applicableFor}}</ion-label>
+              </div>
+              <div class="event-info border-none" *ngIf="discount.boardName">
+                <span class="me-1">Board Name : </span>
+                <ion-label class="card-label">{{discount.boardName}}</ion-label>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="event-info border-none">
+                <span class="me-1">Type : </span>
+                <ion-label class="card-label">{{discount.type}}</ion-label>
+              </div>
+              <div class="event-info border-none" *ngIf="discount.className">
+                <span class="me-1">Class Name : </span>
+                <ion-label class="card-label">{{discount.className}}</ion-label>
+              </div>
+            </div>
+            <div class="event-info border-none">
+              <span class="me-1">Type Value : </span>
+              <ion-label class="card-label">{{discount.typeValue}}</ion-label>
+            </div>
+            <div class="event-info border-none">
+              <span class="me-1">Status : </span>
+              <ion-label class="card-label">{{discount.status}}</ion-label>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="link-outline" (click)="linkDiscount(discount)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon edit-icon">
+                <ion-icon name="create-outline" (click)="editCopun(discount)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon edit-icon">
+                <ion-icon name="eye-outline" (click)="viewLinkedDiscounts(discount)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteCopun(discount)"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+<ion-modal #modal class="selectBottomSheet" [isOpen]="isModalOpen" [initialBreakpoint]=""
+  [breakpoints]="[0.25, 0.5, 0.75]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons class="back" slot="start" (click)="modalDismiss()">
+          <ion-icon name="chevron-back"></ion-icon>
+        </ion-buttons>
+        <ion-title>Select {{selectedDiscount.applicableFor}}</ion-title>
+          <ion-button class="secondary-btn" slot="end" (click)="confirmLinkDiscounts()" 
+      *ngIf="modalOperation=='LINK'">Proceed</ion-button>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <!-- <div class="truckDetail" *ngFor="let usr of users">
+          <ion-item (click)="selectedUser(usr)">
+            <div class="carInfo">
+              <ion-img class="verify-icon" src="/assets/images/verify.svg" *ngIf="usr.isSelected"></ion-img>
+              <span class="name">{{usr?.code}}</span>
+              <span class="decs">{{usr?.firstName}} {{usr?.lastName}}</span>
+              <span class="decs">Mob No: {{usr?.mobileNo}}</span>
+              <span class="decs">Email : {{usr?.email}}</span>
+            </div>
+          </ion-item>
+        </div> -->
+      <div class="page-inner">
+        <ion-card *ngFor="let usr of users">
+          <ion-card-header>
+            <ion-card-title>{{usr?.firstName}} {{usr?.lastName}}</ion-card-title>
+            <ion-card-subtitle>{{usr?.code}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="event-info border-none">
+              <span class="me-1">Mobile No </span>
+              <ion-label class="card-label">{{usr?.mobileNo}}</ion-label>
+            </div>
+            <div class="event-info border-none">
+              <span class="me-1">Email </span>
+              <ion-label class="card-label">{{usr?.email}}</ion-label>
+            </div>
+          </ion-card-content>
+
+          <ion-button fill="clear" (click)="selectedUser(usr)">Link Discount</ion-button>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

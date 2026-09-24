@@ -1,0 +1,38 @@
+<ion-header>
+  <div class="header">
+    <ion-button class="back" (click)="goBack()">
+      <ion-icon name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Quizwhizz Subscription</ion-title>
+    <ion-button slot="end" class="card-btn m-0" (click)="gotoAddQuizWhizz()">Add Subscription</ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="sub-card" *ngFor="let subs of quizSubsData">
+      <div class="card-body">
+        <h4 class="card-heading">Amount : ₹ {{subs.subscriptionAmount}}</h4>
+        <div class="event-info border-none">
+          <span class="me-1">Board Name : </span>
+          <ion-label class="card-label">{{subs.boardName}}</ion-label>
+        </div>
+        <div class="event-info border-none">
+          <span class="me-1">Class Name : </span>
+          <ion-label class="card-label">{{subs.className}}</ion-label>
+        </div>
+        <div class="event-info border-none m-0">
+          <span class="me-1">Create Date : </span>
+          <ion-label class="card-label">{{subs.creationDate}}</ion-label>
+        </div>
+
+      </div>
+      <div class="card-footer">
+        <div class="icon-container">
+          <div class="footer-icon">
+            <ion-icon name="trash" (click)="deletesubs(subs)"></ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

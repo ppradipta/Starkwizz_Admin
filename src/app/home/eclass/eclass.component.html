@@ -1,0 +1,159 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">E-Class ({{eClassList?.length}})</h4>
+    </div>
+    <div class="heading-right">
+      <ion-select placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+        </ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Class" mode="ios" (ionChange)="selectClasses($event)">
+        <ion-select-option *ngFor="let class of allClasses" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+
+      <ion-select  placeholder="Subject" mode="ios" (ionChange)="selectSubjects($event)">
+        <ion-select-option *ngFor="let subj of allSubjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of allModules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="eventTabChanged($event)" [value]="examSegmentValue">
+        <ion-segment-button mode="md" value="ADDED">
+          <!--future date -->
+          <ion-label>ADDED</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="APPROVED">
+          <!--future date -->
+          <ion-label>APPROVED</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="REJECTED">
+          <!--Currend date -->
+          <ion-label>REJECTED</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <div class="d-flex justify-content-end">
+      <ion-button mode="md" fill="outline" class="add-btn" (click)="addEvents('ADD')">Add EClass</ion-button>
+    </div>
+    <div class="card-container">
+      <div *ngIf="eClassList.length == 0">No Events</div>
+      <div class="custom-card" *ngFor="let event of eClassList">
+        <div class="card-img">
+
+          <div class="video-box">
+            <video preload="auto" webkit-playsinline="playsinline" class="videoPlayer" #videoElements controls>
+              <source [src]="event?.videoURL" type="video/mp4" />
+            </video>
+          </div>
+
+          <div class="card-icon">
+            <div class="icon-container">
+              <div class="footer-icon edit-icon" (click)="editEvent(event)">
+                <ion-icon name="create-outline"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteEvent(event)"></ion-icon>
+              </div>
+            </div>
+          </div>
+          <div class="event-date">
+            <span>Upload Date:</span>
+            <ion-icon name="time-outline"></ion-icon>{{event?.uploadDate}}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="card-heading m-0">{{event?.topicName}}</h4>
+          </div>
+          <p class="card-desc" *ngIf="event?.shotDescription">
+            {{event?.shotDescription}}
+          </p>
+          <p class="card-desc" *ngIf="event?.longDescription">
+            {{event?.longDescription}}
+          </p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Board:</span>
+              <ion-label class="card-label">{{event?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Class:</span>
+              <ion-label class="card-label">{{event?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Subject:</span>
+              <ion-label class="card-label">{{event?.subjectName}}</ion-label>
+            </div>
+            <div class="event-info w-100" *ngIf="event.moduleName">
+              <span>Module:</span>
+              <ion-label class="card-label">{{event?.moduleName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Download Allow </span>
+              <ion-toggle [checked]="event.isDownloadAllow" (ionChange)="changeDownloadAllow(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Comment Allow</span>
+              <ion-toggle [checked]="event.isComment"
+                (ionChange)="changeCommentAllow(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Comment :</span>
+              <ion-label class="card-label">{{event?.commentCount}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Like :</span>
+              <ion-label class="card-label">{{event?.likeCount}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>DisLike :</span>
+              <ion-label class="card-label">{{event?.dislikeCount}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Views :</span>
+              <ion-label class="card-label">{{event?.viewsCount}}</ion-label>
+            </div>
+
+            <div class="event-info">
+              <span>Uploader Details</span>
+              <div class="video-detail align-items-center">
+                <div class="d-flex align-items-center">
+                  <!-- <div class="user-img">
+                    <ion-img [src]="event.uploadDetails.imageUrl"></ion-img>
+                  </div> -->
+                  <div>
+                    <h6>{{event?.uploadDetails?.displayName}}</h6>
+                    <!-- <ion-label>{{event?.uploadDetails?.follower}} Followers</ion-label> -->
+                  </div>
+                </div>
+                <!-- <ion-button fill="clear" class="clear-btn">FOLLOW</ion-button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center p-2 pb-3">
+          <ion-select class="status-select" [value]="event.status" okText="Okay" cancelText="Dismiss"
+            (ionChange)="changeEventStatus($event, event)">
+            <ion-select-option value="ADDED">ADDED</ion-select-option>
+            <ion-select-option value="APPROVED">APPROVED</ion-select-option>
+            <ion-select-option value="DECLINED">DECLINED</ion-select-option>
+          </ion-select>
+        </div>
+        <div class="card-footer">
+          <ion-button class="upload-btn">Activity</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

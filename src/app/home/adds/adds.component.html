@@ -1,0 +1,79 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Adds</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="tabChanged($event)" [value]="segmentValue" mode="md" color="secondary">
+        <ion-segment-button mode="md" value="POSTED" >
+          <ion-label>Posted</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="PUBLISHED" class="segmentBtn" value="PUBLISHED">
+          <ion-label>Approved</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <div *ngIf="segmentValue === 'POSTED'" >  
+      <div class="card-container">
+        <div *ngFor ="let add of postedAdds" class="custom-card" [ngClass]="{ 'ads-sold' : toggleChecked}">
+          <div class="card-img">
+            <ion-img [src]="add.photos[0]"></ion-img>
+            <!-- <ion-img src="https://daisy.org/wp-content/uploads/2018/11/book-dark-enlightenment-1029141-1024x683.jpg"></ion-img> -->
+            <div class="add-status completed">{{add?.status}}</div>
+          </div>
+          <div class="card-body">
+            <ion-label class="card-heading">{{add.bookName}}</ion-label>
+            <span class="add-name">by {{add.publicationName}}</span>
+            <div class="addInfo-container">
+              <div class="add-info">
+                <span>Actual price:</span>
+                <ion-label class="card-label">{{add.bookPrice}}</ion-label>
+              </div>
+              <div class="add-info">
+                <span class="box-label">Offer price:</span>
+                <ion-label class="card-label d-flex">
+                  {{add.discount}} 
+                  <span> ({{add?.discountPercentage}}% Off)</span>
+                </ion-label>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <ion-button (click) = "markApproved(add)">Approve</ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="segmentValue === 'PUBLISHED'">
+      <div class="card-container">
+        <div *ngFor ="let add of approvedAdds" class="custom-card" [ngClass]="{ 'ads-sold' : toggleChecked}">
+          <div class="card-img">
+            <ion-img [src]="add.photos[0]"></ion-img>
+            <!-- <ion-img src="https://daisy.org/wp-content/uploads/2018/11/book-dark-enlightenment-1029141-1024x683.jpg"></ion-img> -->
+            <div class="add-status completed">{{add?.status}}</div>
+          </div>
+          <div class="card-body">
+            <ion-label class="card-heading">{{add.bookName}}</ion-label>
+            <span class="add-name">by {{add.publicationName}}</span>
+            <div class="addInfo-container">
+              <div class="add-info">
+                <span>Actual price</span>
+                <ion-label class="card-label">{{add.bookPrice}}</ion-label>
+              </div>
+              <div class="add-info">
+                <span class="box-label">Offer price</span>
+                <ion-label class="card-label d-flex">
+                  {{add.discount}}
+                  <span>({{add?.discountPercentage}}% Off)</span>
+                </ion-label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

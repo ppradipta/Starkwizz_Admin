@@ -1,0 +1,100 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading">
+      <h4 class="title">Add Associates</h4>
+    </div>
+  </div>
+  <ion-button mode="md" class="search-btn" (click)="closeModal()">Close</ion-button>
+</ion-header>
+<ion-content class="date-ion-content ion-padding">
+  <div class="input-content">
+    <div class="login-input">
+      <ion-label>Code :{{user?.code}}</ion-label>
+    </div>
+    <div class="login-input">
+      <ion-select name="post" [(ngModel)]="user.postId" placeholder="Select Post" mode="ios">
+        <ion-select-option *ngFor="let post of postList" [value]="post.id">{{post.displayName}}
+        </ion-select-option>
+      </ion-select>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="firstName" id="firstName" [(ngModel)]="user.firstName" placeholder="First Name"
+        required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="lastName" id="lastName" placeholder="Last Name" [(ngModel)]="user.lastName"
+        required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="mobile" id="mobile" placeholder="Mobile Number" [(ngModel)]="user.mobileNo"
+        minlength="10" maxlength="10" inputmode="tel" required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="email" name="email" id="email" placeholder="Email ID *" [(ngModel)]="user.email"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,10}$" required></ion-input>
+    </div>
+    <div class="select-input">
+      <ion-select name="state" [(ngModel)]="user.stateId" placeholder="Select State" mode="ios"
+        (click)="selectState($event)">
+        <ion-select-option *ngFor="let state of stateList" [value]="state.id">{{state.displayName}}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select name="district" [(ngModel)]="user.districtId" placeholder="Select District" mode="ios"
+        (click)="selectDistrict($event)">
+        <ion-select-option *ngFor="let dist of districts" [value]="dist.id">{{dist.displayName}}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select name="city" [(ngModel)]="user.cityId" placeholder="Select City/Block" mode="ios"
+        (click)="selectCity($event)">
+        <ion-select-option *ngFor="let city of cities" [value]="city.id">{{city.displayName}}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-select name="post" [(ngModel)]="user.gender" placeholder="Gender" mode="ios">
+        <ion-select-option value="Male">Male</ion-select-option>
+        <ion-select-option value="Female">Female</ion-select-option>
+      </ion-select>
+    </div>
+
+    <div class="login-input">
+      <ion-textarea type="text" name="address" id="address" placeholder="Enter Address" [(ngModel)]="user.address"
+        required></ion-textarea>
+    </div>
+
+    <div class="login-input">
+      <ion-input type="text" name="aadharNo" id="aadharNo" [(ngModel)]="user.aadharNo" placeholder="Aadhar Number"
+        minlength="12" maxlength="12" required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="panNo" id="panNo" placeholder="Pan Number" [(ngModel)]="user.panNo"
+        required></ion-input>
+    </div>
+
+    <h4>Reference</h4>
+    <div class="login-input">
+      <ion-input type="text" name="referenceName" id="referenceName" placeholder="Reference Name" [(ngModel)]="user.referenceName"
+        required></ion-input>
+    </div>
+
+    <div class="login-input">
+      <ion-input type="text" name="referenceUID" id="referenceUID" placeholder="UI Code"
+        [(ngModel)]="user.referenceUID" required></ion-input>
+    </div>
+
+    <div class="login-input">
+      <ion-input type="text" name="referenceMobile" id="referenceMobile" placeholder="Mobile Number"
+        [(ngModel)]="user.referenceMobile" minlength="10" maxlength="10" inputmode="tel" required></ion-input>
+    </div>
+
+    <ion-select name="city" [(ngModel)]="user.referencePostId" placeholder="Select Post" mode="ios">
+      <ion-select-option *ngFor="let post of postList" [value]="post.id">{{post.displayName}}
+      </ion-select-option>
+    </ion-select>
+  </div>
+  <div class="mt-3">
+    <ion-button class="secondary-btn" (click)="closeModal()">Close</ion-button>
+    <ion-button class="secondary-btn" (click)="addAssociates()">Proceed</ion-button>
+  </div>
+</ion-content>

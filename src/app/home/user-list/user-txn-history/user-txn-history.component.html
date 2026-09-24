@@ -1,0 +1,169 @@
+<ion-header>
+  <div class="header">
+    <ion-button (click)="goBack()">
+      <ion-icon name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>User {{typeUsers == 'STUDENT' ? 'Student' : 'Approval'}} Details</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="list-container">
+      <ion-segment (ionChange)="tabChanged($event)" [value]="segmentValue" mode="md">
+        <ion-segment-button *ngFor="let list of userType" [value]="list.value">
+          <ion-label>{{list.name}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ng-container *ngIf="segmentValue === 'PROFILE'">
+        <div class="trans-raw" *ngIf="typeUsers == 'STUDENT'">
+          <div class="trans-list">
+            <div class="transaction {{segmentValue}}">
+              <h4>{{user.displayName | uppercase}}</h4>
+              <span class="payment-id">Mobile No : {{user.mobileNo}}</span>
+              <span class="payment-id">Email Id: {{user.emailId}}</span>
+              <span class="payment-id">Date of Birth : <b>{{user.dateOfBirth}}</b></span>
+              <div class="d-flex justify-content-between">
+                <span class="payment-id">Gender : {{user.gender}}</span>
+                <span class="payment-id">User Type : {{user.userType}}</span>
+              </div>
+              <span class="ammount">{{user.applicationId}} </span>
+            </div>
+            <div class="test-card {{segmentValue}}">
+              <div class="score-info">
+                <span>Class Name: <b>{{user.className}}</b></span>
+                <span>Board Name : <b>{{user.boardName}}</b></span>
+              </div>
+              <ion-button class="search-btn" (click)="presentAlertBlockUsers(user)">Mark As Block</ion-button>
+              <div *ngIf="user.profileType?.length">
+                <ion-label><b>subscription types : </b></ion-label>
+                <span class="types" *ngFor="let type of user.profileType"><b>{{type | titlecase}}</b></span>
+              </div>
+              <ion-label>School : <b>{{user.schoolName}}</b></ion-label>
+              <span>City : <b>{{user.cityName}}</b></span>
+              <span>District : <b>{{user.districtName}}</b></span>
+              <span>State : <b>{{user.stateName}}</b></span>
+            </div>
+          </div>
+        </div>
+        <div class="trans-raw" *ngIf="typeUsers == 'APPROVAL'">
+          <div class="trans-list">
+            <div class="transaction PROFILE">
+              <h4>{{approvalUser.displayName | uppercase}}</h4>
+              <span class="payment-id">Mobile No : {{approvalUser.mobileNo}}</span>
+              <span class="payment-id">Email Id: {{approvalUser.emailId}}</span>
+              <span class="payment-id">Date of Birth : <b>{{approvalUser.dateOfBirth}}</b></span>
+              <div class="d-flex justify-content-between">
+                <span class="payment-id">Gender : {{approvalUser.gender}}</span>
+                <span class="payment-id">User Type : {{approvalUser.userType}}</span>
+              </div>
+              <span class="ammount">{{approvalUser.applicationId}} </span>
+            </div>
+            <div class="test-card PROFILE">
+              <div class="score-info">
+                <span>Current Class Name: <b>{{user.className}}</b></span>
+                <span>New Class Name: <b>{{user.changeDetails?.className}}</b></span>
+              </div>
+              <div class="score-info">
+                <span>Current Board Name : <b>{{user.boardName}}</b></span>
+                <span>New Board Name : <b>{{user.changeDetails?.boardName}}</b></span>
+              </div>
+              <div *ngIf="user.profileType?.length">
+                <ion-label><b>subscription types : </b></ion-label>
+                <span class="types" *ngFor="let type of approvalUser.profileType"><b>{{type | titlecase}}</b></span>
+              </div>
+              <ion-label>School : <b>{{approvalUser.schoolName}}</b></ion-label>
+              <span>City : <b>{{approvalUser.cityName}}</b></span>
+              <span>District : <b>{{approvalUser.districtName}}</b></span>
+              <span>State : <b>{{approvalUser.stateName}}</b></span>
+              <span>Reason : <b>{{user.reasone}}</b></span>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+
+
+      <div class="trans-raw" *ngIf="segmentValue === 'TXN_HISTORY'">
+        <div class="p-3" *ngIf="!txnHistory?.length">
+          <span>No data available...</span>
+        </div>
+        <div class="trans-list" *ngFor="let txn of txnHistory" [ngClass]="{'expiredList': txn.expiredDays > 0}">
+          <div class="transaction">
+            <span class="payment-id">Txn Ref : {{txn.txnNumber | uppercase}}</span>
+            <div class="payment d-flex justify-content-between align-items-center">
+              <span class="payment-id">Payment for : {{txn.paymentfor}}</span>
+            </div>
+            <span class="ammount">₹ {{txn.amount}} </span>
+            <div class="d-flex justify-content-between">
+              <div class="startEndDate me-2">
+                <span>Subscription Valid upto </span>
+                <ion-label>{{txn.startDate |date: 'MMM d, y'}} - {{txn.endDate |date: 'MMM d, y'}} </ion-label>
+              </div>
+            </div>
+          </div>
+          <div class="detail">
+            <ion-label>Subscription Details</ion-label>
+            <div class="detail-inner" *ngFor="let txnsubj of txn.paymentForDetails">
+              <span><b>Event Name :</b>{{txnsubj.eventName}}</span>
+              <span><b>Subject Name :</b>{{txnsubj.subjectName}}</span>
+              <span><b>Code Name :</b>{{txnsubj.eventCode}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trans-raw" *ngIf="segmentValue !== 'TXN_HISTORY' && segmentValue !== 'PROFILE'">
+        <div class="p-3" *ngIf="!examDetail?.length">
+          <span>No data available...</span>
+        </div>
+        <div class="trans-list" *ngFor="let exam of examDetail">
+          <div class="transaction {{segmentValue}}">
+            <h4>{{exam.userDisplayName | uppercase}}</h4>
+            <span class="payment-id">Subject Name: {{exam.subjectName}}</span>
+            <span class="payment-id d-block">Event Name: {{exam.eventName}}</span>
+            <div class="payment d-flex justify-content-between align-items-center">
+              <span class="payment-id">Class Name: {{exam.className}}</span>
+              <span class="payment-id">Event Code : {{exam.eventCode}}</span>
+            </div>
+            <span class="ammount">{{exam.applicableType}} </span>
+          </div>
+          <div class="test-card">
+            <div class="score-info">
+              <ion-label>{{exam.appearedDate | date: 'MMM d, y'}}</ion-label>
+              <div class="score" *ngIf="exam.totalSecuredMark > 0">
+                <ion-label>score : </ion-label>
+                <h4>{{exam.totalSecuredMark}}</h4>
+                <span>pt</span>
+              </div>
+            </div>
+            <div class="card-top">
+              <div class="card-section total">
+                <h4>{{exam.totalAppearQuesiton}}</h4>
+                <span>Total Question</span>
+              </div>
+              <div class="card-section time">
+                <h4>{{exam.totalExamTimeDisplay}}</h4>
+                <span>Time taken</span>
+              </div>
+              <!-- </div>
+                        <div class="card-bottom"> -->
+              <div class="card-section currect">
+                <h4>{{exam.totalCorrect}}</h4>
+                <span>Correct</span>
+              </div>
+              <div class="card-section incurrect">
+                <h4>{{exam.totalInCorrect}}</h4>
+                <span>Incorrect</span>
+              </div>
+              <div class="card-section skipped">
+                <h4>{{exam.totalSkipQuestions}}</h4>
+                <span>Skipped</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

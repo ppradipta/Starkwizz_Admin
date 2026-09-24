@@ -1,0 +1,84 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">Posted Snapshots</h4>
+    </div>
+    <div class="heading-right">
+      <ion-select  placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="customSegment">
+    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="onSegmentChange($event)">
+      <ion-segment-button value="POSTED">
+        <ion-label>Posted</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="APPROVED">
+        <ion-label>Approved</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="REJECTED">
+        <ion-label>Rejected</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div class="page-container">
+    <div class="custom-card">
+      <div class="video-container" *ngFor="let ps of postedSnapshots | keyvalue">
+        <ion-label class="card-title">{{ps.key}}</ion-label>
+        <div class="d-flex align-content-center flex-wrap">
+          <div class="video-item" *ngFor="let list of ps.value">
+            <div class="item-left">
+              <div class="video-list" (click)="playVideo(list)">
+                <div class="video-img">
+                 <ion-img src="{{list.videoUrl}}"></ion-img>
+                  <div class="video-date">
+                    <ion-icon name="time-outline"></ion-icon>{{list.uploadDate}}
+                  </div>
+                </div>
+                <div class="video-detail">
+                  <h4 class="video-heading">{{list.videoText}}</h4>
+                  <div class="video-info subHeading">
+                    <ion-label class="video-label">Upload by {{list.userName}}</ion-label>
+                  </div>
+                  <div class="video-info">
+                    <span>Board:</span>
+                    <ion-label class="video-label">{{list.boardName}}</ion-label>
+                  </div>
+                  <div class="video-info">
+                    <span>Class:</span>
+                    <ion-label class="video-label">{{list.className}}</ion-label>
+                  </div>
+                  <div class="video-info">
+                    <span>Module:</span>
+                    <ion-label class="video-label"></ion-label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item-right" [ngClass]="{ 'posted' : list?.status =='POSTED'}">
+              <ion-button class="approve-btn" (click)="approveVideo(list)" 
+                *ngIf="list?.status =='POSTED'|| list?.status =='REJECTED'">Approve</ion-button>
+              <ion-button class="decline-btn" (click)="rejectVideo(list)"
+                *ngIf="list?.status =='POSTED'|| list?.status =='APPROVED'">Decline</ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

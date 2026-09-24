@@ -1,0 +1,85 @@
+ion-header {
+    padding: 12px 16px;
+}
+
+.date-ion-content {
+    --keyboard-offset: 0px !important;
+}
+
+.page-container {
+    padding: 16px;
+
+    .input-content {
+        margin-bottom: 24px;
+
+        ion-label {
+            font-size: 16px;
+            line-height: 20px;
+            font-family: "Nunito-SemiBold";
+            color: #0a395a;
+            margin-bottom: 4px;
+        }
+
+        .login-input {
+            margin-bottom: 12px;
+
+            &:last-child {
+                margin: 0;
+            }
+
+            ion-input {
+                max-width: 250px;
+                border-bottom: 1px solid #0000006b;
+                height: 34px;
+            }
+        }
+
+        ion-radio-group {
+            display: flex;
+            margin-bottom: 12px;
+
+            ion-item {
+                width: 250px;
+                border: 1px solid #cccccc6e;
+                border-radius: 8px;
+                --inner-border-width: 0px;
+                text-align: center;
+
+                &.item-radio-checked {
+                    --background: #51c0e9;
+
+                    ion-label {
+                        font-size: 18px;
+                        line-height: 20px;
+                        font-family: "Nunito-Bold";
+                        color: #fff;
+                    }
+                }
+
+                ion-radio {
+                    opacity: 0;
+                    width: 0;
+                    margin: 0;
+                }
+
+                ion-label {
+                    margin: 0;
+                }
+            }
+        }
+
+    }
+
+    .btn-group {
+        display: flex;
+
+        ion-button {
+            width: 150px;
+            margin: 0;
+
+            &:first-child {
+                margin-right: 16px;
+            }
+        }
+    }
+}

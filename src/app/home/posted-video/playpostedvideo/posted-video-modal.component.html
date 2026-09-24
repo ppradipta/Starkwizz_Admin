@@ -1,0 +1,20 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Uploaded Video
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="onClickClose()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="modal-inner">
+    <video preload="auto" webkit-playsinline="playsinline" class="videoPlayer" #videoElements controls>
+      <source src="{{video.videoUrl}}" type="video/mp4" />
+    </video>
+  </div>
+</ion-content>

@@ -1,0 +1,120 @@
+ion-header {
+    padding: 12px 20px;
+    background: #fff;
+    .header {
+        display: flex;
+        align-items: center;
+    }
+    ion-title {
+        font-size: 24px;
+        font-family: 'Nunito-SemiBold';
+        color: #0A395A;
+        padding: 0;
+        position: unset;
+    }
+}
+
+ion-content {
+    height: calc(100% - 60px);
+}
+.page-container {
+    padding: 24px;
+    .add-btn {
+        letter-spacing: 0;
+        text-transform: capitalize;
+        --color: #0A395A; 
+        --border-color: #0A395A;
+        margin: 0;
+        font-size: 16px;
+        width: 140px;
+        height: 36px;
+        font-family: 'Nunito-Bold';
+    }
+    .main-card {
+        margin-bottom: 24px;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0px 2px 12px #0a395a33;
+        overflow: hidden;
+        display: flex;
+        min-height: 160px;
+        .card-left {
+            flex: 1;
+            padding: 36px 8px 8px;
+            position: relative;
+            .event-info {
+                padding: 8px;
+                width: 25%;
+                span {
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-family: "Nunito-Regular";
+                    color: #727577;
+                    display: block;
+                }
+                .card-label {
+                    font-size: 17px;
+                    line-height: 20px;
+                    font-family: "Nunito-SemiBold";
+                    color: #0a395a;
+                    display: block;
+                    margin-bottom: 0;
+                }
+            }
+            p {
+                font-size: 16px;
+                line-height: 20px;
+                font-family: "Nunito-SemiBold";
+                color: #0a395a;
+                display: block;
+                margin-bottom: 0;
+            }
+        }
+        .card-right {
+            width: 110px;
+            padding: 16px;
+            background: #0a395a2e;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+    }
+    .card-btn {
+        height: 32px;
+        width: 100%;
+        font-size: 14px;
+        --background: #0A395A;
+        --color: #fff;
+        margin: 0;
+        letter-spacing: 0;
+        text-transform: capitalize;
+        --box-shadow: none;
+        &.button-outline {
+            font-family: 'Nunito-Bold';
+            --background: transparent;
+            --color: #0A395A;
+            --background-focused: transparent;
+            --background-hover: transparent;
+            --border-color: #0A395A;
+        }
+    }
+}
+
+.date {
+    font-size: 15px;
+    line-height: 18px;
+    font-family: "Nunito-SemiBold";
+    color: #fff;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #0A395A;
+    padding: 7px 10px 8px 10px;
+    border-radius: 0 0 18px;
+    ion-icon {
+        font-size: 18px;
+        margin-right: 5px;
+    }
+}

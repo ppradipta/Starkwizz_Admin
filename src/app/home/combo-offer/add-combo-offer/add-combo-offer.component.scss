@@ -1,0 +1,58 @@
+.date-ion-content {
+    --keyboard-offset: 0px !important;
+}
+
+.custom-col {
+    border: 1px solid #0a395a;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .title {
+        font-size: 20px;
+        line-height: 24px;
+        font-family: "Nunito-Bold";
+        color: #51c0e9;
+        display: block;
+    }
+
+    .count {
+        font-size: 18px;
+        line-height: 22px;
+        font-family: "Nunito-Bold";
+        color: #0a395a;
+        display: block;
+    }
+
+    ion-textarea {
+        height: 80px;
+        max-height: 8%;
+        width: 100%;
+        --placeholder-opacity: 0.6;
+        font-size: 15px;
+        font-family: "Nunito-SemiBold";
+        border: 1px solid #0a395a;
+        border-radius: 6px;
+        --padding-top: 12px;
+        --padding-end: 12px;
+        --padding-bottom: 10px;
+        --padding-start: 12px;
+        text-align: left;
+        margin: 0;
+    }
+}
+
+.footer-toolbar {
+    ion-button {
+        width: 120px;
+        margin: 0;
+
+        &:first-child {
+            margin-right: 12px;
+        }
+    }
+}

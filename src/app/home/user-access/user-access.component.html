@@ -1,0 +1,47 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">User Access</h4>
+    </div>
+  </div>
+  <ion-button mode="md" class="search-btn" (click)="addUser()" *ngIf="userDetail.type == 'SA ADMIN'">Add User</ion-button>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+
+    <ion-segment (ionChange)="tabChanged($event)" [value]="segmentValue" mode="md">
+      <ion-segment-button *ngFor="let type of typeList" [value]="type.id">
+        <ion-label>{{type.displayName}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <div class="card-container">
+      <div class="custom-card" *ngFor="let user of users">
+        <div class="card-head">
+          <div class="userImg">
+            <ion-img
+              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"></ion-img>
+          </div>
+          <div class="userInfo">
+            <ion-label class="user-name">{{user?.firstName}} {{user?.lastName}}</ion-label>
+            <h4 class="card-heading">+91-{{user?.mobileNo}}</h4>
+            <p class="card-desc">{{user?.email}}</p>
+          </div>
+          <div class="event-status">{{user?.profileType}}</div>
+        </div>
+        <div class="card-body">
+          <ion-label class="card-label">Access</ion-label>
+          <div class="eventInfo-container">
+            <ng-container *ngFor="let acs of user?.acess">
+              <span *ngIf="acs.isSelected">{{acs.name}}</span>
+            </ng-container>
+          </div>
+        </div>
+        <div class="card-footer" *ngIf="userDetail.type == 'SA ADMIN'">
+          <ion-button class="upload-btn" (click)="editAccess(user)">Edit</ion-button>
+          <ion-button class="upload-btn" (click)="viewAccess(user)">View</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

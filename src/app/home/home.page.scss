@@ -1,0 +1,107 @@
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.header-md::after {
+  height: 0;
+}
+
+.drawerHeader {
+  min-height: 64px;
+  background: #0A395A;
+}
+.drawerToolBar { 
+  --background: #0A395A;
+  padding: 5px 16px;
+  height: 64px;
+  .user-img {
+    width: 40px;
+    background: #fff;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: #0A395A;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-right: 10px;
+  }
+  .user-info  {
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: 400;
+    color: #fff;
+    text-transform: capitalize;
+    margin-bottom: 0px;
+    display: block;
+  }
+  span {
+    text-transform: uppercase;
+  }
+}
+
+.user-left-menu {
+  --background: #fff !important;
+  flex: 1;
+  padding: 0;
+  .side-nav-border {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --min-height: unset;
+    &.active-link {
+      --background: #0A395A;
+      p {
+        color: #fff;
+      }
+    }
+    ion-label {
+      padding: 10px 16px !important;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000;
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  flex: 1;
+  .page-body {
+      flex: 1;
+  }
+}
+
+ion-menu {
+  --side-min-width: 220px;
+  --side-max-width: 280px;
+}

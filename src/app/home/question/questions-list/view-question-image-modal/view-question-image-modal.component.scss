@@ -1,0 +1,47 @@
+.modal-inner {
+    height: 100%;
+    .question-text {
+        font-family: "Nunito-SemiBold";
+        font-size: 18px;
+        color: #0a395a;
+        line-height: 22px;
+        display: block;
+        margin-bottom: 10px;
+    }
+    .question-img {
+        height: auto;
+        width: 100%;
+        ion-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .option-list {
+        .option {
+            background: #fff;
+            padding: 4px 12px;
+            margin: 6px 0;
+            color: #0A395A;
+            font-size: 15px;
+            font-family: 'Nunito-SemiBold';
+            border-radius: 6px;
+            border: 2px dashed #174c70;
+            opacity: 0.6;
+            &.answer {
+                border: 2px dashed #0A395A;
+                background: #0A395A;
+                color: #fff;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.footer-toolbar {
+    padding: 14px 12px;
+    ion-button {
+        font-size: 15px;
+        height: 32px;
+    }
+}

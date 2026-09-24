@@ -1,0 +1,81 @@
+<ion-header>
+  <div class="heading">
+    <ion-title>Combo Offers</ion-title>
+    <div class="d-flex">
+      <ion-button class="card-btn me-3" fill="outline" (click)="goToCancel()">Cancel Subscription</ion-button>
+      <ion-button class="card-btn me-3" fill="outline" (click)="goTofreetrial()">Type Freetrial</ion-button>
+      <ion-button class="card-btn" fill="outline" (click)="addComboOffer('ADD')">Add Offer</ion-button>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <ion-list class="card-list">
+      <ion-item *ngFor="let offer of offerList; let i=index">
+        <div class="sub-card">
+          <div class="card-body">
+            <h4 class="card-heading">{{offer.code}}</h4>
+            <div class="d-flex justify-content-between">
+              <div class="event-info">
+                <span class="me-1">Name : </span>
+                <ion-label class="card-label">{{offer.name}}</ion-label>
+              </div>
+              <ion-chip>{{offer.status}}</ion-chip>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="event-info">
+                <span class="me-1">Total : </span>
+                <ion-label class="card-label"><b>₹ {{offer.totalPrice}}</b></ion-label>
+              </div>
+              <div class="event-info">
+                <span class="me-1">Discount : </span>
+                <ion-label class="card-label">₹ {{offer.discount}}</ion-label>
+              </div>
+            </div>
+            <div class="custom-col" *ngFor="let item of offer.offerApplicables">
+              <div class="d-flex justify-content-between">
+                <ion-label class="offer-label">{{item.name}}</ion-label>
+                <div class="event-info">
+                  <span class="me-1">Count Days : </span>
+                  <ion-label class="card-label">{{item.countDays}}</ion-label>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between">
+                <div class="event-info">
+                  <span class="me-1">Price : </span>
+                  <ion-label class="card-label"><b>₹ {{item.price}}</b></ion-label>
+                </div>
+                <div class="event-info">
+                  <span class="me-1">Discount : </span>
+                  <ion-label class="card-label"><b>₹ {{item.discount}}</b></ion-label>
+                </div>
+              </div>
+              <div class="event-info">
+                <span class="me-1">Description : </span>
+                <ion-label class="card-label">{{item.desc}}</ion-label>
+              </div>
+            </div>
+
+          </div>
+          <div class="card-footer">
+            <div class="icon-container" *ngIf="offer.status == 'CREATE'">
+              <div class="footer-icon">
+                <ion-icon name="link-outline" (click)="activeComboOffer(offer)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon edit-icon">
+                <ion-icon name="create-outline" (click)="editComboOffer(offer)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteComboOffer(offer)"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

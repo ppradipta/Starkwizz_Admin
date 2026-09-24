@@ -1,0 +1,87 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Edit Module
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="personalInfoForm">
+
+      <ion-row>
+
+        <ion-col size="12">
+          <div class="avatar-img">
+            <ion-avatar class="w-100 h-100 emp-avatar" *ngIf="selectedModule?.imageURL">
+              <ion-img class="w-100 h-100" [src]="selectedModule.imageURL">
+              </ion-img>
+            </ion-avatar>
+            <div class="select-icon">
+              <input type="file" (change)="imageSelected($event)" accept=".png,.jpg" />
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Module Name<span>*</span></ion-label>
+            <ion-input [(ngModel)]="selectedModule.displayName" id="displayName" name="displayName" type="text"
+              pattern="[A-Za-z0-9]+" autofocus inputmode="text" required class="p-1" placeholder="Enter Module Name">
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="selectedModule">
+          <div class="custom-input">
+            <ion-label>Publisher Name<span>*</span></ion-label>
+            <ion-select mode="md" [(ngModel)]="selectedPublisher" id="publisherId" name="publisherId"
+              #publisher="ngModel" placeholder="Select Publisher Name" class="p-1" required>
+              <ion-select-option *ngFor="let pub of bookPublishers" [value]="pub">
+                {{pub.displayName}}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Color Code<span>*</span></ion-label>
+            <ion-input [(ngModel)]="selectedModule.colorCode" id="colorCode" name="colorCode" type="text"
+              pattern="[A-Za-z0-9]+" autofocus inputmode="text" required placeholder="Enter Color Code">
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="selectedSubjects?.length > 0">
+          <div class="custom-input">
+            <ion-label>Select Subject<span>*</span></ion-label>
+            <ion-select mode="md" [(ngModel)]="selectedModule.subjectName" id="subjectName" name="subjectName"
+              #subjectName="ngModel" placeholder="Select Subject" class="p-1" required>
+              <ion-select-option *ngFor="let sub of selectedSubjects" [value]="sub.name">
+                {{sub.displayName}}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Class Name : {{selectedClass.displayName}}</ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+
+
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="updateModule()">Update</ion-button>
+  </div>
+</ion-footer>

@@ -1,0 +1,57 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Upload Question
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="personalInfoForm">
+      <ion-row>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-input type="file" (change)="onFileChange($event)" multiple="false" autofocus required
+              placeholder="upload question">
+            </ion-input>
+          </div>
+          <div class="customSegment">
+            <ion-segment (ionChange)="onQuestionUploadSelect($event)" [value]="uploadType">
+              <ion-segment-button value="XLSX" id="XLSX">
+                <ion-label>Xlsx</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="TXT" id="TXT">
+                <ion-label>Txt</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="questions.length > 0">
+          <ion-label>Question  is uploaded. You can proceed to Preview uploaded Data<span>*</span></ion-label>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="states.length > 0 || district.length > 0 || cities.length > 0 || schools.length > 0">
+          <ion-label>States or Districts or Cities or Schools is uploaded. You can proceed to Preview uploaded Data<span>*</span></ion-label>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="interest.length > 0 && uploadforType=='INTEREST'">
+          <ion-label>Interests  is uploaded. You can proceed to Preview uploaded Data<span>*</span></ion-label>
+        </ion-col>
+      </ion-row>
+    </form>
+
+
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="previewUpload()">Preview</ion-button>
+  </div>
+</ion-footer>

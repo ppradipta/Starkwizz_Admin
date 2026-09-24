@@ -1,0 +1,60 @@
+<ion-header>
+  <div class="heading">
+    <ion-title>Price Management</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Individual Plan Prices</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="price-section">
+          <ion-item>
+            <ion-label position="stacked">Individual Plan Price (Rs.)</ion-label>
+            <ion-input type="number" [(ngModel)]="prices.individual.yearly" placeholder="Enter yearly price"></ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Family Plan Price</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Family Plan Price (Rs.)</ion-label>
+          <ion-input type="number" [(ngModel)]="prices.family" placeholder="Enter family plan price"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>School Plan Price</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">School Plan Price (Rs.)</ion-label>
+          <ion-input type="number" [(ngModel)]="prices.school" placeholder="Enter school plan price"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Private Institution Plan Price</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Private Institution Plan Price (Rs.)</ion-label>
+          <ion-input type="number" [(ngModel)]="prices.privateInstitution" placeholder="Enter private institution plan price"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="full" class="save-btn" (click)="savePrices()">Save Prices</ion-button>
+  </div>
+</ion-content>

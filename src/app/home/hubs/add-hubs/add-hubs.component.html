@@ -1,0 +1,148 @@
+<ion-header>
+  <div class="header">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Add Hub</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="content page-container">
+    <form #hubForm="ngForm" name="hubForm" autocomplete="off">
+      <ion-row>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Hub Name<span>*</span></ion-label>
+            <ion-input id="displayName" [(ngModel)]="hub.displayName" name="displayName" type="text" required
+              placeholder="Enter Hub Name"></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="8">
+          <div class="custom-input">
+            <ion-label>Hub Discription<span>*</span></ion-label>
+            <ion-textarea [(ngModel)]="hub.description" name="description" type="text" required row="2"
+              placeholder="Enter Hub Discription"></ion-textarea>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Deals In<span>*</span></ion-label>
+            <ion-textarea id="dealsIn" [(ngModel)]="hub.dealsIn" name="dealsIn" type="text" required row="2"
+              placeholder="Enter  deals In details"></ion-textarea>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Hub Address<span>*</span></ion-label>
+            <ion-textarea [(ngModel)]="hub.locationText" name="locationText" type="text" required row="2" required
+              placeholder="Enter Hub Address"></ion-textarea>
+              <ion-label>Latitude<span>*</span></ion-label>
+              <ion-input id="latitude" [(ngModel)]="hub.latitude" name="latitude" type="text" required
+                placeholder="Enter Latitude"></ion-input>
+                <ion-label>Longitude<span>*</span></ion-label>
+                <ion-input id="longitude" [(ngModel)]="hub.longitude" name="longitude" type="text" required
+                  placeholder="Enter Longitude"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Phone Number<span>*</span></ion-label>
+            <ion-input name="phoneNumber" [(ngModel)]="hub.phoneNumber" inputmode="tel" required minlength="10"
+              maxlength="10" type="number" required placeholder="Enter Phone Number"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Whatsapp Number<span>*</span></ion-label>
+            <ion-input name="whatsappNumber" [(ngModel)]="hub.whatsappNumber" required inputmode="tel" minlength="10"
+              maxlength="10" type="number" required placeholder="Enter Whatsapp Number"></ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Website<span>*</span></ion-label>
+            <ion-input [(ngModel)]="hub.website" name="website" type="text" required placeholder="Enter Website">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Photos<span>*</span></ion-label>
+            <ion-input class="file-input" required (change)="selectHubImage($event, hub)" type="file" multiple>
+            </ion-input>
+            <div class="item-img" *ngIf="hub.imgUrl">
+              <img [src]="hub.imgUrl">
+            </div>
+            <div class="clear-img" (click)="onClickDeleteImage(hub)" *ngIf="hub.imgUrl">
+              <ion-icon name="close-circle-outline"></ion-icon>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label class="section-title">Active Days of the week</ion-label>
+            <ion-row *ngFor="let workingday of hub?.workingDays">
+              <ion-col size="6" class="d-flex align-items-center">
+                <ion-checkbox [(ngModel)]="workingday.isWorkingDay" [checked]="workingday.isWorkingDay" (ionChange)="selectWorkingDay($event, workingday)">
+                </ion-checkbox>
+                <ion-label class="dayName">{{workingday.name}}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-input name="startTime" type="text" required id="startTime" placeholder="Enter start time" [(ngModel)]="workingday.startTime" (click)="selectStartTime(workingday)">
+                </ion-input>
+                <ion-input name="endTime" type="text" id="endTime" required placeholder="Enter end time" [(ngModel)]="workingday.endTime" (click)="selectEndTime(workingday)"></ion-input>
+              </ion-col>
+            </ion-row>
+
+          </div>
+        </ion-col>
+
+        <ion-label class="section-title" *ngIf="!isEdit">Offer</ion-label>
+        <ion-col size="12" *ngIf="!isEdit">
+          <div class="custom-input">
+            <ion-label>Offer Title</ion-label>
+            <ion-input [(ngModel)]="hub.offerTitle" name="offerTitle" type="text" placeholder="Enter Offer Title">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="!isEdit">
+          <div class="custom-input">
+            <ion-label>Offer Discription</ion-label>
+            <ion-input [(ngModel)]="hub.offerDiscription" name="offerDiscription" type="text"
+              placeholder="Enter Offer Discription"></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-label class="section-title" *ngIf="!isEdit">Notice</ion-label>
+        <ion-col size="12" *ngIf="!isEdit">
+          <div class="custom-input">
+            <ion-label>Notice</ion-label>
+            <ion-textarea [(ngModel)]="hubNotice.description" name="notice" type="text" placeholder="Enter Notice"></ion-textarea>
+          </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="!isEdit">
+          <div class="custom-input">
+            <ion-label>Notice Image</ion-label>
+            <ion-input class="file-input" type="file" (change)="selectNoticeImage($event)" id="noticeimage"></ion-input>
+          </div>
+          <div class="item-img" *ngIf="hubNotice.noticeImgUrl">
+            <img [src]="hubNotice.noticeImgUrl">
+          </div>
+          <div class="clear-img" (click)="onClickDeleteImageForNotice(hubNotice)" *ngIf="hubNotice.noticeImgUrl">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+  <ion-button [disabled]="!hubForm.valid" mode="md" class="okay-btn" (click)="save()">Save</ion-button>
+</ion-content>
+<ion-footer>
+  <!-- <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn">Save</ion-button>
+  </div> -->
+</ion-footer>

@@ -1,0 +1,81 @@
+ 
+ion-content {
+    --background: #fff !important;
+}
+ion-button {
+    letter-spacing: 0;
+}
+.content {
+    text-align: center;   
+    padding: 26px;
+    .logo { 
+        max-width: 200px;
+        margin: 50px auto; 
+        height:80px;
+    }
+    .text {
+        font-size: 24px;
+        font-family: 'Nunito-SemiBold';
+        color: #181B2C;
+    }
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .login-input {
+        margin-top: 20px;
+        ion-input {
+            height: 60px;
+            width: 100%;
+            font-size: 16px;
+            font-family: 'Nunito-Regular';
+            border-radius: 30px;
+            background: #F3F3F3;
+            border: none;
+            --padding-top: 14px;
+            --padding-end: 20px;
+            --padding-bottom: 14px;
+            --padding-start: 20px;
+            text-align: left;
+            overflow: hidden;
+            --overflow: hidden;
+        }
+    }
+    .reset-btn {
+        text-transform: capitalize;
+        color: #0A395A !important; 
+        --color-activated: #0A395A;
+        --padding-top: 6px;
+        --padding-bottom: 6px;
+        --padding-end: 6px;
+        --padding-start: 6px;
+        margin: 0;
+        font-family: 'Nunito-Regular';
+        font-size: 14px;
+        height: unset;
+    }
+    .btn-content {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 25px 0 20px;
+        .login-btn {
+            --background: #0A395A;
+            --color: #fff;
+            width: 90%;
+            --border-radius: 30px;
+            height: 60px ;
+            --box-shadow: 0 3px 20px #00000010 !important;
+            text-transform: capitalize;
+            font-size: 20px;
+            font-family: 'Nunito-Regular';
+            font-weight: 500;
+            margin: 0;
+        }
+    }
+}
+
+.input-content {
+    margin: 0 auto;
+    margin-top: 30px; 
+}

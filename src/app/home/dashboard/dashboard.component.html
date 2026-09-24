@@ -1,0 +1,331 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Board Classes</ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+
+    <div class="custom-card">
+      <div class="customSegment">
+        <ion-segment [(ngModel)]="selectedBoard" mode="ios" (ionChange)="boardChanged()">
+          <ion-segment-button *ngFor="let board of boardEducations" [value]="board">
+            <ion-label>{{board.displayName}}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+
+      <input type="file" id="fileLoader" #fileLoader name="files" title="Load File" hidden />
+
+    </div>
+
+
+    <div class="main-card custom-card">
+      <div class="card-left">
+        <div class="status-select" *ngIf="selectedClassList?.length > 0 && selectedBoard.displayName">
+          <ion-list class="card-list">
+            <!-- <ion-radio-group class="w-100" (ionChange)="classChanged()" [(ngModel)]="selectClass"> -->
+            <ion-item *ngFor="let class of selectedClassList; let i=index"
+              [ngClass]="{'card-checked': !class.isChecked}">
+              <div class="sub-card" (click)="classChanged(class)">
+                <!-- <div class="card-img">
+                  <ion-img
+                    [src]="class.imageURL?class.imageURL:'https://ionicframework.com/docs/demos/api/card/madison.jpg'">
+                  </ion-img>
+                  <div class="camera-icons" (click)="presentActionSheet(fileLoader,class,'CLASSES')">
+                    <ion-icon name="camera"></ion-icon>
+                  </div>
+                </div> -->
+                <div class="card-body">
+                  <h4 class="card-heading">Class: {{class.displayName}}</h4>
+                  <!-- <p class="card-desc">
+                      {{class.description}}
+                    </p> -->
+                  <div class="event-info">
+                    <div>
+                      <span>Color</span>
+                      <ion-label class="card-label" [hidden]='!class.edit'> {{class.colorCode}}</ion-label>
+                      <ion-input [(ngModel)]="class.colorCode" type="text" [hidden]='class.edit'>
+                      </ion-input>
+                    </div>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='!class.edit' [disabled]="class.isChecked"
+                      (click)="enableColorCode(class)">Change</ion-button>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='class.edit' [disabled]="class.isChecked"
+                      (click)="disableColorCode(class,'CLASSES')">Save</ion-button>
+                  </div>
+                </div>
+                <div class="card-footer">
+
+                  <div class="icon-container">
+                    <div class="footer-icon edit-icon">
+                      <ion-icon name="create-outline" (click)="updateClass(class)"></ion-icon>
+                    </div>
+                  </div>
+
+                  <div class="icon-container">
+                    <div class="footer-icon">
+                      <ion-icon name="trash" (click)="deleteClasses(class)"></ion-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ion-radio slot="end" mode="ios" [value]="class"></ion-radio> -->
+            </ion-item>
+            <!-- </ion-radio-group> -->
+          </ion-list>
+        </div>
+        <p class="default-text" *ngIf="selectedClassList?.length == 0 && selectedBoard.displayName">
+          No Classes present in {{selectedBoard.displayName}}. Please add some class.
+        </p>
+      </div>
+      <div class="card-right">
+        <div class="mb-2" *ngIf="selectedBoard.displayName">
+          <ion-button class="card-btn" (click)="addClasses()">Add Class</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="main-card custom-card" *ngIf="selectClass?.id">
+      <div class="card-left">
+        <div class="status-select">
+          <h6 class="card-title">Book Publishers</h6>
+          <ion-list class="card-list"> -->
+            <!-- <ion-radio-group class="w-100" (ionChange)="classChanged()" [(ngModel)]="selectClass"> -->
+            <!-- <ion-item *ngFor="let bPublisher of filterBookPublisher; let i=index">
+              <div class="card-body">
+                <span>Name : </span>
+                <h6 class="card-heading">{{bPublisher?.displayName}}</h6>
+              </div>
+              <div class="card-body">
+                <span>Board </span>
+                <ion-label class="card-label"> {{bPublisher?.board}}</ion-label>
+              </div>
+              <div class="card-body">
+                <span>Class </span>
+                <ion-label class="card-label"> {{bPublisher?.className}}</ion-label>
+              </div>
+              <div class="card-footer">
+                <div class="icon-container">
+                  <div class="footer-icon edit-icon">
+                    <ion-icon name="create-outline" (click)="updateBookPublisher(bPublisher)"></ion-icon>
+                  </div>
+                </div>
+
+                <div class="icon-container">
+                  <div class="footer-icon">
+                    <ion-icon name="trash" (click)="deleteBookPublisher(bPublisher)"></ion-icon>
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- <ion-radio slot="end" mode="ios" [value]="class"></ion-radio> -->
+            <!-- </ion-item> -->
+            <!-- </ion-radio-group> -->
+          <!-- </ion-list>
+        </div>
+        <p class="default-text" *ngIf="filterBookPublisher?.length == 0">
+          No Book Publisher in {{selectedBoard.displayName}}. Please add some Book Publisher.
+        </p>
+      </div>
+      <div class="card-right">
+        <div class="mb-2" *ngIf="selectedBoard.displayName">
+          <ion-button class="card-btn" (click)="addBookPublisher()">Add Publisher</ion-button>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="subject-card custom-card" *ngIf="selectClass?.id">
+      <div class="card-left p-0">
+        <h6 class="card-title"> Subjects of Class : {{selectClass.displayName}}</h6>
+        <div class="px-2 pb-1" *ngIf="selectedSubjectList.length > 0">
+          <ion-list class="card-list">
+            <ion-item *ngFor="let sub of selectedSubjectList; let i=index" [ngClass]="{'card-checked': !sub.isChecked}">
+              <div class="sub-card" (click)="subjectChanged(sub)">
+                <!-- <div class="card-img">
+                  <ion-img
+                    [src]="sub.imageURL?sub.imageURL:'https://ionicframework.com/docs/demos/api/card/madison.jpg'">
+
+                  </ion-img>
+                  <div class="camera-icons" (click)="presentActionSheet(fileLoader,sub,'SUBJECT')">
+                    <ion-icon name="camera"></ion-icon>
+                  </div>
+                </div> -->
+                <div class="card-body">
+                  <h6 class="card-heading">{{sub.displayName}}</h6>
+                  <div class="event-info border-none">
+                    <span class="me-1">Category : </span>
+                    <ion-label class="card-label">{{sub.category}}</ion-label>
+                  </div>
+                  <div class="event-info border-none">
+                    <span class="me-1">Price (per month) : </span>
+                    <ion-label class="card-label">{{sub.price}}</ion-label>
+                  </div>
+                  <div class="event-info">
+                    <div>
+                      <span>Color</span>
+                      <ion-label class="card-label" [hidden]='!sub.edit'> {{sub.colorCode}}</ion-label>
+                      <ion-input [(ngModel)]="sub.colorCode" type="text" [hidden]='sub.edit'>
+                      </ion-input>
+                    </div>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='!sub.edit' [disabled]="sub.isChecked"
+                      (click)="enableColorCode(sub)">Change</ion-button>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='sub.edit' [disabled]="sub.isChecked"
+                      (click)="disableColorCode(sub,'SUBJECT')">Save</ion-button>
+                  </div>
+
+                </div>
+                <div class="card-footer">
+                  <div class="icon-container">
+                    <div class="footer-icon edit-icon">
+                      <ion-icon name="create-outline" (click)="editSubject(sub)"></ion-icon>
+                    </div>
+                  </div>
+                  <div class="icon-container">
+                    <div class="footer-icon">
+                      <ion-icon name="trash" (click)="deleteSubject(sub)"></ion-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ion-checkbox slot="end" mode="ios" [ngModel]="subjectChecked == i"
+                (ngModelChange)="$event ? subjectChecked = i : subjectChecked = -1"></ion-checkbox> -->
+            </ion-item>
+          </ion-list>
+        </div>
+        <p class="default-text" *ngIf="selectedSubjectList?.length == 0">
+          No Subject present in selected Class. Please add some.
+        </p>
+      </div>
+      <div class="card-right d-flex justify-content-between flex-column">
+        <div class="mb-2">
+          <ion-button class="card-btn" (click)="addSubject()">Add Subject</ion-button>
+        </div>
+        <!-- <div class="d-flex flex-column" *ngIf="selectSubject?.id">
+          <ion-button class="card-btn mb-2" fill="outline" (click)="editSubject()">Edit</ion-button>
+          <ion-button class="card-btn" (click)="deleteSubject()">Delete</ion-button>
+        </div> -->
+      </div>
+    </div>
+
+    <div class="module-card custom-card" *ngIf="selectSubject?.id">
+
+      <div class="card-left p-0">
+        <h6 class="card-title"> Modules of Subject : {{selectSubject.displayName}}</h6>
+        <div class="px-2 pb-1" *ngIf="selectedModules?.length > 0">
+          <ion-list class="card-list">
+            <ion-item *ngFor="let mod of selectedModules;let i=index">
+              <div class="sub-card" (click)="moduleChanged(mod)">
+                <div class="card-body">
+                  <h6 class="card-heading">{{mod.displayName}}</h6>
+                  <div class="event-info border-none">
+                    <span class="me-1">Publisher Name : </span>
+                    <ion-label class="card-label"><b>{{mod?.publisherName}}</b></ion-label>
+                  </div>
+
+                  <div class="event-info border-none" *ngIf="mod.linktype=='SCHOOL'">
+                    <span class="me-1">Linked Schools : </span>
+                    <ion-label class="card-label" *ngFor="let school of mod.linkValueDetails">
+                      <b>{{school?.displayName}}</b>
+                    </ion-label>
+                  </div>
+
+                  <div class="event-info">
+                    <div>
+                      <span>Color</span>
+                      <ion-label class="card-label" [hidden]='!mod.edit'> {{mod.colorCode}}</ion-label>
+                      <ion-input [(ngModel)]="mod.colorCode" type="text" [hidden]='mod.edit'>
+                      </ion-input>
+                    </div>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='!mod.edit' [disabled]="mod.isChecked"
+                      (click)="enableColorCode(mod)">Change</ion-button>
+                    <ion-button class="clear-btn" fill="clear" [hidden]='mod.edit' [disabled]="mod.isChecked"
+                      (click)="disableColorCode(mod,'MODULE')">Save</ion-button>
+                  </div>
+
+                </div>
+                <div class="card-footer">
+                  <div class="icon-container">
+                    <div class="footer-icon">
+                      <ion-icon name="link-outline" (click)="linkSchoolForModule(mod)"></ion-icon>
+                    </div>
+                  </div>
+                  <div class="icon-container">
+                    <div class="footer-icon edit-icon">
+                      <ion-icon name="create-outline" (click)="editModule(mod)"></ion-icon>
+                    </div>
+                  </div>
+                  <div class="icon-container">
+                    <div class="footer-icon">
+                      <ion-icon name="trash" (click)="deleteModule(mod)"></ion-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <ion-checkbox slot="end" mode="ios" [ngModel]="moduleChecked == i"
+                (ngModelChange)="$event ? moduleChecked = i : moduleChecked = -1"></ion-checkbox>-->
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <p class="default-text" *ngIf="selectedModules?.length == 0">
+          No Module present in selected Subject. Please add some.
+        </p>
+      </div>
+      <div class="card-right">
+        <div class="mb-2">
+          <ion-button class="card-btn" (click)="addModuleToSubject()">Add Module</ion-button>
+        </div>
+        <!-- <div class="d-flex flex-column" *ngIf="selectModule?.id">
+          <ion-button class="card-btn mb-2" fill="outline" (click)="editModule()">Edit</ion-button>
+          <ion-button class="card-btn" (click)="deleteModule()">Delete</ion-button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+
+<ion-modal #modal class="selectBottomSheet" [isOpen]="isBookPublisherOpen" [initialBreakpoint]="1.00"
+  [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{bookPublisherOperationType | titlecase}} Book Publisher</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div>
+        <ion-text class="inputLabel">Enter Book Publisher Name</ion-text>
+        <ion-input class="custom-input" type="text" placeholder="Enter Book Publisher Name" required
+          [(ngModel)]="bookPublisherName"></ion-input>
+
+        <div class="event-info">
+          <span>Board Name : </span>
+          <ion-label class="card-label"> {{selectedBoard?.name}}</ion-label>
+        </div>
+        <div class="event-info">
+          <span>Class Name : </span>
+          <ion-label class="card-label"> {{selectClass?.displayName}}</ion-label>
+        </div>
+      </div>
+      <ion-button class="secondary-btn" (click)="confirmAddBookPublisher()" *ngIf="bookPublisherOperationType=='ADD'">
+        <!-- <ion-spinner color="light" name="dots"></ion-spinner> -->
+        <span class="btn-text">Confirm</span>
+      </ion-button>
+      <ion-button class="secondary-btn" (click)="confirmUpdateBookPublisher()"
+        *ngIf="bookPublisherOperationType=='EDIT'">
+        <!-- <ion-spinner color="light" name="dots"></ion-spinner> -->
+        <span class="btn-text">Update</span>
+      </ion-button>
+      <ion-button class="secondary-btn" (click)="confirmDeleteBookPublisher()"
+        *ngIf="bookPublisherOperationType=='DELETE'">
+        <!-- <ion-spinner color="light" name="dots"></ion-spinner> -->
+        <span class="btn-text">Confirm</span>
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,25 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Image Question
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="modal-inner">
+    <ion-label class="question-text" *ngIf="question?.text">{{question?.text}}</ion-label>
+    <div class="question-img" *ngIf="question?.url">
+      <ion-img [src]="question?.url"></ion-img>
+    </div>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">ok</ion-button>
+  </div>
+</ion-footer>

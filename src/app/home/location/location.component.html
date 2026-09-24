@@ -1,0 +1,235 @@
+<ion-header>
+  <div class="header">
+    <ion-title>Location </ion-title>
+    <ion-label *ngIf="event">Link {{event.eventName}} To {{type}} </ion-label>
+    <ion-icon name="close-circle-outline" *ngIf="actionType=='LINK_SCHOOL'" (click)="closeModal()"></ion-icon>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="tabChanged($event)" [value]="tabValue" mode="md" color="secondary">
+        <ion-segment-button mode="md" value="STATE">
+          <ion-label>State</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="DISTRICT" class="segmentBtn" value="DISTRICT">
+          <ion-label>District</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="CITIES" class="segmentBtn" value="CITIES">
+          <ion-label>Cities</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="SCHOOLS" class="segmentBtn" value="SCHOOLS">
+          <ion-label>Schools</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="INSTITUTE" class="segmentBtn" value="INSTITUTE">
+          <ion-label>Institutes</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <div class="d-flex justify-content-end" *ngIf="actionType!='LINK_SCHOOL'">
+        <ion-button mode="md" fill="outline" class="add-btn" (click)="addNewEntryAlert()">Add {{tabValue}}</ion-button>
+        <ion-button mode="md" fill="outline" class="add-btn" (click)="uploadData(tabValue)">Upload {{tabValue}}
+        </ion-button>
+      </div>
+      <div class="d-flex justify-content-end" *ngIf="actionType=='LINK_SCHOOL'">
+        <ion-button mode="md" fill="outline" class="add-btn" (click)="confirmSelectedSchool()">Confirm</ion-button>
+      </div>
+      <div class="d-flex justify-content-end" *ngIf="actionType=='BULK_UPLOAD'">
+        <ion-button mode="md" fill="outline" class="add-btn" (click)="confirmBulkUpload()">Confirm Upload</ion-button>
+      </div>
+    </div>
+
+
+    <div *ngIf="tabValue === 'STATE'">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">State Name</th>
+            <th class="th-sm" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')">View</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="states?.length">
+          <tr *ngFor="let data of states">
+            <td>{{data?.displayName}}</td>
+            <td (click)="viewData(data, 'DISTRICT')" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')"> View Disctricts</td>
+            <td class="btn-holder">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!states?.length">
+          <tr>
+            <p>No States available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="tabValue === 'DISTRICT'">
+      <div style="padding-left: 30%;" class="heading-right">
+        <ion-select  placeholder="State" mode="ios" (ionChange)="selectState($event)">
+          <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchDistrict()">Search</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">District Name</th>
+            <th *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')">View</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="district?.length">
+          <tr *ngFor="let data of district">
+            <td *ngIf="actionType!='BULK_UPLOAD'">{{data?.displayName}}</td>
+            <td *ngIf="actionType=='BULK_UPLOAD'">{{data?.displayName}}({{data?.stateid}})</td>
+            <td (click)="viewData(data, 'CITIES')" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')"> View Cities</td>
+            <td class="btn-holder">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!district?.length">
+          <tr>
+            <p class="zero">No Disctrict available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="tabValue === 'CITIES'">
+      <div style="padding-left: 30%;" class="heading-right">
+        <ion-select  placeholder="State" mode="ios" (ionChange)="selectState($event)">
+          <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}
+          </ion-select-option>
+        </ion-select>
+        <ion-select placeholder="Disctrict" mode="ios" (ionChange)="selectDistrict($event)">
+          <ion-select-option *ngFor="let district of allDistricts" [value]="district">{{district.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchCities()">Search</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Cities Name</th>
+            <th *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')">View</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="cities?.length">
+          <tr *ngFor="let data of cities">
+            <td *ngIf="actionType!='BULK_UPLOAD'">{{data?.displayName}}</td>
+            <td *ngIf="actionType=='BULK_UPLOAD'">{{data?.displayName}}({{data?.districtid}})</td>
+            <td (click)="viewData(data, 'SCHOOL')" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')"> View Schools</td>
+            <td class="btn-holder">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!cities?.length">
+          <tr>
+            <p class="zero">No Cities available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="tabValue === 'SCHOOLS'">
+      <div style="padding-left: 20%;" class="heading-right">
+        <ion-select  placeholder="State" mode="ios" (ionChange)="selectState($event)">
+          <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}
+          </ion-select-option>
+        </ion-select>
+        <ion-select  placeholder="Disctrict" mode="ios" (ionChange)="selectDistrict($event)">
+          <ion-select-option *ngFor="let district of allDistricts" [value]="district">{{district.displayName}}
+          </ion-select-option>
+        </ion-select>
+        <ion-select  placeholder="Cities" mode="ios" (ionChange)="selectCities($event)">
+          <ion-select-option *ngFor="let cities of allCities" [value]="cities">{{cities.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchSchools()">Search</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Schools Name</th>
+            <th *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')">View</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="schools?.length">
+          <tr *ngFor="let data of schools">
+            <td *ngIf="actionType!='BULK_UPLOAD'">{{data?.displayName}}</td>
+            <td *ngIf="actionType=='BULK_UPLOAD'">{{data?.displayName}}({{data?.boardString}}{{data?.districtid}})</td>
+            <td (click)="viewData(data, 'SCHOOL')" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')"> View Schools</td>
+            <td class="btn-holder" *ngIf="actionType!='LINK_SCHOOL'">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+            <td class="btn-holder" *ngIf="actionType=='LINK_SCHOOL'">
+              <ion-checkbox (click)="selectSchoolForEvent($event,data)"></ion-checkbox>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!schools?.length">
+          <tr>
+            <p class="zero">No Schools available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="tabValue === 'INSTITUTE'">
+      <div style="padding-left: 15%;" class="heading-right">
+        <ion-select  placeholder="State" mode="ios" (ionChange)="selectState($event)">
+          <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}
+          </ion-select-option>
+        </ion-select>
+        <ion-select  placeholder="Disctrict" mode="ios" (ionChange)="selectDistrict($event)">
+          <ion-select-option *ngFor="let district of allDistricts" [value]="district">{{district.displayName}}
+          </ion-select-option>
+        </ion-select>
+        <ion-select  placeholder="Cities" mode="ios" (ionChange)="selectCities($event)">
+          <ion-select-option *ngFor="let cities of allCities" [value]="cities">{{cities.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchInstitutes()">Search</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Institutes Name</th>
+            <th *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')">View</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="institutes?.length">
+          <tr *ngFor="let data of institutes">
+            <td *ngIf="actionType!='BULK_UPLOAD'">{{data?.displayName}}</td>
+            <td *ngIf="actionType=='BULK_UPLOAD'">{{data?.displayName}}({{data?.cityid}})</td>
+            <td (click)="viewData(data, 'INSTITUTE')" *ngIf="actionType!=('BULK_UPLOAD'||'LINK_SCHOOL')"> View Institutes</td>
+            <td class="btn-holder" *ngIf="actionType!='LINK_SCHOOL'">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+            <td class="btn-holder" *ngIf="actionType=='LINK_SCHOOL'">
+              <ion-checkbox (click)="selectSchoolForEvent($event,data)"></ion-checkbox>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!institutes?.length">
+          <tr>
+            <p class="zero">No Institutes available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</ion-content>

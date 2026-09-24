@@ -1,0 +1,115 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>Add Combo Offer</ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="date-ion-content">
+  <div class="content modal-inner">
+    <ion-row>
+      <ion-col size="3">
+        <div class="custom-input">
+          <ion-label>Code<span>*</span></ion-label>
+          <ion-input id="code" [(ngModel)]="comboSetup.code" name="code" type="text" placeholder="Enter code"
+            readonly></ion-input>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div class="custom-input">
+          <ion-label>Offer Name<span>*</span></ion-label>
+          <ion-input id="name" [(ngModel)]="comboSetup.name" name="name" type="text" placeholder="Enter Offer Name">
+          </ion-input>
+        </div>
+      </ion-col>
+
+      <ion-col size="3">
+        <div class="custom-input">
+          <ion-label>Discount<span>*</span></ion-label>
+          <ion-input [(ngModel)]="comboSetup.discount" id="discount" name="discount" type="number" inputmode="number"
+            placeholder="Enter Discount"></ion-input>
+        </div>
+      </ion-col>
+    </ion-row>
+    <div class="custom-col" *ngFor="let list of comboSetup.offerApplicables">
+      <div class="d-flex justify-content-between">
+        <ion-label class="title">{{list?.name}}</ion-label>
+        <span class="count" *ngIf="list.countDays > 0">Days Count : {{list.countDays}}</span>
+      </div>
+      <ion-row>
+
+        <ion-col size="3">
+          <div class="custom-input">
+            <ion-label>Price<span>*</span></ion-label>
+            <ion-input [(ngModel)]="list.price" id="price" name="price" type="number" autofocus inputmode="number"
+              required placeholder="Price For Applicable"></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Description<span>*</span></ion-label>
+            <ion-textarea id="desc" [(ngModel)]="list.desc" name="desc" type="text" required
+              placeholder="Enter Description">
+            </ion-textarea>
+          </div>
+        </ion-col>
+
+        <ion-col size="3">
+          <div class="custom-input">
+            <ion-label>Discount<span>*</span></ion-label>
+            <ion-input [(ngModel)]="list.discount" id="discount1" name="discount1" type="number" autofocus inputmode="number"
+              required placeholder="Enter Discount"></ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-item id="open-modal-start-{{list.name}}">
+            <ion-icon icon="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>Start Date</ion-label>
+            <ion-text slot="end">{{list.startDate}}</ion-text>
+          </ion-item>
+
+          <ion-modal trigger="open-modal-start-{{list.name}}" class="date-modal" mode="md">
+            <ng-template>
+              <ion-content class="date-content">
+                <ion-datetime #inputdate presentation="date" size="cover" [(ngModel)]="list.startDate"
+                  (ionChange)="offerStartDateChange(list, inputdate.value)" showDefaultButtons="true" [max]="maxDate"
+                  [min]="minDate" [ngModelOptions]="{standalone: true}">
+                </ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item id="open-modal-end-{{list.name}}">
+            <ion-icon icon="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>End Date</ion-label>
+            <ion-text slot="end">{{list.endDate}}</ion-text>
+          </ion-item>
+
+          <ion-modal trigger="open-modal-end-{{list.name}}" class="date-modal" mode="md">
+            <ng-template>
+              <ion-content class="date-content">
+                <ion-datetime #inputdate presentation="date" size="cover" [(ngModel)]="list.endDate"
+                  (ionChange)="offerEndDateChange(list, inputdate.value)" showDefaultButtons="true" [max]="maxDate"
+                  [min]="minDate" [ngModelOptions]="{standalone: true}">
+                </ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-col>
+      </ion-row>
+    </div>
+
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="createComboOffer()">Save</ion-button>
+  </div>
+</ion-footer>

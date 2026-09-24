@@ -1,0 +1,39 @@
+ion-menu-button {
+    color: #fff;
+    height: 42px;
+    width: 42px;
+    font-size: 28px;
+    &.menu-button-hidden {
+        display: block !important;
+    }
+}
+
+ion-header {
+    background: #0A395A;
+    height: 64px;
+    padding: 10px 16px;
+    display: flex;
+    .logo {
+        max-width: 180px;
+    }
+    ion-icon {
+        font-size: 25px;
+        color: #fff;
+    }
+
+    .logout {
+        height: 30px;
+        padding: 5px;
+        background: #fff;
+        margin: 0 8px 0 12px;
+        border-radius: 4px;
+        ion-icon {
+            font-size: 20px;
+            color: #0A395A;
+        }
+    }
+}
+
+.c-pointer {
+    cursor: pointer;
+}

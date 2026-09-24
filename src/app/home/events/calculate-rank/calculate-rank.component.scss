@@ -1,0 +1,48 @@
+.modal-inner {
+    padding: 16px 20px;
+}
+
+ion-list {
+    margin: 0;
+    padding: 0;
+    h4 {
+        font-size: 20px;
+        line-height: 22px;
+        font-family: "Nunito-Bold";
+        color: #51c0e9;
+        margin: 0 0 12px;
+    }
+    ion-item {
+        width: 100%;
+        margin: 10px 0;
+        --min-height: 38px;
+        --border-style: none;
+        border-radius: 10px;
+        border: 2px dashed #dce2e7;
+        --ripple-color: #0a395a;
+        --padding-start: 16px;
+        --inner-padding-end: 16px;
+        &.item-radio-checked {
+            border-color: #51c0e9;
+        }
+        ion-label {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #353636;
+        }
+        ion-radio {
+            margin: 0;
+            --color-checked: #51c0e9;
+            --color: #dce2e7;
+        }
+    }
+}
+
+.footer-toolbar {
+    padding: 14px 12px;
+    ion-button {
+        font-size: 15px;
+        height: 32px;
+    }
+}

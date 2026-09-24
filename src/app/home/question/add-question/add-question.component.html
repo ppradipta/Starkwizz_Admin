@@ -1,0 +1,193 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">Add Questions</h4>
+    </div>
+    <div class="heading-right" *ngIf="!type">
+      <ion-select placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+        </ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+    </div>
+    <ion-buttons slot="end" *ngIf="type">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment (ionChange)="onQuestionSegmentChange($event)" [value]="selectedSegment">
+        <ion-segment-button value="SINGLE" id="SINGLE">
+          <ion-label>Single</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="BULK" id="BULK">
+          <ion-label>Bulk</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <div *ngIf="filterBoard && filterClass && filterSubject && filterModule">
+
+      <div *ngIf="selectedSegment=='SINGLE'">
+        <div class="custom-card">
+          <div class="d-flex align-items-center justify-content-center">
+            <ion-select mode="md" name="class" placeholder="Select Question Type" (ionChange)="selectChanged($event)"
+              [(ngModel)]="questionType">
+              <ion-select-option value="SINGLE_CHOICE">Single Choice</ion-select-option>
+              <ion-select-option value="MULTIPLE_CHOICE">Multiple Choice</ion-select-option>
+              <ion-select-option value="PICTURE_CHOICE">Picture Choice</ion-select-option>
+              <ion-select-option value="FREE_TEXT">Free Text </ion-select-option>
+            </ion-select>
+          </div>
+
+          <!-- <div class="custom-card">
+          <div class="questions-Preview">
+            <app-single-choice-preview></app-single-choice-preview>
+          </div>
+        </div> -->
+        </div>
+        <div *ngIf="questionType">
+          <app-single-choice *ngIf="questionType === 'SINGLE_CHOICE'" [questionType]="questionType"
+            [question]="question" [type]="type"></app-single-choice>
+          <app-multiple-choice *ngIf="questionType === 'MULTIPLE_CHOICE'" [questionType]="questionType">
+          </app-multiple-choice>
+          <app-picture-choice *ngIf="questionType === 'PICTURE_CHOICE'" [questionType]="questionType">
+          </app-picture-choice>
+          <app-text-choice *ngIf="questionType === 'FREE_TEXT'" [questionType]="questionType"></app-text-choice>
+        </div>
+      </div>
+
+      <div class="custom-card" *ngIf="selectedSegment=='BULK'">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h4>Total Preview Question Count : {{questions.length + recejctedRecords.length}}</h4>
+          <div class="d-flex align-items-center">
+            <ion-button mode="end" class="tab-btn" (click)="confirmPreviewUpload()">
+              Confirm Upload
+              <ion-icon name="cloud-upload"></ion-icon>
+            </ion-button>
+            <ion-button mode="end" class="tab-btn" (click)="uploadBulkQuestion()">
+              Upload Question
+              <ion-icon name="cloud-upload"></ion-icon>
+            </ion-button>
+            <div class="file-btn">
+              <a download="filename" target="_blank" href="/assets/download/sample_question.xlsx">
+                Sample XLXS
+              </a>
+              <a download="filename" target="_blank" href="/assets/download/Question_Text.txt">
+                Sample TXT
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="questions.length>0">
+
+          <!--Table-->
+          <table class="table">
+
+            <!--Table head-->
+            <thead>
+              <h4 class="title">Approved ({{questions.length}})</h4>
+              <tr>
+                <th>#</th>
+                <th class="th-sm">Question</th>
+                <th class="th-sm">Board</th>
+                <th class="th-sm">Class</th>
+                <th class="th-sm">Subject</th>
+                <th class="th-sm">Module</th>
+                <th class="th-sm">Options</th>
+                <th class="th-sm">Edit</th>
+                <th class="th-sm">Delete</th>
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody *ngFor="let question of questions;let i=index;">
+              <tr>
+                <th scope="row">{{i + 1}}</th>
+                <td>{{question?.text}}
+                  <div *ngIf="question?.url">
+                    <ion-img [src]="question?.url"> </ion-img>
+                    <p><a href={{question?.url}} target="_blank">Question url</a></p>
+                  </div>
+                </td>
+
+                <td>{{question?.board}}</td>
+                <td>{{question?.class?.displayName}}</td>
+                <td>{{question?.subject?.displayName}}</td>
+                <td>{{question?.module?.displayName}}</td>
+                <!-- <td>{{question.subjectName}}</td> -->
+                <td class="line-unset">
+                  <ion-button class="card-btn" (click)="viewOptionsForSelectQuestion(question)"
+                    *ngIf="question?.type != 'SUBJECTIVE_NO_OPTION'">View Options</ion-button>
+                </td>
+                <td class="line-unset">
+                  <ion-button class="card-btn" (click)="onClickEditForSelectedQuestion(question)">Edit</ion-button>
+                </td>
+                <td class="line-unset">
+                  <ion-button class="card-btn" color="danger" (click)="deleteSelectedQuestion(question)">Delete
+                  </ion-button>
+                </td>
+              </tr>
+            </tbody>
+            <!--Table body-->
+
+          </table>
+          <!--Table-->
+
+        </div>
+
+        <div class="table-responsive" *ngIf="recejctedRecords.length>0">
+
+          <!--Table-->
+          <table class="table">
+
+            <!--Table head-->
+            <thead>
+              <h4 class="title">Rejected ({{recejctedRecords.length}})</h4>
+              <tr>
+                <th>#</th>
+                <th class="th-sm">Question</th>
+                <th class="th-sm">Board</th>
+                <th class="th-sm">Class</th>
+                <th class="th-sm">Subject</th>
+                <th class="th-sm">Module</th>
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody *ngFor="let rquestion of recejctedRecords;let i=index;">
+              <tr>
+                <th scope="row">{{i + 1}}</th>
+                <td>{{rquestion?.text}}</td>
+                <td>{{rquestion?.board}}</td>
+                <td>{{rquestion?.class?.displayName}}</td>
+                <td>{{rquestion?.subject?.displayName}}</td>
+                <td>{{rquestion?.module?.displayName}}</td>
+              </tr>
+            </tbody>
+            <!--Table body-->
+
+          </table>
+          <!--Table-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

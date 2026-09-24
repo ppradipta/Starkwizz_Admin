@@ -1,0 +1,53 @@
+<ion-header>
+  <div class="heading">
+    <h4 class="m-0">Add Club Point</h4>
+  </div>
+</ion-header>
+<ion-content class="date-ion-content">
+  <div class="page-container">
+    <div class="input-content">
+      <div class="login-input">
+        <ion-input type="text" name="clubName" id="clubName" [(ngModel)]="clubName" placeholder="Club Name"
+          required></ion-input>
+      </div>
+      <div class="d-flex">
+        <div class="login-input me-3">
+          <ion-input type="number" name="minScore" id="minScore" placeholder="Minimum Score Value" [(ngModel)]="minScore"
+            required></ion-input>
+        </div>
+        <div class="login-input">
+          <ion-input type="number" name="maxScore" id="maxScore" placeholder="Maximum Score Value" [(ngModel)]="maxScore"
+            required></ion-input>
+        </div>
+      </div>
+
+
+      <ion-list class="checkbox-list">
+        <ion-label>Select Test<span>*</span></ion-label>
+        <ion-radio-group name="type" [(ngModel)]="testType" required>
+          <ion-item class="me-3">
+            <ion-label>INITIAL-TEST</ion-label>
+            <ion-radio slot="start" mode="ios" value="INITIAL-TEST"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>TERMINAL-TEST</ion-label>
+            <ion-radio slot="start" mode="ios" value="TERMINAL-TEST"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
+      <div class="login-input">
+        <ion-input type="number" name="points" id="points" placeholder="Point Value" [(ngModel)]="points"
+          required></ion-input>
+      </div>
+
+    </div>
+    <div class="btn-group">
+      <ion-button class="secondary-btn" (click)="createClubPoints()">Proceed
+      </ion-button>
+      <ion-button class="secondary-btn" (click)="close()" color="warning">Cancel
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

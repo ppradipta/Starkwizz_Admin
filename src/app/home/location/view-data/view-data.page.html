@@ -1,0 +1,36 @@
+<ion-header>
+  <div class="header">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title><b>{{locData.collectionName | uppercase}}S</b> under {{locData.displayName}}</ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="th-sm">Name</th>
+        <!-- <th class="th-sm">View</th> -->
+        <th class="th-sm">Action</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="locationData?.length">
+      <tr *ngFor="let data of locationData">
+        <td>{{data?.displayName}}</td>
+        <!-- <td (click)="viewDistrict(data)"> View</td> -->
+        <td class="btn-holder">
+          <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+        </td>
+      </tr>
+    </tbody>
+    <tbody class="sdsf" *ngIf="!locationData?.length">
+      <tr>
+        <p>No locationData available!</p>
+      </tr>
+    </tbody>
+  </table>
+</ion-content>

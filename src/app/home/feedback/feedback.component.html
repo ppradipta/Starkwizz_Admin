@@ -1,0 +1,67 @@
+<ion-header>
+  <div class="heading">
+    <h4 class="title">Feedback</h4>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="card-list">
+      <div class="sub-card" *ngFor="let sub of feedbackList">
+        <div class="card-body">
+          <h4 class="card-heading">{{sub.name | titlecase}}</h4>
+          <div class="d-flex justify-content-between">
+            <div class="event-info">
+              <span class="me-1">Mobile No : </span>
+              <ion-label class="card-label">{{sub.mobileNo}}</ion-label>
+            </div>
+          </div>
+          <div class="event-info">
+            <span class="me-1">Email Id : </span>
+            <ion-label class="card-label"><b>{{sub.userEmail}}</b></ion-label>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="event-info">
+              <span class="me-1">Board : </span>
+              <ion-label class="card-label"><b>{{sub.boardName}}</b></ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Class : </span>
+              <ion-label class="card-label"><b>{{sub.className}}</b></ion-label>
+            </div>
+          </div>
+
+          <div class="event-info">
+            <span class="me-1">Create Date : </span>
+            <ion-label class="card-label">{{sub.createDate | date:'dd-MM-yyyy'}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span class="me-1">School : </span>
+            <ion-label class="card-label"><b>{{sub.schoolName}}</b></ion-label>
+          </div>
+          <div class="event-info">
+            <span class="me-1">Address : </span>
+            <ion-label class="card-label"><b>{{sub.cityName}}, {{sub.districtName}}, {{sub.stateName}}</b></ion-label>
+          </div>
+          <div class="custom-col">
+            <div class="d-flex justify-content-between">
+              <div class="event-info">
+                <span class="me-1">Board : </span>
+                <ion-label class="card-label"><b>{{sub.boardName}}</b></ion-label>
+              </div>
+              <div class="event-info">
+                <span class="me-1">Class : </span>
+                <ion-label class="card-label"><b>{{sub.className}}</b></ion-label>
+              </div>
+            </div>
+            <div class="event-info m-0">
+              <span class="me-1">Message : </span>
+              <ion-label class="card-label"><b>{{sub.message}}</b></ion-label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</ion-content>

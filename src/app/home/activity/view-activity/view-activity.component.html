@@ -1,0 +1,194 @@
+<ion-header>
+  <div class="header">
+    <ion-button (click)="goBack()">
+      <ion-icon name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>View Subscription</ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="custom-card">
+      <div class="top-head">
+        <span>UR Code : <b>{{viewDetail.referenceUID}}</b></span>
+        <span>Name : <b>{{viewDetail.firstName | titlecase}} {{viewDetail.lastName | titlecase}}</b></span>
+      </div>
+
+      <div class="middle-head">
+        <span>Month : <b>{{monthName?.displayName}}</b></span>
+        <div class="middle">
+          <span><b>Subscription Linked</b></span>
+          <span><b>{{subscriptionDetail?.length}}</b></span>
+        </div>
+      </div>
+      <div class="card-title">
+        <div class="login-input">
+          <mat-form-field appearance="standard">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <ion-input class="custom-input" id="selectYear" placeholder="{{currentYear}}" [(ngModel)]="selectYear"
+            (ionChange)="selectModuleForYear($event)"></ion-input>
+        </div>
+
+        <div>
+          <ion-select placeholder="{{currentMonth}}" mode="ios" (ionChange)="selectModuleForMonth($event)">
+            <ion-select-option *ngFor="let month of months" [value]="month.title">{{month.title}}</ion-select-option>
+          </ion-select>
+        </div>
+
+      </div>
+
+
+
+      <div class="w-100 overflow-auto">
+        <table mat-table [dataSource]="dataSourceActivity" matSort>
+          <ng-container matColumnDef="#">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+            <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Subscr. Date </th>
+            <td mat-cell *matCellDef="let row">{{row?.startDate | date:'dd-MM-yyyy'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row?.name}}</td>
+          </ng-container>
+          <ng-container matColumnDef="userid">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User ID </th>
+            <td mat-cell *matCellDef="let row"> {{row?.userid}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="boardName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Board </th>
+            <td mat-cell *matCellDef="let row"> {{row?.boardName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="className">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Class </th>
+            <td mat-cell *matCellDef="let row"> {{row?.className}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="boardId">
+            <th mat-header-cell class="p-2" *matHeaderCellDef mat-sort-header> A </th>
+            <td mat-cell class="ser p-2"  *matCellDef="let row">
+              <img *ngIf="row?.offerType == 'ALL'" src="/assets/images/approved.png">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="classId">
+            <th mat-header-cell class="p-2" *matHeaderCellDef mat-sort-header> D </th>
+            <td mat-cell class="ser p-2" *matCellDef="let row">
+              <img *ngIf="row?.offerType == 'DYNAMO'" src="/assets/images/approved.png">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell class="p-2" *matHeaderCellDef mat-sort-header> Q </th>
+            <td mat-cell class="ser p-2" *matCellDef="let row">
+              <img *ngIf="row?.offerType == 'QUIZWHIZZ'" src="/assets/images/approved.png">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell class="p-2" *matHeaderCellDef mat-sort-header> E </th>
+            <td mat-cell class="ser p-2" *matCellDef="let row">
+              <img *ngIf="row?.offerType == 'EVENT'" src="/assets/images/approved.png">
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fee Paid </th>
+            <td mat-cell *matCellDef="let row"> {{row?.amount}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="referralCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Other Details </th>
+            <td mat-cell *matCellDef="let row">
+              <ion-button class="clear-btn" fill="clear" (click)="viewActivity(row)">
+                <ion-icon name="eye"></ion-icon>
+              </ion-button>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsActivity"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsActivity;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input?.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 30,50,100]" aria-label="Select page of userAssocates"
+          #MatPaginatorAssociate></mat-paginator>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-modal #viewActivityModal class="selectBottomSheet viewActivity" [isOpen]="isViewActivityOpen"
+  [initialBreakpoint]="0.6" [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title class="p-0">{{userRecord.name}} Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="viewModalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="w-100 overflow-auto">
+        <table class="table-bordered">
+          <tbody>
+            <tr>
+              <td>Subscription Valid Till: </td>
+              <td>{{userRecord.endDate | date:'dd-MM-yyyy'}}</td>
+            </tr>
+            <tr>
+              <td>Gender</td>
+              <td>{{userDetail.gender}}</td>
+            </tr>
+            <tr>
+              <td>Date of Birth</td>
+              <td>{{userDetail.dateOfBirth}}</td>
+            </tr>
+            <tr>
+              <td>Parent Name</td>
+              <td>{{userDetail.parentName}}</td>
+            </tr>
+            <tr>
+              <td>Mobile No.</td>
+              <td>{{userDetail.mobileNo}}</td>
+            </tr>
+            <tr>
+              <td>Email ID </td>
+              <td>{{userDetail.emailId}}</td>
+            </tr>
+            <tr>
+              <td>School Name </td>
+              <td>{{userDetail.schoolName}}</td>
+            </tr>
+            <tr>
+              <td>City / Block Name </td>
+              <td>{{userDetail.cityName}}</td>
+            </tr>
+            <tr>
+              <td>District Name </td>
+              <td>{{userDetail.districtName}}</td>
+            </tr>
+            <tr>
+              <td>State Name </td>
+              <td>{{userDetail.stateName}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

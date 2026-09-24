@@ -1,0 +1,424 @@
+<ion-header>
+  <div class="header">
+    <ion-title>User Management</ion-title>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <div class="custom-card">
+      <ion-segment (ionChange)="tabChanged($event)" [value]="segmentValue" mode="md">
+        <ion-segment-button *ngFor="let list of userList" [value]="list">
+          <ion-label>{{list.type}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <div class="table-responsive" *ngIf="segmentValue?.type == 'student'">
+        <div class="heading-right">
+          <ion-input id="name" [(ngModel)]="searchMobileNo" name="mark" type="text" required
+            placeholder="Enter Mobile No">
+          </ion-input>
+          <ion-button class="search-btn" (click)="searchUser()">Search</ion-button>
+        </div>
+        <div class="card-title">
+          <!-- <h4>Students</h4> -->
+          <ion-button class="secondary-btn ms-2" (click)="goToBlockStudent()">View Block
+          </ion-button>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event, 'STUDENTS')" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="applicationId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> App ID </th>
+              <td mat-cell *matCellDef="let row" (click)="viewStudentsDetailsTxnDetails(row)">
+                <ion-button fill="clear">
+                  <ion-img src="assets/images/activity.svg" style="width: 20px; position: absolute; left: 0;"></ion-img>
+                  <span class="ms-4">{{row?.applicationId}}</span></ion-button>
+
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row?.firstName}} {{row?.lastName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="boardName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Board </th>
+              <td mat-cell *matCellDef="let row"> {{row?.boardName}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="creationdate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Creation Date </th>
+              <td mat-cell *matCellDef="let row">{{row?.creationdate}}</td>
+            </ng-container> -->
+            <ng-container matColumnDef="mobileNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile Number </th>
+              <td mat-cell *matCellDef="let row">{{row?.mobileNo}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="profileType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+              <td mat-cell *matCellDef="let row"> {{row?.profileType}} </td>
+            </ng-container> -->
+            <!-- <ng-container matColumnDef="dateOfBirth">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
+              <td mat-cell *matCellDef="let row"> {{row?.dateOfBirth}}</td>
+            </ng-container> -->
+            <!-- <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+              <td mat-cell *matCellDef="let row"> {{row?.stateName}}, {{row?.districtName}},{{row?.cityName}} </td>
+            </ng-container> -->
+            <ng-container matColumnDef="school">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> School </th>
+              <td mat-cell *matCellDef="let row"> {{row?.schoolName}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="emailId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+              <td mat-cell *matCellDef="let row"> {{row?.emailId}} </td>
+            </ng-container> -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 30,50,100]" aria-label="Select page of users"
+            #MatPaginator1></mat-paginator>
+        </div>
+
+      </div>
+      <!-- <div class="table-responsive" *ngIf="segmentValue?.type == 'associates'">
+        <div class="card-title">
+          <ion-button class="secondary-btn" (click)="addAssociates()">Add
+          </ion-button>
+          <ion-button class="secondary-btn ms-2" (click)="goToBlockAssociates()">View Block
+          </ion-button>
+        </div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event, 'ASSOCIATES')" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+        <div class="w-100 overflow-auto">
+          <table mat-table [dataSource]="dataSourceAssociates" matSort>
+            <ng-container matColumnDef="#">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+            </ng-container>
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> App ID </th>
+              <td mat-cell *matCellDef="let row" (click)="presentAlertBlockAssociates(row)">
+                <ion-button class="clear-btn" fill="clear">
+                  <ion-icon class="text-danger" name="trash" style="font-size: 16px; margin: 0 4px 4px 0;"></ion-icon>
+                  {{row?.code}}</ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+              <td mat-cell *matCellDef="let row"> {{row?.firstName}} {{row?.lastName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="CouponCode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> UIC Code </th>
+              <td mat-cell *matCellDef="let row" (click)="viewLinkUsers(row)">
+                <ion-button class="clear-btn" fill="clear">
+                  <ion-icon  name="eye" style="font-size: 16px; margin: 0 4px 4px 0;"></ion-icon>
+                  {{row?.discount?.code}}
+                </ion-button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="creationdate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+              <td mat-cell *matCellDef="let row"> {{row?.creationdate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="mobileNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile Number </th>
+              <td mat-cell *matCellDef="let row">{{row?.mobileNo}} </td>
+            </ng-container>
+            <ng-container matColumnDef="postId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Post </th>
+              <td mat-cell *matCellDef="let row"> {{row?.postId}} </td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+              <td mat-cell *matCellDef="let row"> {{row?.email}}</td>
+            </ng-container>
+            <ng-container matColumnDef="stateName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+              <td mat-cell *matCellDef="let row"> {{row?.cityName}}, {{row?.districtName}}, {{row?.stateName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="referenceName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref Name </th>
+              <td mat-cell *matCellDef="let row"> {{row?.referenceName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="referenceUID">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref UID </th>
+              <td mat-cell *matCellDef="let row"> {{row?.referenceUID}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="referenceMobile">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Ref Mobile Number </th>
+              <td mat-cell *matCellDef="let row"> {{row?.referenceMobile}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsAssociates"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsAssociates;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input?.value}}"</td>
+            </tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 30,50,100]" aria-label="Select page of userAssocates"
+            #MatPaginatorAssociate></mat-paginator>
+        </div>
+
+      </div> -->
+      
+      <!-- <div class="table-responsive" *ngIf="segmentValue?.type == 'parent'">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="th-sm">Name</th>
+              <th class="th-sm">Mobile Number</th>
+              <th class="th-sm">Childs</th>
+              <th class="th-sm">Action</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="userDetails?.length">
+            <tr *ngFor="let data of userDetails">
+              <td>{{data?.id}}</td>
+              <td>{{data.displayName}}</td>
+              <td>{{data.mobileNo}}</td>
+              <td>{{data?.child?.length}}</td>
+              <td class="btn-holder">
+                <ion-icon name="eye"></ion-icon>
+                <ion-icon class="delete-icon" name="trash"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="sdsf" *ngIf="!userDetails?.length">
+            <tr>
+              <p>No data available!</p></tr>
+          </tbody>
+        </table>
+      </div> -->
+      <!-- 
+      <div class="table-responsive" *ngIf="segmentValue?.type == 'teacher'">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="th-sm">First Name</th>
+              <th class="th-sm">Last Name</th>
+              <th class="th-sm">DOB</th>
+              <th class="th-sm">Mobile Number</th>
+              <th class="th-sm">Board</th>
+              <th class="th-sm">Action</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="userDetails?.length">
+            <tr *ngFor="let data of userDetails">
+              <td>{{data?.id}}</td>
+              <td>{{data.firstName}}</td>
+              <td>{{data.lastName}}</td>
+              <td>{{data.dateOfBirth}}</td>
+              <td>{{data.mobileNo}}</td>
+              <td>{{data.boardName}}</td>
+              <td class="btn-holder">
+                <ion-icon name="eye"></ion-icon>
+                <ion-icon class="delete-icon" name="trash"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="sdsf" *ngIf="!userDetails?.length">
+            <tr>
+              <p>No data available!</p></tr>
+          </tbody>
+        </table>
+      </div> -->
+
+      <!-- <div class="table-responsive" *ngIf="segmentValue?.type == 'hub'">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="th-sm">Hub Name</th>
+              <th class="th-sm">Mobile Number</th>
+              <th class="th-sm">Address</th>
+              <th class="th-sm">Rated Count</th>
+              <th class="th-sm">Ratings</th>
+              <th class="th-sm">Website</th>
+              <th class="th-sm">Email ID</th>
+              <th class="th-sm">Action</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="hubDetails?.length">
+            <tr *ngFor="let data of hubDetails">
+              <td>{{data?.id}}</td>
+              <td>{{data.displayName}}</td>
+              <td>{{data.whatsappNumber}}</td>
+              <td>{{data.locationText}}</td>
+              <td>{{data.ratedCount}}</td>
+              <td>{{data.rating}}</td>
+              <td>{{data.website}}</td>
+              <td>{{data?.email}}</td>
+              <td class="btn-holder">
+                <ion-icon name="eye"></ion-icon>
+                <ion-icon class="delete-icon" name="trash"></ion-icon>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="sdsf" *ngIf="!userDetails?.length">
+            <tr>
+              <p>No data available!</p></tr>
+          </tbody>
+        </table>
+      </div> -->
+
+      <!-- <div class="" *ngIf="segmentValue?.id === 5">
+        <form>
+          <div class="custom-input">
+            <ion-label>First Name<span>*</span></ion-label>
+            <ion-input type="text" placeholder="Enter First Name"></ion-input>
+          </div>
+          <div class="custom-input">
+            <ion-label>Last Name<span>*</span></ion-label>
+            <ion-input type="text" placeholder="Enter Last Name"></ion-input>
+          </div>
+          <div class="custom-input">
+            <ion-label>Email Address<span>*</span></ion-label>
+            <ion-input type="text" placeholder="Enter Email Address"></ion-input>
+          </div>
+          <div class="custom-input">
+            <ion-label>Password<span>*</span></ion-label>
+            <ion-input type="Password" placeholder="Enter Password"></ion-input>
+          </div>
+          <div class="custom-input">
+            <ion-label>Confirm Password<span>*</span></ion-label>
+            <ion-input type="Password" placeholder="Enter Confirm Password"></ion-input>
+          </div>
+          <div class="custom-input">
+            <ion-label>Role<span>*</span></ion-label>
+            <ion-select mode="md" placeholder="Select Role">
+              <ion-select-option value="1">Role 1</ion-select-option>
+              <ion-select-option value="2">Role 2</ion-select-option>
+              <ion-select-option value="3">Role 3</ion-select-option>
+              <ion-select-option value="4">Role 4</ion-select-option>
+            </ion-select>
+          </div>
+          <div class="form-btn">
+            <ion-button>Register Admin</ion-button>
+          </div>
+        </form>
+      </div> -->
+    </div>
+  </div>
+</ion-content>
+
+
+
+<ion-modal #modal class="selectBottomSheet" trigger="submit-modal" [initialBreakpoint]="0.6"
+  [breakpoints]="[0, 0.3, 0.5, 0.75]" [isOpen]="isLinkedUserModal" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Coupon Linked Users({{copunLinkedUsers?.length}}) </ion-title>
+        <ion-title>UIC Linked Users({{copunLinkedUsers?.length}}) </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="th-sm">Name</th>
+              <th class="th-sm">Board</th>
+              <th class="th-sm">Class</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="copunLinkedUsers?.length">
+            <tr *ngFor="let user of copunLinkedUsers">
+              <td>{{user?.firstName}} {{user?.lastName}}</td>
+              <td>{{user?.boardName}}</td>
+              <td>{{user?.className}}</td>
+            </tr>
+          </tbody>
+          <tbody class="sdsf" *ngIf="!copunLinkedUsers?.length">
+            <tr>
+              <p>No data available!</p>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #modal class="selectBottomSheet blockModal" [isOpen]="isBlockAssociatesOpen" [initialBreakpoint]="0.6"
+  [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Block</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="blockModalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="w-100 overflow-auto">
+        <table mat-table [dataSource]="dataSourceBlockAssociates" matSort>
+          <ng-container matColumnDef="#">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+            <td mat-cell *matCellDef="let row; let i=index"> {{i+1}} </td>
+          </ng-container>
+          <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> App ID </th>
+            <td mat-cell *matCellDef="let row" (click)="presentAlertActiveAssociates(row, blockType)">
+              <ion-button class="clear-btn" fill="clear">
+                <ion-icon name="checkmark-done-outline" style="font-size: 12px; margin-right: 4px;"></ion-icon>
+                {{row?.code}}</ion-button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row?.firstName}} {{row?.lastName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="creationdate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+            <td mat-cell *matCellDef="let row"> {{row?.creationdate}} </td>
+          </ng-container>
+          <ng-container matColumnDef="mobileNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile Number </th>
+            <td mat-cell *matCellDef="let row">{{row?.mobileNo}} </td>
+          </ng-container>
+          <ng-container matColumnDef="profileType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let row"> {{row?.profileType}} </td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{row?.email}}</td>
+          </ng-container>
+          <ng-container matColumnDef="CouponCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> CouponCode </th>
+            <td mat-cell *matCellDef="let row"> {{row?.discount?.code}}
+              <ion-icon name="eye" (click)="viewLinkUsers(row)"></ion-icon>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="blockColumnsAssociates"></tr>
+          <tr mat-row *matRowDef="let row; columns: blockColumnsAssociates;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input?.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 30,50,100]" aria-label="Select page of userBlockAssocates"
+          #MatPaginatorAssociate></mat-paginator>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

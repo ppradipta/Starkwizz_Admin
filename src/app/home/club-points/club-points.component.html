@@ -1,0 +1,49 @@
+<ion-header>
+  <div class="heading">
+    <ion-title>Club Point List</ion-title>
+    <ion-button class="card-btn" (click)="addClubPoints('ADD')">Add club</ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <ion-list class="card-list">
+      <ion-item *ngFor="let club of clubPointsList; let i=index">
+        <div class="sub-card">
+          <div class="card-body">
+            <h4 class="card-heading">{{club.type}}</h4>
+            <div class="event-info border-none">
+              <span class="me-1">Name : </span>
+              <ion-label class="card-label">{{club.name}}</ion-label>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="event-info border-none">
+                <span class="me-1">Minimum Score : </span>
+                <ion-label class="card-label">{{club.score?.min}}</ion-label>
+              </div>
+              <div class="event-info border-none">
+                <span class="me-1">Create Date : </span>
+                <ion-label class="card-label">{{club.creationdate}}</ion-label>
+              </div>
+            </div>
+            <div class="event-info border-none">
+              <span class="me-1">Maximum Score : </span>
+              <ion-label class="card-label">{{club.score?.max}}</ion-label>
+            </div>
+            <div class="event-info border-none">
+              <span class="me-1">Points : </span>
+              <ion-label class="card-label">{{club.points}}</ion-label>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteCopun(club)"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

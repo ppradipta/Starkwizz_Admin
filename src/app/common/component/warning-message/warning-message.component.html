@@ -1,0 +1,17 @@
+<div style="background: white;height: 100%;">
+  <div>
+    <div class="d-flex justify-content-center">
+      <ion-img class="entity-icon mr-3" style="width: 150px;height: 100px;padding-top: 40px;"
+        [src]="'assets/icon/warning-alert.svg'"></ion-img>
+    </div>
+    <div class="d-flex justify-content-center" style="padding-left: 20px;padding-right: 20px;padding-top: 5%;">
+      <p style="text-align: center;font-size: 18px;">{{message.displayText}}</p>
+    </div>
+  </div>
+  <ion-toolbar mode="md" position="bottom" style="position: fixed;
+  bottom: 10%;">
+    <div class="footer-toolbar ion-text-center p-2">
+      <ion-button mode="md" size="medium" class="ok-alert-btn" (click)="success()">Ok</ion-button>
+    </div>
+  </ion-toolbar>
+</div>

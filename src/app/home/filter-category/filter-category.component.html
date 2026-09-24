@@ -1,0 +1,98 @@
+<ion-header>
+
+  <div class="heading-left">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Filters </ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" [value]="tabValue" mode="md" color="secondary" (ionChange)="tabChanged($event)">
+        <ion-segment-button mode="md" value="SHOWCASE" id="SHOWCASE" class="segmentBtn">
+          <ion-label>Showcase</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="EVENT" class="segmentBtn" value="EVENT">
+          <ion-label>Event</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+
+    <div *ngIf="tabValue === 'SHOWCASE'">
+      <div style="padding-left: 30%;" class="heading-right">
+        <ion-select  placeholder="Filter Type" mode="ios" (click)="selectFilterType()" [(ngModel)]="filterType">
+          <ion-select-option *ngFor="let type of filterTypes" [value]="type">{{type.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchFilter()">Search</ion-button>
+
+        <ion-button class="search-btn" (click)="addFilters()">Add Filters</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Filter Name</th>
+            <th class="th-sm">Description</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="filters?.length">
+          <tr *ngFor="let data of filters">
+            <td>{{data?.displayName}}</td>
+            <td>{{data?.description}}</td>
+            <td class="btn-holder">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!filters?.length">
+          <tr>
+            <p class="zero">No Filters available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="tabValue === 'EVENT'">
+      <div style="padding-left: 30%;" class="heading-right">
+        <ion-select  placeholder="Filter Type" mode="ios" (click)="selectFilterType()" [(ngModel)]="filterType">
+          <ion-select-option *ngFor="let type of filterTypes" [value]="type">{{type.displayName}}
+          </ion-select-option>
+        </ion-select> &nbsp; &nbsp;
+        <ion-button class="search-btn" (click)="searchFilter()">Search</ion-button>
+        <ion-button class="search-btn" (click)="addFilters()">Add Filters</ion-button>
+      </div>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Filter Name</th>
+            <th class="th-sm">Description</th>
+            <th class="th-sm">Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="filters?.length">
+          <tr *ngFor="let data of filters">
+            <td>{{data?.displayName}}</td>
+            <td>{{data?.description}}</td>
+            <td class="btn-holder">
+              <ion-icon class="delete-icon" name="trash" (click)="delete(data)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="sdsf" *ngIf="!filters?.length">
+          <tr>
+            <p class="zero">No Filters available!</p>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ion-content>

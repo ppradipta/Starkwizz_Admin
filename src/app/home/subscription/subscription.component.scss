@@ -1,0 +1,288 @@
+ion-header {
+    padding: 12px 20px;
+    background: #fff;
+    .header {
+        display: flex;
+        align-items: center;
+    }
+    ion-title {
+        font-size: 24px;
+        font-family: 'Nunito-SemiBold';
+        color: #0A395A;
+        padding: 0;
+        position: unset;
+    }
+}
+
+ion-content {
+    height: calc(100% - 60px);
+}
+
+.page-container {
+    padding: 15px 20px;
+    h2 {
+        font-size: 26px;
+        line-height: 30px;
+        font-family: "Nunito-Bold";
+        color: #0a395a;
+        display: block;
+        padding: 0 10px;
+        margin-bottom: 10px;
+    }
+    h4 {
+        font-size: 16px;
+        font-family: "Nunito-Bold";
+        color: #0A395A;
+        margin: 0;
+        &:first-child {
+            font-size: 20px;
+            line-height: 24px;
+            margin-bottom: 4px;
+        }
+    }
+    .report-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .report-card {
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        min-height: 130px;
+        margin: 10px;
+        border-radius: 10px;
+        width: calc(25% - 20px);
+        box-shadow: 0px 2px 12px #0a395a33;
+        overflow: hidden;
+        .report-left {
+            margin-right: 16px;
+            ion-icon {
+                color: #00000038;
+                font-size: 24px;
+            }
+        }
+        .report-content {
+            display: flex;
+            width: 100%;
+        }
+        .report-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            ion-label {
+                font-size: 20px;
+                line-height: 22px;
+                font-family: "Nunito-SemiBold";
+                color: #0a395a;
+                display: block;
+            }
+            span {
+                font-size: 26px;
+                line-height: 26px;
+                font-family: "Nunito-Bold";
+                color: #0a395a;
+                display: block;
+                margin-bottom: 4px;
+            }
+        }
+    }
+    // .card-container {
+    //     display: flex;
+    //     align-items: flex-start;
+    // }
+    .custom-card {
+        // width: calc(50% - 20px);
+        // max-height: calc(100vh - 180px);
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 12px #0a395a33;
+        overflow: hidden;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        .table-responsive {
+            width: 100%;
+        }
+    }
+    
+}
+
+marquee {
+    font-family: "Nunito-SemiBold";
+    font-size: 22px;
+    color: #0a395a;
+    margin-top: 16px;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 350px;
+    ::ng-deep .mat-form-field-wrapper {
+        .mat-form-field-flex {
+            padding-top: 0;
+            .mat-form-field-infix {
+                padding: 8px 0;
+            }
+        }
+        .mat-form-field-underline {
+            height: 1px;
+        }
+    }
+}
+
+.card-title {
+    margin: 0 !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-right {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    .inputLabel {
+        font-size: 13px;
+        line-height: 16px;
+        margin-bottom: 4px;
+        display: block;
+    }
+    ion-select {
+        min-width: 100px;
+        height: 34px;
+        --padding-end: 8px;
+        --padding-start: 8px;
+        margin-right: 6px;
+        font-family: 'Nunito-SemiBold';
+        font-size: 14px;
+        --placeholder-opacity: 0.7;
+    }
+    ion-input {
+        width: 100px;
+        border: 1px solid #0A395A;
+        border-radius: 6px;
+        height: 34px;
+        --padding-end: 8px;
+        --padding-start: 8px;
+        --placeholder-opacity: 0.7;
+        margin-right: 6px;
+        font-family: 'Nunito-SemiBold';
+        font-size: 14px;
+    }
+    .downLoad {
+        background: #0d6efd;
+        margin: 0 8px 0 0;
+        height: 34px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+
+        ion-icon {
+            font-size: 18px;
+        }
+
+    }
+    .search-btn {
+        --color: #fff;
+        --background: #0A395A;
+        margin: 0;
+        height: 34px;
+        letter-spacing: 0;
+        --box-shadow: none;
+    }
+}
+  
+::ng-deep table {
+    width: 100%;
+    margin: 0;
+    thead {
+        th {
+            padding: 10px 16px !important;
+            font-size: 16px !important;
+            line-height: 20px;
+            font-family: "Nunito-Bold";
+            border-top: none;
+            color: #0A395A !important;
+            white-space: nowrap;
+            &:first-child {
+                padding-left: 6px !important;
+            }
+            &:last-child {
+                padding-right: 6px !important;
+            }
+        }
+    }
+    tbody {
+        td {
+            padding: 8px 16px !important;
+            font-family: "Nunito-Regular";
+            font-size: 16px !important;
+            color: #454545 !important;
+            line-height: 20px;
+            min-width: 130px;
+            &:first-child {
+                padding-left: 6px !important;
+            }
+            &:last-child {
+                padding-right: 6px !important;
+            }
+            ion-button {
+                margin: 0;
+                text-transform: capitalize;
+            }
+        }
+    }
+}
+
+ion-popover {
+    --width: 320px !important;
+    --offset-x: -115px;
+}
+
+.selectBottomSheet {
+    ion-header {
+        padding: 10px 20px;
+        ion-toolbar {
+            --min-height: 32px;
+            ion-title {
+                font-size: 20px;
+                font-family: "Nunito-Bold";
+            }
+        }
+    }
+    .event-info {
+        // border: 1px dashed #b0c2ce;
+        padding: 5px 8px;
+        display: flex;
+        align-items: center;
+        // justify-content: space-between;
+        span {
+            font-size: 14px;
+            line-height: 15px;
+            font-family: "Nunito-SemiBold";
+            color: #a9a9a9;
+            display: block;
+        }
+        .card-label {
+            font-size: 15px;
+            line-height: 18px;
+            font-family: "Nunito-Bold";
+            color: #0A395A;
+            display: block;
+            margin-left: 4px;
+        }
+    }
+
+    ion-chip {
+        margin: 0 0 0 6px;
+        color: #0A395A;
+        border: 1px solid #0A395A;
+        background: #f1f9ff;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 14px;
+        border-radius: 18px;
+        padding: 2px 8px 0px;
+        height: 25px;
+    }
+}

@@ -1,0 +1,53 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Calculate Rank
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+
+    <ion-list>
+      <ion-radio-group (ionChange)="calculateRankByType($event)">
+        <h4>Rank By</h4>
+        <ion-item>
+          <ion-label>School</ion-label>
+          <ion-radio value="SCHOOL"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>City</ion-label>
+          <ion-radio value="CITY"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>District</ion-label>
+          <ion-radio value="DISTRICT"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>State</ion-label>
+          <ion-radio value="STATE"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>All</ion-label>
+          <ion-radio value="ALL"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="claculateRank()">Calculate</ion-button>
+  </div>
+</ion-footer>

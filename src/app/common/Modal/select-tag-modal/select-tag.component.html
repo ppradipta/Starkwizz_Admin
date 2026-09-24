@@ -1,0 +1,63 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Select {{tag}} Tag
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+   <!--  <form name="personalInfoForm"> -->
+
+      <ion-row>
+
+        <ion-col size="12" *ngIf="tag === 'Class'">
+          <p>Select class</p>
+          <ion-list>
+            <ion-radio-group (ionChange)="tagChange($event)"> <!-- [value]="question.answers[0]" -->
+              <ion-item *ngFor="let class of classes">
+                <ion-label>Class {{class.displayName}}</ion-label>
+                <ion-radio slot="start" value="{{class.name}}" (click)="tagSelected(class)"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="tag === 'Subject'">
+          <p>Select Subject</p>
+          <ion-list>
+            <ion-radio-group> <!-- [value]="question.answers[0]" -->
+              <ion-item *ngFor="let subject of subjects">
+                <ion-label>{{subject.displayName}}</ion-label>
+                <ion-radio slot="start" value="{{subject.name}}" (click)="tagSelected(subject)"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="tag === 'Module'">
+          <p>Select Module</p>
+          <ion-list>
+            <ion-radio-group> <!-- [value]="question.answers[0]" -->
+              <ion-item *ngFor="let module of modules">
+                <ion-label>{{module.displayName}}</ion-label>
+                <ion-radio slot="start" value="{{module.name}}" (click)="tagSelected(module)"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+        </ion-row>
+   <!--  </form> -->
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="selectTag()">Save</ion-button>
+  </div>
+</ion-footer>

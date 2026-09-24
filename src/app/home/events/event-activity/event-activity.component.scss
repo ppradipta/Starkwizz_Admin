@@ -1,0 +1,109 @@
+ion-header {
+    padding: 16px 20px;
+    background: #fff;
+    .heading {
+        .title {
+            font-size: 24px;
+            font-family: 'Nunito-SemiBold';
+            color: #0A395A;
+            margin: 0;
+        }
+        .heading-right {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            h4 {
+                font-size: 14px;
+                font-family: "Nunito-Regular";
+                color: #0A395A;
+                margin: 0;
+            }
+        }
+    }
+}
+
+ion-content {
+    height: calc(100% - 66px);
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+ion-card {
+    margin: 10px !important;
+    border-radius: 10px;
+    width: calc(50% - 20px);
+    box-shadow: 0px 2px 10px #0a395a33;
+    overflow: hidden;
+    ion-item {
+        align-items: flex-start;
+        padding: 16px 0 0;
+        ion-label {
+            margin: 0 8px 10px 0;
+            h3 {
+                font-size: 22px;
+                line-height: 24px;
+                font-family: "Nunito-Bold";
+                color: #51c0e9;
+                display: block;
+                margin-bottom: 12px;
+            }
+            p {
+                font-size: 16px;
+                line-height: 20px;
+                font-family: "Nunito-SemiBold";
+                color: #727577;
+                display: block;
+                margin-right: 4px;
+            }
+        }
+        .search-btn {
+            --color: #fff;
+            --background: #0A395A;
+            margin: 0;
+            height: 32px;
+            letter-spacing: 0;
+            --box-shadow: none;
+            --padding-start: 15px;
+            --padding-end: 15px;
+        }
+    }
+    ion-card-content {
+        .eventInfo-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            .event-info {
+                width: calc(50% - 5px);
+                display: flex;
+                margin: 8px 0;
+                span {
+                    font-size: 15px;
+                    line-height: 20px;
+                    font-family: "Nunito-Regular";
+                    color: #727577;
+                    display: block;
+                    margin-right: 4px;
+                    &.head {
+                        font-size: 18px;
+                        line-height: 20px;
+                        font-family: "Nunito-SemiBold";
+                        color: #474747;
+                    }
+                }
+                .card-label {
+                    font-size: 16px;
+                    line-height: 20px;
+                    font-family: "Nunito-SemiBold";
+                    color: #0a395a;
+                    display: block;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}

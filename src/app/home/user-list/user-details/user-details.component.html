@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="date-ion-content">
+  <div class="input-content">
+    <div class="login-input">
+      <ion-label>Name :{{userDetail?.displayName}}</ion-label>
+      <ion-label>Mobile No :{{userDetail?.mobileNo}}</ion-label>
+
+      <ion-label>Board Name :{{userDetail?.boardName}}</ion-label>
+      <ion-label>Class Name :{{userDetail?.className}}</ion-label>
+      <ion-label>School Name :{{userDetail?.schoolName}}</ion-label>
+
+      <ion-label>District Name :{{userDetail?.districtName}}</ion-label>
+      <ion-label>City Name :{{userDetail?.cityName}}</ion-label>
+      <ion-label>State Name :{{userDetail?.stateName}}</ion-label>
+
+
+      <ion-label>Type :{{userDetail?.userLinkType}}</ion-label>
+      <ion-label>Profile Type :{{userDetail?.profileType}}</ion-label>
+      <ion-label>User Type :{{userDetail?.userType}}</ion-label>
+    </div>
+  </div>
+  
+  <ion-col *ngIf="userDetail?.userLinkType==null">
+    <p>Select Type</p>
+    <ion-list>
+      <ion-radio-group> <!-- [value]="question.answers[0]" -->
+        <ion-item>
+          <ion-label>General</ion-label>
+          <ion-radio slot="start" value="GENERAL" (click)="userLinkTypeSelected('GENERAL')"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>School Specifice</ion-label>
+          <ion-radio slot="start" value="SCHOOL_SPECIFICE" (click)="userLinkTypeSelected('SCHOOL_SPECIFICE')"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  </ion-col>
+  <div class="px-3">
+    <ion-button class="secondary-btn" (click)="updateUserLinkType()">Proceed
+    </ion-button>
+  </div>
+</ion-content>

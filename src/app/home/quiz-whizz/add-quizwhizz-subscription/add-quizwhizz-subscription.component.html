@@ -1,0 +1,52 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>Add Quizwhizz Subscription</ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="eventDetailForm" #eventDetailForm="ngForm" autocomplete="off">
+      <ion-row>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Board<span>*</span></ion-label>
+            <ion-select mode="md" id="board" name="board" placeholder="Select Board"
+              [(ngModel)]="subsDetail.boardId">
+              <ion-select-option *ngFor="let board of boardDetails" [value]="board.id">{{board.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Class<span>*</span></ion-label>
+            <ion-select mode="md" id="class" name="class" placeholder="Select Class" (click)="selectClass($event)"
+              [(ngModel)]="subsDetail.classId">
+              <ion-select-option *ngFor="let class of classDetails" [value]="class.id">{{class.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Amount<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="subsDetail.price" name="price" type="number" required
+              placeholder="Enter Amount">
+            </ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button [disabled]="!eventDetailForm.valid" mode="md" class="okay-btn" (click)="saveEvent()">Save</ion-button>
+  </div>
+</ion-footer>

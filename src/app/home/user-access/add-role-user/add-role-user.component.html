@@ -1,0 +1,62 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <ion-title>Add Details</ion-title>
+    </div>
+  </div>
+  <ion-buttons slot="end">
+    <ion-button (click)="closeModal()">Close</ion-button>
+  </ion-buttons>
+</ion-header>
+<ion-content class="date-ion-content ion-padding">
+  <div class="input-content">
+    <div class="login-input">
+      <ion-label>Code :{{userAdd?.code}}</ion-label>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="firstName" id="firstName" [(ngModel)]="userAdd.firstName" placeholder="First Name"
+        required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="lastName" id="lastName" placeholder="Last Name" [(ngModel)]="userAdd.lastName"
+        required></ion-input>
+    </div>
+    <div class="login-input">
+      <ion-input type="text" name="mobile" id="mobile" placeholder="Mobile No." [(ngModel)]="userAdd.mobileNo"
+      minlength="10" maxlength="10" inputmode="tel" required></ion-input>
+    </div>
+
+    <div class="login-input">
+      <ion-select name="type" [(ngModel)]="userAdd.type" placeholder="Select Type" mode="ios">
+        <ion-select-option *ngFor="let type of typeList" [value]="type.id">{{type.displayName}}
+        </ion-select-option>
+      </ion-select>
+    </div>
+
+    <div class="login-input mb-1">
+      <ion-input type="email" name="email" id="email" placeholder="Create Email ID *" [(ngModel)]="userAdd.email"
+      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,10}$" required></ion-input>
+    </div>
+    <div class="login-input mb-1">
+      <ion-input class="custom-input" minlength="8" type="{{isVisible ? 'text': 'password'}}" name="password"
+        id="password" placeholder="Create Password" [(ngModel)]="password" required></ion-input>
+      <span class="hideShowIcon">
+        <ion-icon name="{{isVisible ? 'eye-off' : 'eye'}}" (click)="isVisible = !isVisible"></ion-icon>
+      </span>
+    </div>
+
+    <div class="login-input">
+      <ion-input class="custom-input" minlength="8" type="{{isVisible1 ? 'text': 'password'}}" name="confirmPassword"
+        id="confirmPassword" placeholder="Confirm Password" [(ngModel)]="confirmPassword" required></ion-input>
+      <span class="hideShowIcon">
+        <ion-icon name="{{isVisible ? 'eye-off' : 'eye'}}" (click)="isVisible1 = !isVisible1"></ion-icon>
+      </span>
+    </div>
+  </div>
+  <div>
+    <ion-button class="secondary-btn" (click)="closeModal()">close
+    </ion-button>
+    <ion-button class="secondary-btn" (click)="registerUser()">Confirm
+    </ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,107 @@
+<ion-header>
+  <div class="heading">
+    <ion-title>Type FreeTrial</ion-title>
+    <ion-button class="card-btn" fill="outline" (click)="addFreeTrial()">Add Trial</ion-button>
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+    <ion-list class="card-list">
+      <ion-item *ngFor="let item of trialList; let i=index">
+        <div class="sub-card">
+          <div class="card-body">
+            <div class="event-info">
+              <span class="me-1">Board Name : </span>
+              <ion-label class="card-label">{{item.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Class Name : </span>
+              <ion-label class="card-label">{{item.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Total Days : </span>
+              <ion-label class="card-label">{{item.totalDays}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">limit Count : </span>
+              <ion-label class="card-label">{{item.limitCount}}</ion-label>
+            </div>
+            <div class="event-info m-0">
+              <span class="me-1">Create Date : </span>
+              <ion-label class="card-label">{{item.creationdate}}</ion-label>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteFreeTrial(item)"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+
+
+<ion-modal #blockModal class="selectBottomSheet blockModal" [isOpen]="isFreeTrialOpen" [initialBreakpoint]="0.6"
+  [breakpoints]="[0.5, 1.00]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Add FreeTrial</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="blockModalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="w-100 overflow-auto">
+        <ion-row>
+          <ion-col size="6">
+            <div class="custom-input">
+              <ion-label>Select Board<span>*</span></ion-label>
+              <ion-select mode="md" id="board" name="board" placeholder="Select Board" [(ngModel)]="selectBoard">
+                <ion-select-option *ngFor="let board of boardDetails" [value]="board">{{board.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="custom-input">
+              <ion-label>Select Class<span>*</span></ion-label>
+              <ion-select mode="md" id="class" name="class" placeholder="Select Class" (click)="selectClasses($event)"
+                [(ngModel)]="selectClass">
+                <ion-select-option *ngFor="let class of classDetails" [value]="class">{{class.displayName}}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="custom-input">
+              <ion-label>Total Days<span>*</span></ion-label>
+              <ion-input id="totalDays" [(ngModel)]="totalDays" name="totalDays" type="text" required
+                placeholder="Enter Days">
+              </ion-input>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="custom-input">
+              <ion-label>Limit Count<span>*</span></ion-label>
+              <ion-input id="limitCount" [(ngModel)]="limitCount" name="limitCount" type="text" required
+                placeholder="Enter Limit Count">
+              </ion-input>
+            </div>
+          </ion-col>
+        </ion-row>
+        <div class="footer-toolbar">
+          <ion-button mode="md" fill="outline" class="cancel-btn" (click)="blockModalDismiss()">Cancel</ion-button>
+          <ion-button mode="md" class="okay-btn" (click)="createFreeTrial()">Save</ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

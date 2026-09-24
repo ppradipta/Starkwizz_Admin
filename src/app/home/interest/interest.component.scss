@@ -1,0 +1,29 @@
+ion-header {
+    padding: 16px 20px;
+    background: #fff;
+    height: 60px;
+    .heading-left {
+        display: flex;
+        ion-buttons {
+            height: 28px;
+        }
+        ion-title {
+            font-size: 24px;
+            font-family: "Nunito-SemiBold";
+            color: #0A395A;
+            margin: 0;
+            line-height: 28px;
+        }
+    }
+}
+.page-container {
+    padding: 24px;
+    .customSegment {
+        margin-bottom: 12px;
+    }
+    .table {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        border-collapse: unset;
+    }
+}

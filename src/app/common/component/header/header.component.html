@@ -1,0 +1,19 @@
+<ion-header>
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <div class="d-flex align-items-center">
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <div class="px-3">
+                <img src="/assets/images/logo.png" class="logo">
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <ion-icon class="c-pointer" name="notifications" (click)="goToNotification()"></ion-icon>
+            <div class="logout c-pointer" (click)="logout()">
+                <ion-icon name="power"></ion-icon>
+            </div>
+        </div>
+    </div>
+</ion-header>
+

@@ -1,0 +1,170 @@
+ion-header {
+    padding: 16px 20px;
+    background: #fff;
+
+    .heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            font-size: 24px;
+            font-family: 'Nunito-SemiBold';
+            color: #0A395A;
+            margin: 0 20px 0 0;
+        }
+    }
+}
+
+ion-content {
+    height: calc(100% - 66px);
+    --keyboard-offset: 0px !important;
+}
+
+
+.page-container {
+    padding: 16px;
+
+
+
+
+    .card-list {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap
+    }
+
+    .sub-card {
+        overflow: hidden;
+        position: relative;
+        width: calc(50% - 16px);
+        margin: 8px;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0px 2px 12px #0a395a33;
+
+        .card-body {
+            padding: 20px;
+
+            .card-heading {
+                font-size: 22px;
+                line-height: 24px;
+                font-family: "Nunito-Bold";
+                color: #51c0e9;
+                display: block;
+                margin-bottom: 14px;
+            }
+
+            .event-info {
+                display: flex;
+                align-items: center;
+                margin-bottom: 4px;
+
+                span {
+                    font-size: 13px;
+                    line-height: 15px;
+                    font-family: "Nunito-Regular";
+                    color: #a9a9a9;
+                    display: block;
+                    margin-bottom: 2px;
+                }
+
+                .card-label {
+                    font-size: 14px;
+                    line-height: 18px;
+                    font-family: "Nunito-SemiBold";
+                    color: #373737;
+                    display: block;
+                    margin-bottom: 0;
+                }
+            }
+
+            .custom-col {
+                border-top: 1px dashed #b0c2ce;
+                padding-top: 4px;
+
+                .offer-label {
+                    font-size: 18px;
+                    line-height: 24px;
+                    font-family: "Nunito-Bold";
+                    color: #51c0e9;
+                    display: block;
+                    margin-bottom: 2px;
+                }
+            }
+
+            ion-chip {
+                margin: 0 0 0 10px;
+                border: 1px solid #51c0e9;
+                background: #EEFFFE;
+                font-size: 11px;
+                line-height: 14px;
+                border-radius: 18px;
+                padding: 4px 8px 2px;
+                height: 20px;
+                font-family: "Nunito-Bold";
+                color: #51c0e9;
+            }
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            background-color: #fff;
+            border-radius: 0 0 0 14px;
+            border-top: none;
+            position: absolute;
+            top: 14px;
+            right: 20px;
+
+            .icon-container {
+                margin-right: 8px;
+                text-align: center;
+
+                &:last-child {
+                    margin: 0;
+                }
+
+                .footer-icon {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    background-color: red;
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+
+
+                    &.edit-icon {
+                        background-color: #51c0e9;
+
+                        ion-icon {
+                            font-size: 18px;
+                            padding-bottom: 2px;
+                            padding-left: 2px;
+                        }
+                    }
+
+                    ion-icon {
+                        color: #fff;
+                        font-size: 19px;
+                        padding-bottom: 2px;
+                    }
+                }
+
+                span {
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-family: "Nunito-Regular";
+                    color: #373737;
+                    display: block;
+                }
+            }
+        }
+    }
+}

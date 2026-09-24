@@ -1,0 +1,183 @@
+ion-header {
+    padding: 12px 20px;
+    background: #fff;
+    .header {
+        display: flex;
+        align-items: center;
+    }
+    ion-title {
+        font-size: 24px;
+        font-family: 'Nunito-SemiBold';
+        color: #0A395A;
+        padding: 0;
+        position: unset;
+    }
+}
+
+ion-content {
+    height: calc(100% - 60px);
+}
+.page-container {
+    padding: 24px;
+    .custom-card {
+        margin-bottom: 24px;
+        border-radius: 10px;
+        width: 100%;
+        box-shadow: 0px 2px 12px #0a395a33;
+        overflow: hidden;
+        display: flex;
+        &.main-card {
+            min-height: 180px;
+        }
+        .card-left {
+            flex: 1;
+            padding: 16px;
+            overflow: hidden;
+        }
+        .card-right {
+            width: 120px;
+            padding: 16px;
+            background: #0a395a2e;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+    }
+    .module-card {
+        .card-list {
+            ion-item {
+                --min-height: 40px;
+                border: 1px solid #dce2e7;
+                &.item-checkbox-checked {
+                    border-color: #51c0e9;
+                    ion-icon {
+                        display: block;
+                        color: #000;
+                        font-size: 20px;
+                    }
+                }
+                ion-icon {
+                    display: none;
+                    margin: 0;
+                }
+            }
+            
+        }
+    }
+    .card-btn {
+        height: 30px;
+        width: 100%;
+        font-size: 15px;
+        --background: #0A395A;
+        --color: #fff;
+        margin: 0;
+        letter-spacing: 0;
+        text-transform: capitalize;
+        --box-shadow: none;
+        &.button-outline {
+            font-family: 'Nunito-Bold';
+            --background: transparent;
+            --color: #0A395A;
+            --background-focused: transparent;
+            --background-hover: transparent;
+            --border-color: #0A395A;
+        }
+    }
+    .card-list {
+        margin-bottom: 16px;
+        padding: 0;
+        width: calc(50% - 8px);
+        ion-item {
+            --min-height: 54px;
+            --border-style: none;
+            border-radius: 10px;
+            border: 2px dashed #dce2e7;
+            --ripple-color: #0a395a;
+            --padding-start: 16px;
+            --inner-padding-end: 16px;
+            &.item-checkbox-checked {
+                border-color: #51c0e9;
+            }
+            ion-label {
+                margin: 0;
+                font-size: 15px;
+                font-weight: 500;
+                color: #353636;
+            }
+            ion-checkbox {
+                margin: 0;
+                margin-left: 8px;
+                --size: 20px;
+                --border-color: #cad1d7;
+                --background-checked: #51c0e9;
+                --border-color-checked: #51c0e9;
+                --checkmark-color: #fff;
+                --background: transparent;
+            }
+        }
+    }
+    .card-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h4 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #0A395A;
+            margin: 0;
+        }
+        .tab-btn {
+            font-size: 16px;
+            --background: #0A395A;
+            font-family: "Nunito-Bold";
+            --color: #fff;
+            margin: 0 6px;
+            letter-spacing: 0;
+            text-transform: capitalize;
+            --box-shadow: none;
+            ion-icon {
+                margin-left: 6px;
+                color: #fff;
+            }
+        }
+    }
+    ion-select {
+        border: 1px solid #0A395A;
+        border-radius: 6px;
+        --padding-end: 10px;
+        width: 220px;
+        height: 42px;
+        --placeholder-opacity: 0.6;
+        font-size: 15px;
+        font-family: 'Nunito-SemiBold';
+    }
+    ion-segment {
+        max-width: 300px;
+        border-radius: 30px;
+        overflow: hidden;
+        border: 1px solid #0A395A;
+        background: #fff;
+        margin: 0 auto;
+        ion-segment-button {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0;
+            color: #0A395A;
+            border-radius: 30px;
+            height: 38px;
+            min-height: unset;
+            margin: 0;
+            --indicator-height: 0;
+            &.segment-button-checked {
+                color: #fff;
+                background: #0A395A;
+            }
+            ion-label {
+                margin: 0;
+            }
+        }
+    }
+    .customSegment {
+        margin: 41px 0 20px;
+    }
+}

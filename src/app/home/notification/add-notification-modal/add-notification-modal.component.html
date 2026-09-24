@@ -1,0 +1,130 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Add Notification
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+      <ion-row>
+        <ion-col size="3">
+          <div class="custom-input">
+            <ion-label>Type<span>*</span></ion-label>
+            <ion-select mode="md" id="notiType" name="notiType" placeholder="Select Notification Type"
+              (click)="selectNotificationType()" [(ngModel)]="notificationType">
+              <ion-select-option *ngFor="let noti of notificationTypes" [value]="noti.id">{{noti.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>Notification Name<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="name" name="name" type="text" required [ngModelOptions]="{standalone: true}"
+              placeholder="Enter Notification Name" (ionInput)="notificationNameChange($event)">
+            </ion-input>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="custom-input">
+            <ion-label>{{functionType}}<span>*</span></ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select State</ion-label>
+            <ion-select placeholder="Select State" [(ngModel)]="stateId" mode="ios" (click)="selectState($event)">
+              <ion-select-option *ngFor="let state of stateList" [value]="state.id">{{state.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select District</ion-label>
+            <ion-select placeholder="Select District" [(ngModel)]="districtId" mode="ios"
+              (click)="selectDistrict($event)">
+              <ion-select-option *ngFor="let dist of districts" [value]="dist.id">{{dist.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select City<span>*</span></ion-label>
+            <ion-select placeholder="Select City/Block" [(ngModel)]="cityId" mode="ios" (click)="selectCity($event)">
+              <ion-select-option *ngFor="let city of cities" [value]="city.id">{{city.displayName}}</ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Board</ion-label>
+            <ion-select mode="md" id="board" name="board" placeholder="Select Board" (click)="selectBoard($event)"
+              [(ngModel)]="boardId">
+              <ion-select-option *ngFor="let board of boards" [value]="board.id">{{board.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select School</ion-label>
+            <ion-select placeholder="Select School" [(ngModel)]="schoolId" mode="ios" (click)="selectSchool($event)">
+              <ion-select-option *ngFor="let school of schools" [value]="school.id">{{school.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Class</ion-label>
+            <ion-select mode="md" id="class" name="class" placeholder="Select Class" (click)="selectClass($event)"
+              [(ngModel)]="classId">
+              <ion-select-option *ngFor="let class of classDetails" [value]="class.id">{{class.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Subject</ion-label>
+            <ion-select mode="md" id="subject" name="subject" placeholder="Select Subject"
+              (click)="selectSubject($event)" [(ngModel)]="subjectId">
+              <ion-select-option *ngFor="let subject of subjects" [value]="subject.id">{{subject.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="custom-input">
+            <ion-label>Select Module </ion-label>
+            <ion-select mode="md" id="module" name="module" placeholder="Select Modul" (click)="selectModule($event)"
+              [(ngModel)]="moduleId">
+              <ion-select-option *ngFor="let module of subjectModules" [value]="module.id">{{module.displayName}}
+              </ion-select-option>
+            </ion-select>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>Enter Notification </ion-label>
+            <ion-textarea placeholder="Enter Notification" row="4" [(ngModel)]="notificationText"></ion-textarea>
+          </div>
+        </ion-col>
+      </ion-row>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="saveNotification()">Save</ion-button>
+  </div>
+</ion-footer>

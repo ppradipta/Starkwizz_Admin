@@ -1,0 +1,33 @@
+export class UserRank {
+    id: string;
+    calculateRank: number;
+    userId: string;
+    userImage: string;
+    name: string;
+    displayName: string;
+    token:string;
+    point: number;
+    boardId: string;
+    boardName: string;
+    schoolId: string;
+    schoolName: string;
+    classId: string;
+    className: string;
+    subjectId: string;
+    subjectName: string;
+    moduleId: string;
+    moduleName: string;
+    eventId: string;
+    eventType:string;
+    eventName: string;
+    status: string;
+    stateId: string;
+    stateName: string;
+    districtId: string;
+    districtName: string;
+    cityId: string;
+    cityName: string;
+    totalExamTime: number;
+    examTimeInMilliSeconds: number;
+    totalExamTimeDisplay: string;
+}

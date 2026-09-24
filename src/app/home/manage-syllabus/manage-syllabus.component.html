@@ -1,0 +1,106 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">Manage Syllabus</h4>
+    </div>
+    <!-- <div class="heading-right">
+      <ion-select placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+        </ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div> -->
+  </div>
+</ion-header>
+<ion-content>
+  <div class="page-container">
+
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="syllabusTabChanged($event)" [value]="segmentValue">
+        <ion-segment-button mode="md" value="ACTIVE">
+          <ion-label>Active</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="PENDING">
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="APPROVE">
+          <ion-label>Approve</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="REJECT">
+          <ion-label>Reject</ion-label>
+        </ion-segment-button>
+        
+      </ion-segment>
+    </div>
+
+    <ion-list class="card-list">
+      <ion-item *ngFor="let sub of enquiryList">
+        <div class="sub-card">
+          <div class="card-body">
+            <h4 class="card-heading">{{sub.name}}</h4>
+            <div class="d-flex justify-content-between">
+              <div class="event-info">
+                <span class="me-1">Mobile No : </span>
+                <ion-label class="card-label">{{sub.mobileNo}}</ion-label>
+              </div>
+              <ion-chip>{{sub.status}}</ion-chip>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Email Id : </span>
+              <ion-label class="card-label"><b>{{sub.to}}</b></ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Create Date : </span>
+              <ion-label class="card-label">{{sub.createDate | date:'dd-MM-yyyy'}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span class="me-1">Address : </span>
+              <ion-label class="card-label"><b>{{sub.address}}</b></ion-label>
+            </div>
+            <div class="custom-col">
+              <div class="d-flex justify-content-between">
+                <div class="event-info">
+                  <span class="me-1">Board : </span>
+                  <ion-label class="card-label"><b>{{sub.boardName}}</b></ion-label>
+                </div>
+                <div class="event-info">
+                  <span class="me-1">Class : </span>
+                  <ion-label class="card-label"><b>{{sub.className}}</b></ion-label>
+                </div>
+              </div>
+              <div class="event-info m-0">
+                <span class="me-1">Message : </span>
+                <ion-label class="card-label"><b>{{sub.decs}}</b></ion-label>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer" >
+            <div class="icon-container">
+              <div class="footer-icon" *ngIf="sub.status == 'ACTIVE'">
+                <ion-icon name="link-outline" (click)="presentAlertForUpdateStatus(sub)"></ion-icon>
+              </div>
+
+              <div class="footer-icon" *ngIf="sub.status == 'PENDING'">
+                <ion-icon name="link-outline" (click)="presentAlertForStatusPending(sub)"></ion-icon>
+              </div>
+
+              <div class="footer-icon" *ngIf="sub.status == 'REJECT'">
+                <ion-icon name="trash" (click)="presentAlertForDelete(sub)"></ion-icon>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

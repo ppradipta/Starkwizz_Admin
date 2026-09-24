@@ -1,0 +1,29 @@
+<ion-content>
+  <div class="content">
+    <ion-img [src]="'/assets/images/logo.png'" class="logo"></ion-img>
+    <form>
+      <div class="input-content">
+        <ion-text color="medium" class="text">Account Login</ion-text>
+        <ion-row>
+          <ion-col size="12" class="p-0">
+            <div class="login-input">
+              <ion-input minlength="8" type="email" name="email" id="email" placeholder="Email Id" [(ngModel)]="email"></ion-input>
+            </div>
+            <div class="login-input">
+              <ion-input minlength="8" type="password" name="password" id="password" placeholder="Password"  [(ngModel)]="password"></ion-input>
+            </div>
+            <div class="text-end mt-2">
+              <ion-button class="reset-btn" fill="clear">Forgot Password?</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
+       <div class="btn-content no-border">
+        <ion-button class="login-btn" (click)="login()">Login</ion-button>
+      </div>
+      <!-- <div class="btn-content no-border">
+        <ion-button class="login-btn" (click)="login()">Login</ion-button>
+      </div> -->
+    </form>
+  </div>
+</ion-content>

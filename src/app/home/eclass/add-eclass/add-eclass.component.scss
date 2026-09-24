@@ -1,0 +1,19 @@
+ion-header {
+    padding: 12px 20px;
+    background: #fff;
+    .header {
+        display: flex;
+        align-items: center;
+    }
+    ion-title {
+        font-size: 24px;
+        font-family: 'Nunito-SemiBold';
+        color: #0A395A;
+        padding: 0;
+        position: unset;
+    }
+}
+
+ion-content {
+    height: calc(100% - 60px);
+}

@@ -1,0 +1,422 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">Event ({{eventDetails?.length}})</h4>
+    </div>
+    <div class="heading-right">
+      <ion-select placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}
+        </ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+
+      <ion-select placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-input value="{{ eventDate | date: 'dd-MM-YYYY' }}" id="date" placeholder="Date"></ion-input>
+      <ion-popover trigger="date" size="cover">
+        <ng-template>
+          <ion-datetime presentation="date" [ngModel]="eventDate" (ngModelChange)="eventDate=$event" name="eventDate"
+            required></ion-datetime>
+        </ng-template>
+      </ion-popover>
+      <!-- <ion-searchbar mode="ios"></ion-searchbar> -->
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="eventTabChanged($event)" [value]="examSegmentValue">
+        <ion-segment-button mode="md" value="NOQUESTION">
+          <!--future date -->
+          <ion-label>NOQUESTION</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="UPCOMING">
+          <!--future date -->
+          <ion-label>UPCOMING</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="ACTIVE">
+          <!--Currend date -->
+          <ion-label>ACTIVE</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" value="COMPLETED">
+          <!--after event date complete via schduled-->
+          <ion-label>COMPLETED</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" class="segmentBtn" value="CANCELLED">
+          <ion-label>CANCELLED</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <div class="d-flex justify-content-end">
+      <ion-button mode="md" fill="outline" class="add-btn" (click)="cleanEvent('DELETE')">Clean Event</ion-button>
+      <ion-button mode="md" fill="outline" class="add-btn" (click)="addEvents('ADD')">Add Event</ion-button>
+    </div>
+    <div class="card-container" *ngIf="actionType !='DELETE'">
+      <div *ngIf="eventDetails.length == 0">No Events</div>
+      <div class="custom-card" *ngFor="let event of eventDetails">
+        <div class="card-img">
+          <!-- <ion-img [src]="event?.imageURL">
+          </ion-img> -->
+          <div class="camera-icons">
+            <label class="fileButton">
+              <ion-icon name="camera">
+                <ion-input type="file" (change)="fileChangeEvent($event, event)"></ion-input>
+              </ion-icon>
+            </label>
+          </div>
+          <div class="card-icon">
+            <div class="icon-container">
+              <div class="footer-icon edit-icon" (click)="editEvent(event)">
+                <ion-icon name="create-outline"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon">
+                <ion-icon name="trash" (click)="deleteEvent(event)"></ion-icon>
+              </div>
+            </div>
+            <div class="icon-container">
+              <div class="footer-icon link-icon">
+                <ion-icon name="link-outline" (click)="linkSchoolForEvent(event)"></ion-icon>
+              </div>
+            </div>
+          </div>
+          <div class="event-date">
+            <ion-icon name="time-outline"></ion-icon>{{event?.eventEndDate}}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="card-heading m-0">{{event?.eventName}}</h4>
+            <ion-button class="rank-btn" fill="outline" (click)="viewRank(event)">View Rank</ion-button>
+          </div>
+          <p class="card-desc" *ngIf="event?.discription">
+            {{event?.discription}}
+          </p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Code :</span>
+              <ion-label class="card-label">{{event?.eventCode}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Board:</span>
+              <ion-label class="card-label">{{event?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Class:</span>
+              <ion-label class="card-label">{{event?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Subject:</span>
+              <ion-label class="card-label">{{event?.subjectName}}</ion-label>
+            </div>
+            <div class="event-info w-100" *ngIf="event.moduleName">
+              <span>Module:</span>
+              <ion-label class="card-label">{{event?.moduleName}}</ion-label>
+            </div>
+            <div class="event-info w-100" *ngIf="event?.testType">
+              <span>Test Type:</span>
+              <ion-label class="card-label">{{event?.testType}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>category:</span>
+              <ion-label class="card-label">{{event?.eventCategory}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Type:</span>
+              <ion-label class="card-label">{{event?.type}}</ion-label>
+            </div>
+            <div class="event-info" *ngIf="event.type == 'EVENT'">
+              <span>Price:</span>
+              <ion-label class="card-label">INR {{event?.price}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Mark :</span>
+              <ion-label class="card-label">{{event?.eventMarks}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Time :</span>
+              <ion-label class="card-label">{{event?.totalHour}} sec</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Questions :</span>
+              <ion-label class="card-label">{{event?.questions?.length}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>QuestionType:</span>
+              <ion-label class="card-label">{{event?.questionPattern}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Allow to Attemp:</span>
+              <ion-label class="card-label">{{event?.questionToAttemp}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Pass Mark(Question Count):</span>
+              <ion-label class="card-label">{{event?.passMark}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>start Date:</span>
+              <ion-label class="card-label">{{event?.eventStartDate}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>End Date:</span>
+              <ion-label class="card-label">{{event?.eventEndDate}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Download Ans :</span>
+              <ion-toggle [checked]="event.isDownloadAnsAllow"
+                (ionChange)="changeDownloadOptionForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Leader Board :</span>
+              <ion-toggle [checked]="event.isLeaderBoardAllow"
+                (ionChange)="changeLeaderBoardDisplayAllowForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Review Ans :</span>
+              <ion-toggle [checked]="event.isReviewAnsAllow" (ionChange)="changeReviewAnsForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Publish Rank :</span>
+              <ion-toggle [checked]="event.isPublishRankAllow"
+                (ionChange)="changePublishRankForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info" *ngIf="event?.linktype">
+              <span>Linked {{event?.linktype}}:</span>
+              <ion-label class="card-label">{{event?.linkvalues?.length}}</ion-label>
+            </div>
+            <div class="event-info">
+              <ion-button fill="outline" (click)="onClickDescriptionModal(event)">
+                Description
+                <ion-icon name="document-text-outline"></ion-icon>
+              </ion-button>
+            </div>
+            <div class="event-info">
+              <ion-button fill="outline"  (click)="onClickInfoModal(event)">
+                Info
+                <ion-icon name="information-circle-outline"></ion-icon>
+              </ion-button>
+            </div>
+            <div class="event-info">
+              <ion-button fill="outline" (click)="onClickInstructionModal(event)">
+                Instruction
+                <ion-icon name="list-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center p-2 pb-3"
+          *ngIf="examSegmentValue == 'ACTIVE' || examSegmentValue=='UPCOMING' || examSegmentValue=='CANCELLED' ">
+          <ion-select class="status-select" [value]="event.status" okText="Okay" cancelText="Dismiss"
+            (ionChange)="changeEventStatus($event, event)">
+            <ion-select-option value="UPCOMING">UPCOMING</ion-select-option>
+            <ion-select-option value="ACTIVE">ACTIVE</ion-select-option>
+            <ion-select-option value="COMPLETED">COMPLETED</ion-select-option>
+            <ion-select-option value="CANCELLED">CANCELLED</ion-select-option>
+          </ion-select>
+        </div>
+
+        <div class="d-flex justify-content-center p-2 pb-3" *ngIf="event.status=='COMPLETED' || event.status=='ACTIVE'">
+          <ion-button class="search-btn" (click)="calculateRank(event)">Calculate Rank</ion-button>
+        </div>
+        <div class="card-footer">
+          <ion-button class="upload-btn" *ngIf="event.status=='COMPLETED' || event.status=='ACTIVE'"
+            (click)="eventsActivity(event)">Activity
+          </ion-button>
+          <ion-button (click)="goToAddQuestions(event)">Add Questions</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-container" *ngIf="actionType=='DELETE'">
+      <h5>This is for cleanup events</h5>
+      <div *ngIf="cleanupEvents.length == 0">No Events</div>
+      <div class="custom-card" *ngFor="let event of cleanupEvents">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="card-heading m-0">{{event?.eventName}}</h4>
+            <ion-button class="rank-btn" fill="outline" (click)="viewRank(event)">View Rank</ion-button>
+          </div>
+          <p class="card-desc" *ngIf="event?.discription">
+            {{event?.discription}}
+          </p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Code :</span>
+              <ion-label class="card-label">{{event?.eventCode}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Board:</span>
+              <ion-label class="card-label">{{event?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Class:</span>
+              <ion-label class="card-label">{{event?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Subject:</span>
+              <ion-label class="card-label">{{event?.subjectName}}</ion-label>
+            </div>
+            <div class="event-info w-100" *ngIf="event.moduleName">
+              <span>Module:</span>
+              <ion-label class="card-label">{{event?.moduleName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>category:</span>
+              <ion-label class="card-label">{{event?.eventCategory}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Type:</span>
+              <ion-label class="card-label">{{event?.type}}</ion-label>
+            </div>
+            <div class="event-info" *ngIf="event.type == 'EVENT'">
+              <span>Price:</span>
+              <ion-label class="card-label">INR {{event?.price}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Mark :</span>
+              <ion-label class="card-label">{{event?.eventMarks}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Time :</span>
+              <ion-label class="card-label">{{event?.totalHour}} sec</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Total Questions :</span>
+              <ion-label class="card-label">{{event?.questions?.length}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>QuestionType:</span>
+              <ion-label class="card-label">{{event?.questionPattern}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Allow to Attemp:</span>
+              <ion-label class="card-label">{{event?.questionToAttemp}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>start Date:</span>
+              <ion-label class="card-label">{{event?.eventStartDate}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>End Date:</span>
+              <ion-label class="card-label">{{event?.eventEndDate}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Download Ans :</span>
+              <ion-toggle [checked]="event.isDownloadAnsAllow"
+                (ionChange)="changeDownloadOptionForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Leader Board :</span>
+              <ion-toggle [checked]="event.isLeaderBoardAllow"
+                (ionChange)="changeLeaderBoardDisplayAllowForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Review Ans :</span>
+              <ion-toggle [checked]="event.isReviewAnsAllow" (ionChange)="changeReviewAnsForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info">
+              <span>Publish Rank :</span>
+              <ion-toggle [checked]="event.isPublishRankAllow"
+                (ionChange)="changePublishRankForEvent(event)"></ion-toggle>
+            </div>
+            <div class="event-info" *ngIf="event?.linktype">
+              <span>Linked {{event?.linktype}}:</span>
+              <ion-label class="card-label">{{event?.linkvalues?.length}}</ion-label>
+            </div>
+          </div>
+        </div>
+        <ion-button (click)="goToDeleteEvents(event)">Delete</ion-button>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
+
+
+
+<ion-modal #eventInstructionModal class="selectBottomSheet" [isOpen]="isInstructionModalOpen" [initialBreakpoint]="1.0"
+  [breakpoints]="[0, 1.0]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Event Instruction </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-label class="section-label">Instruction</ion-label>
+      <ion-textarea label="Instruction" [(ngModel)]="selectedEvent.instruction"></ion-textarea>
+
+      <h6>Instruction Preview</h6>
+      <div class="page-inner" [innerHTML]="selectedEvent?.instruction">
+      </div>
+      <div class="btn-content">
+        <ion-button class="outlineBtn" (click)="onConfirmInstruction()">Confirm</ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal #eventInfoModal class="selectBottomSheet" [isOpen]="isInfoModalOpen" [initialBreakpoint]="1.0"
+  [breakpoints]="[0, 1.0]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Events Info </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-label class="section-label">Information</ion-label>
+      <ion-textarea label="Information" [(ngModel)]="selectedEvent.information"></ion-textarea>
+      <h6>Info Preview</h6>
+      <div class="page-inner" [innerHTML]="selectedEvent?.information">
+      </div>
+      <div class="btn-content">
+        <ion-button class="outlineBtn" (click)="onConfirmInformation()">Confirm</ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal #eventDescriptionModal class="selectBottomSheet" [isOpen]="isDescriptionModalOpen" [initialBreakpoint]="1.0"
+  [breakpoints]="[0, 1.0]" backdrop-dismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Events Description </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalDismiss()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-label class="section-label">Description</ion-label>
+      <ion-textarea label="Description"
+        [(ngModel)]="selectedEvent.description"></ion-textarea>
+
+      <h6>Description Preview</h6>
+      <div class="page-inner" [innerHTML]="selectedEvent?.description">
+      </div>
+      <div class="btn-content">
+        <ion-button class="outlineBtn" (click)="onConfirmDescription()">Confirm</ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

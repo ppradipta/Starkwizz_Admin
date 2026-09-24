@@ -1,0 +1,48 @@
+.modal-inner {
+    padding: 8px;
+    .option-list {
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .option {
+            width: calc(50% - 16px);
+            margin: 8px;
+            background: #fff;
+            padding: 8px 12px;
+            color: #0A395A;
+            font-size: 16px;
+            font-family: 'Nunito-SemiBold';
+            border-radius: 6px;
+            border: 2px dashed #174c70;
+            opacity: 0.5;
+            &.answer {
+                border: 2px dashed #0A395A;
+                background: #0A395A;
+                color: #fff;
+                opacity: 1;
+            }
+            p {
+                margin: 0;
+            }
+            .option-img {
+                height: auto;
+                overflow: hidden;
+                border-radius: 6px;
+                margin: 6px 0;
+                ion-img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+.footer-toolbar {
+    padding: 14px 12px;
+    ion-button {
+        font-size: 15px;
+        height: 32px;
+    }
+}

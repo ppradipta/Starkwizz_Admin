@@ -1,0 +1,90 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <h4 class="title">Events Snapshots</h4>
+    </div>
+    <div class="heading-right">
+      <ion-select  placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+        <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Class" mode="ios" (ionChange)="selectClass($event)">
+        <ion-select-option *ngFor="let class of classes" [value]="class">{{class.displayName}}</ion-select-option>
+      </ion-select>
+
+      <ion-select  placeholder="Subject" mode="ios" (ionChange)="selectSubject($event)">
+        <ion-select-option *ngFor="let subj of subjects" [value]="subj">{{subj.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-select  placeholder="Module" mode="ios" (ionChange)="selectModule($event)">
+        <ion-select-option *ngFor="let module of modules" [value]="module">{{module.displayName}}</ion-select-option>
+      </ion-select>
+      <ion-input value="{{ eventDate | date: 'dd-MM-YYYY' }}" id="date" placeholder="Date"></ion-input>
+      <ion-popover trigger="date" size="cover">
+        <ng-template>
+          <ion-datetime presentation="date" [ngModel]="eventDate" (ngModelChange)="eventDate=$event" name="dateOfBirth" required></ion-datetime>
+        </ng-template>
+      </ion-popover>
+      <ion-button class="search-btn" (click)="search()">Search</ion-button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="customSegment">
+      <ion-segment mode="md" (ionChange)="tabChanged($event)" [value]="tabValue" mode="md">
+        <ion-segment-button mode="md" value="EXAM">
+          <ion-label>EXAM</ion-label>
+        </ion-segment-button>
+        <ion-segment-button mode="md" id="PUBLISHED" class="segmentBtn" value="EVENT">
+          <ion-label>EVENTS</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <div class="card-container">
+      <div class="custom-card" *ngFor="let item of EventVideoList; let i = index">
+        <div class="card-img">
+          <ion-img *ngIf="!item.imageUrl" src="https://ionicframework.com/docs/demos/api/card/madison.jpg"></ion-img>
+          <ion-img *ngIf="item.imageUrl && item.imageUrl != ''" [src]="item.imageUrl"></ion-img>
+          <div class="event-date" *ngIf="item?.eventDate">
+            <ion-icon name="time-outline"></ion-icon>{{item?.eventDate}}
+          </div>
+          <div class="event-status started" *ngIf="item?.status =='STARTED'">{{item?.status}}</div>
+          <div class="event-status inprogress" *ngIf="item?.status =='INPROGRESS'">{{item?.status}}</div>
+          <div class="event-status completed" *ngIf="item?.status =='COMPLETED'">{{item?.status}}</div>
+          <div class="event-status rescheduled" *ngIf="item?.status =='RESCHEDULED'">{{item?.status}}</div>
+          <div class="event-status evaluated" *ngIf="item?.status =='EVALUATED'">{{item?.status}}</div>
+        </div>
+        <div class="card-body">
+          <ion-label class="user-name" *ngIf="item?.userName">{{item.userName}}</ion-label>
+          <h4 class="card-heading" *ngIf="item?.videoName">{{item?.videoName}}</h4>
+          <p class="card-desc">{{item?.moduleName}}</p>
+          <div class="eventInfo-container">
+            <div class="event-info">
+              <span>Class:</span>
+              <ion-label class="card-label">{{item?.className}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Board:</span>
+              <ion-label class="card-label">{{item?.boardName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Subject:</span>
+              <ion-label class="card-label">{{item?.subjectName}}</ion-label>
+            </div>
+            <div class="event-info">
+              <span>Category:</span>
+              <ion-label class="card-label">{{item?.category}}</ion-label>
+            </div>
+            <div class="event-info w-100">
+              <span>Module:</span>
+              <ion-label class="card-label">{{item?.moduleName}}</ion-label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <ion-button class="upload-btn" (click)="approved(item, 'EVALUATED')">Evaluated</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

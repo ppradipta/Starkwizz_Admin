@@ -1,0 +1,116 @@
+<ion-header>
+  <div class="heading">
+    <div class="heading-left">
+      <ion-buttons slot="start">
+        <ion-button (click)="goBack()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>Calculate Rank</ion-title>
+    </div>
+    <div class="heading-right">
+      <ion-select  placeholder="Country" mode="ios" (click)="getAllRank()"
+        [(ngModel)]="selectedCountry">
+        <ion-select-option>India</ion-select-option>
+      </ion-select>
+      <!-- <ion-button size="small" (click)="getAllRank()">Country</ion-button> -->
+      <ion-select  placeholder="State" mode="ios" [(ngModel)]="rankStateFilter"
+        (click)="getAllStateRank($event)">
+        <ng-container>
+          <ion-select-option *ngFor="let data of states" [value]="data">{{data.displayName}}</ion-select-option>
+        </ng-container>
+      </ion-select>
+      <!-- <ion-button size="small" (click)="getAllStateRank()">State</ion-button> -->
+      <ion-select  placeholder="Disctrict" mode="ios" [(ngModel)]="rankDistrictFilter"
+        (click)="getAllDistrictRank($event)">
+        <ion-select-option *ngFor="let data of districts" [value]="data">{{data.displayName}}</ion-select-option>
+      </ion-select>
+      <!-- <ion-button size="small" (click)="getAllDistrictRank()">District</ion-button> -->
+      <ion-select  placeholder="City" mode="ios" [(ngModel)]="rankCityFilter"
+        (click)="getAllCityRank($event)">
+        <ion-select-option *ngFor="let data of cities" [value]="data">{{data.displayName}}</ion-select-option>
+      </ion-select>
+      <!-- <ion-button size="small" (click)="getAllSchoolRank()">School</ion-button> -->
+
+      <ion-select  placeholder="School" mode="ios" [(ngModel)]="rankSchoolFilter"
+        (click)="getAllSchool($event)">
+        <ion-select-option *ngFor="let data of schools" [value]="data">{{data.displayName}}</ion-select-option>
+      </ion-select>
+
+      <ion-button size="small" (click)="viewRank()">View Rank</ion-button>
+    </div>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="page-container">
+    <div class="custom-card">
+      <div class="card-heading">
+        <h4>{{eventDetails?.eventName}}</h4>
+        <ion-label>Date: {{eventDetails?.eventStartDate}}</ion-label>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-wrap mb-2">
+          <div class="event-info">
+            <span>Board:</span>
+            <ion-label class="card-label">{{eventDetails?.boardName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="eventDetails?.schoolName">
+            <span>school:</span>
+            <ion-label class="card-label">{{eventDetails?.schoolName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Class:</span>
+            <ion-label class="card-label">{{eventDetails?.className}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="eventDetails?.subjectName">
+            <span>Subject:</span>
+            <ion-label class="card-label">{{eventDetails?.subjectName}}</ion-label>
+          </div>
+          <div class="event-info" *ngIf="eventDetails?.moduleName">
+            <span>Module:</span>
+            <ion-label class="card-label">{{eventDetails?.moduleName}}</ion-label>
+          </div>
+        </div>
+        <div class="mb-4" *ngIf="rankData.length==0">
+          <h4 class="rank-title">No Rank found for given criteria </h4>
+        </div>
+        <div class="mb-4" *ngIf="rankData.length>0">
+          <div class="mb-4" *ngFor="let calrank of rankGroupedData | keyvalue">
+            <ng-container>
+              <h4 class="rank-title" *ngIf="rankTypeView === 'ALL'">Rank For {{selectedCountry}}</h4>
+              <h4 class="rank-title" *ngIf="rankTypeView == 'STATE'">Rank For {{rankStateFilter?.displayName}}</h4>
+              <h4 class="rank-title" *ngIf="rankTypeView == 'DISTRICT'">Rank For {{rankStateFilter?.displayName}} |
+                {{rankDistrictFilter?.displayName}}</h4>
+              <h4 class="rank-title" *ngIf="rankTypeView == 'CITY'">Rank For {{rankStateFilter?.displayName}} |
+                {{rankDistrictFilter?.displayName}} | {{rankCityFilter?.displayName}}</h4>
+              <h4 class="rank-title" *ngIf="rankTypeView == 'SCHOOL'">Rank For {{rankSchoolFilter?.displayName}} |
+                {{rankCityFilter?.displayName}} | {{rankDistrictFilter?.displayName}} | {{rankStateFilter.displayName}}
+              </h4>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th class="th-sm">Name</th>
+                      <th class="th-sm">Points</th>
+                      <th class="th-sm">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let rank of calrank.value;let i=index;">
+                      <td>{{rank?.calculateRank}}</td>
+                      <td>{{rank?.displayName}}</td>
+                      <td>{{rank?.point}} pt</td>
+                      <td>{{rank?.totalExamTimeDisplay}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

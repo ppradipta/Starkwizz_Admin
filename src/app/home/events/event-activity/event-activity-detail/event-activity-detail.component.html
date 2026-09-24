@@ -1,0 +1,82 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Evaluate
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="card-container">
+    <ion-card>
+      <ion-item>
+        <!-- <ion-avatar slot="start"></ion-avatar> -->
+        <ion-label>
+          <h3> {{activity?.userDisplayName}}</h3>
+          <div class="card-data">
+            <p>Mobile No : {{activity?.mobileNo}}</p>
+            <p>Appear Date : {{activity?.appearedDate}}</p>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-card-content>
+        <div class="eventInfo-container">
+          <div class="event-info">
+            <span>State :</span>
+            <ion-label class="card-label">{{activity?.stateName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>District :</span>
+            <ion-label class="card-label">{{activity?.districtName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>City :</span>
+            <ion-label class="card-label">{{activity?.cityName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>School :</span>
+            <ion-label class="card-label">{{activity?.schoolName}}</ion-label>
+          </div>
+          <div class="event-info">
+            <span>Time Taken :</span>
+            <ion-label class="card-label">{{activity?.totalExamTimeDisplay}}</ion-label>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="title-row">
+    <ng-container *ngFor="let quest of activity?.questions">
+      <div class="row-inner" *ngIf="quest.type=='SUBJECTIVE_NO_OPTION'">
+        <div class="img-container" *ngIf="quest.userSelectedOptionType=='IMAGE'">
+          <div class="preview-img" *ngFor="let ansimage of quest.userSelectedOption">
+            <ion-img [src]="ansimage" class="image"></ion-img>
+            <div class="view-icon" (click)="previewImage(ansimage)">
+              <ion-icon name="eye"></ion-icon>
+            </div>
+          </div>
+        </div>
+        <div class="img-container" *ngIf="quest?.userSelectedOptionType=='TEXT'">
+          <ion-label class="section-label">{{quest?.userSelectedOption}}</ion-label>
+        </div>
+        <div class="section-row">
+          <ion-label class="section-label">Enter Evaluate Mark</ion-label>
+          <ion-input class="section-value section-input" [(ngModel)]="quest.mark" inputmode="tel" type="number"></ion-input>
+          <ion-button class="search-btn" (click)="confirmEvaluation(quest)">Confirm</ion-button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button mode="md" class="okay-btn" (click)="finalizedEventEvaluation()">Finalized</ion-button>
+  </div>
+</ion-footer>

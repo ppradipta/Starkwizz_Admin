@@ -1,0 +1,256 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+@import "theme/default/color.scss";
+
+* {
+  box-sizing: border-box !important;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+}
+
+ion-select {
+  max-width: 220px;
+  border: 1px solid #0a395a;
+  border-radius: 6px;
+  --padding-end: 12px;
+  --padding-start: 12px;
+  height: 42px;
+  --placeholder-opacity: 0.6;
+  font-size: 15px;
+  font-family: "Nunito-SemiBold";
+}
+
+.custom-input {
+  ion-input {
+    height: 42px;
+    max-height: 42px;
+    width: 100%;
+    --placeholder-opacity: 0.6;
+    font-size: 15px;
+    font-family: "Nunito-SemiBold";
+    border: 1px solid #0a395a;
+    border-radius: 6px;
+    --padding-top: 12px;
+    --padding-end: 12px;
+    --padding-bottom: 10px;
+    --padding-start: 12px;
+    text-align: left;
+  }
+}
+
+ion-modal {
+  ion-header {
+    ion-toolbar {
+      --min-height: 50px;
+
+      ion-title {
+        font-size: 20px;
+        font-family: "Nunito-Bold";
+        color: #0a395a;
+      }
+
+      .modal-close {
+        color: #0a395a;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .modal-inner {
+    padding: 12px;
+
+    .custom-input {
+      margin-bottom: 10px;
+
+      ion-label {
+        font-size: 15px;
+        color: #454545;
+        font-family: "Nunito-SemiBold";
+        margin-bottom: 2px;
+        display: block;
+
+        span {
+          color: red;
+          margin-left: 4px;
+        }
+      }
+
+      ion-select {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .footer-toolbar {
+    padding: 16px 12px;
+    text-align: center;
+
+    ion-button {
+      font-size: 16px;
+      --background: #0a395a;
+      font-family: "Nunito-SemiBold";
+      --color: #fff;
+      margin: 0 6px;
+      letter-spacing: 0;
+      text-transform: capitalize;
+      --box-shadow: none;
+      width: 80px;
+
+      &.cancel-btn {
+        font-family: "Nunito-Bold";
+        --background: transparent;
+        --color: #0a395a;
+        --background-focused: transparent;
+        --background-hover: transparent;
+        --border-color: #0a395a;
+      }
+    }
+  }
+}
+
+.custom-card {
+  background-color: #fff;
+}
+
+.date-modal {
+  --background: rgba(44, 39, 45, 0.2);
+
+  &::part(content) {
+    backdrop-filter: blur(6px);
+  }
+
+  .date-content {
+    --background: transparent;
+    --padding-top: 14vh;
+    --padding-start: 36px;
+    --padding-end: 36px;
+
+    ion-datetime {
+      border-radius: 15px;
+    }
+  }
+}
+
+ion-popover {
+  &.select-popover {
+    --max-height: calc(100% - 150px);
+    --height: unset;
+  }
+
+  ion-select-popover {
+    ion-item {
+      ion-label {
+        white-space: unset !important;
+        font-size: 14px !important;
+        line-height: 18px;
+      }
+    }
+  }
+}
+
+.customAlert {
+  text-align: center;
+  --max-width: 300px;
+  --width: 100%;
+
+  &.customAlert1 {
+    --max-width: 330px;
+    .alert-button-group {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+    }
+
+  }
+
+  .alert-wrapper {
+    border-radius: 10px;
+  }
+
+  .alert-head {
+    text-align: center;
+    background: #70cfed8a;
+    padding: 15px 0;
+
+    .alert-title {
+      color: #0A395A;
+      font-size: 18px;
+      line-height: 22px;
+      font-weight: 500;
+    }
+  }
+
+  .alert-message {
+    max-height: 266px;
+    font-size: 15px;
+    color: #262626;
+    padding: 20px 24px !important;
+  }
+
+  .alert-button-group {
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+
+  .alert-button {
+    padding: 5px 10px;
+    height: 30px;
+    width: 90px;
+    border-radius: 30px;
+    text-transform: capitalize;
+    height: 32px;
+    text-align: center;
+    color: #136886;
+    background: #70cfed96;
+    font-size: 12px;
+
+    &:last-child {
+      background: #51C1E9;
+      color: #fff;
+      margin: 0;
+    }
+
+    .alert-button-inner {
+      justify-content: center;
+    }
+  }
+}
+
+
+// Remove Type Number Spin Button
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,75 @@
+<ion-header mode="md">
+  <ion-toolbar mode="md">
+    <ion-title>
+      Add New {{tabValue}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="close()" class="btn-blue modal-close">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="content modal-inner">
+    <form name="newForm" #newForm="ngForm" autocomplete="off">
+
+      <ion-row *ngIf = "tabValue =='SCHOOLS' || tabValue =='INSTITUTE'">
+        <ion-col size ="12">
+          <div class="custom-input">
+          <ion-select  placeholder="Board" mode="ios" (ionChange)="selectBoard($event)">
+            <ion-select-option *ngFor="let board of allBoardDetails" [value]="board">{{board.displayName}}</ion-select-option>
+          </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row *ngIf = "tabValue =='DISTRICT' || tabValue =='CITIES' || tabValue =='SCHOOLS' || tabValue =='INSTITUTE'">
+        <ion-col size ="12">
+          <div class="custom-input">
+          <ion-select placeholder="State" mode="ios" (ionChange)="selectState($event)">
+            <ion-select-option *ngFor="let state of allStateDetails" [value]="state">{{state.displayName}}</ion-select-option>
+          </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf = "tabValue =='CITIES' || tabValue =='SCHOOLS' || tabValue =='INSTITUTE'">
+        <ion-col size ="12">
+          <div class="custom-input">
+          <ion-select  placeholder="District" mode="ios" (ionChange)="selectDistrict($event)">
+            <ion-select-option *ngFor="let district of allDistrictDetails" [value]="district">{{district.displayName}}</ion-select-option>
+          </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf = "tabValue =='SCHOOLS' || tabValue =='INSTITUTE'">
+        <ion-col size ="12">
+          <div class="custom-input">
+          <ion-select  placeholder="Cities" mode="ios" (ionChange)="selectSchool($event)">
+            <ion-select-option *ngFor="let school of allCitiesDetails" [value]="school">{{school.displayName}}</ion-select-option>
+          </ion-select>
+          </div>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <div class="custom-input">
+            <ion-label>{{tabValue | lowercase}} Name<span>*</span></ion-label>
+            <ion-input id="name" [(ngModel)]="name" name="name" type="text" required placeholder="Enter Name">
+            </ion-input>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="footer-toolbar">
+    <ion-button mode="md" fill="outline" class="cancel-btn" (click)="close()">Cancel</ion-button>
+    <ion-button [disabled]="!newForm.valid" mode="md" class="okay-btn" (click)="save()">Save</ion-button>
+  </div>
+</ion-footer>
