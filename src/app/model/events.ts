@@ -24,7 +24,8 @@ export class Events {
     public creationDate: string; //autcreate
     public startDate: string;
     public endDate: string;
-    public questions: QuestionAppearanceView[] = []
+    public questions: QuestionAppearanceView[] = [];
+    public levels?: EventLevel[] = [];
     public imageUrl: string;
     public colorCode: string;
     public answerUrl: string;
@@ -62,6 +63,17 @@ export class QuestionAppearanceView {
     id: string;
     //sequence: string;
     correctAnswer: string;
+    level?: number;
+}
+
+export class EventLevel {
+    public levelNumber: number; // 1, 2, 3, 4, 5
+    public levelName: string; // "Foundation Practice", "School Exam Readiness", etc.
+    public tag: string; // "Easy", "Moderate", "Application", "Proficiency", "Advanced"
+    public description: string;
+    public totalQuestions: number;
+    public totalTime: number; // in seconds
+    public questions: QuestionAppearanceView[] = [];
 }
 
 export class Parameters {

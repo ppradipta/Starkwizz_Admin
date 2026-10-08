@@ -152,6 +152,16 @@
               <span>Total Questions :</span>
               <ion-label class="card-label">{{event?.questions?.length}}</ion-label>
             </div>
+            <div class="event-info w-100" *ngIf="event?.levels && event.levels.length > 0">
+              <span>5 Levels :</span>
+              <ion-label class="card-label">
+                L1: {{event.levels[0]?.totalQuestions || event.levels[0]?.questions?.length || 0}} | 
+                L2: {{event.levels[1]?.totalQuestions || event.levels[1]?.questions?.length || 0}} | 
+                L3: {{event.levels[2]?.totalQuestions || event.levels[2]?.questions?.length || 0}} | 
+                L4: {{event.levels[3]?.totalQuestions || event.levels[3]?.questions?.length || 0}} | 
+                L5: {{event.levels[4]?.totalQuestions || event.levels[4]?.questions?.length || 0}}
+              </ion-label>
+            </div>
             <div class="event-info">
               <span>QuestionType:</span>
               <ion-label class="card-label">{{event?.questionPattern}}</ion-label>
