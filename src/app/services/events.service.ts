@@ -172,10 +172,11 @@ export class EventsService {
     populateQuestionToCollection(questionData, eventData) {
         eventData.questions = [];
         questionData.forEach(questions => {
-            let data = {
+            let data: any = {
                 id: questions.id,
-                correctAnswer: questions.answers[0]
-            }
+                correctAnswer: questions.answers ? questions.answers[0] : '',
+                level: Number(questions.level) || 1
+            };
             eventData.questions.push(data);
         });
 

@@ -1,102 +1,181 @@
-<!-- Singel choice -->
-<ion-header>
+<!-- Level Wise Question Selection for Dynamo Events -->
+<ion-header class="preview-header">
   <div class="heading">
-    <div class="d-flex">
+    <div class="d-flex align-items-center">
       <ion-button slot="start" (click)="goBack()">
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
-      <h4 class="title">Question</h4>
+      <div>
+        <h4 class="title">Assign Questions Level-wise</h4>
+        <span class="sub-title">{{eventData?.eventName}}</span>
+      </div>
     </div>
 
-    <div class="checkBox">
-      <ion-checkbox color="primary" name="list_name" value="m1" (ionChange)="checkUncheckAll($event)"> </ion-checkbox>
-      <strong>Select/ Unselect All</strong>
+    <div class="header-actions">
+      <ion-button color="secondary" size="small" fill="outline" (click)="autoDistributeQuestions(20)">
+        <ion-icon name="flash-outline" slot="start"></ion-icon>
+        Auto-Distribute (20/Lvl)
+      </ion-button>
+      <ion-button color="tertiary" size="small" fill="outline" (click)="autoDistributeQuestions(25)">
+        <ion-icon name="flash-outline" slot="start"></ion-icon>
+        Auto-Distribute (25/Lvl)
+      </ion-button>
+      <ion-button color="medium" size="small" fill="outline" (click)="clearAllSelections()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Clear All
+      </ion-button>
+      <ion-button class="save-header-btn" color="success" (click)="save()">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Save Levels ({{getTotalAssignedCount()}})
+      </ion-button>
     </div>
   </div>
+
   <div class="heading-right">
     <div class="tags">
-      <span>Name : {{eventData?.eventName}}
-      </span>
-      <ion-badge>
-        <span>Board: {{eventData?.boardName}}
-        </span>
+      <ion-badge color="dark">
+        <span>Board: {{eventData?.boardName || '-'}}</span>
       </ion-badge>
-      <ion-badge>
-        <span>Class: {{eventData?.className}}
-        </span>
+      <ion-badge color="primary">
+        <span>Class: {{eventData?.className || '-'}}</span>
       </ion-badge>
-      <ion-badge>
-        <span>Subject: {{eventData?.subjectName}}
-        </span>
+      <ion-badge color="secondary">
+        <span>Subject: {{eventData?.subjectName || '-'}}</span>
       </ion-badge>
-      <ion-badge>
-        <span>Module: {{eventData?.moduleName}}
-        </span>
+      <ion-badge color="tertiary">
+        <span>Module: {{eventData?.moduleName || '-'}}</span>
+      </ion-badge>
+      <ion-badge color="warning">
+        <span>Category: {{eventData?.category || 'Diagnostic Test'}}</span>
       </ion-badge>
     </div>
-    <ion-button class="card-btn" (click)="viewQuestionRelatedToEvent()">View Questions</ion-button>
+    <ion-button class="card-btn" (click)="viewQuestionRelatedToEvent()">Reload Questions</ion-button>
+  </div>
+
+  <!-- Level Summary Counters Bar -->
+  <div class="level-summary-bar">
+    <div class="summary-chip all" [class.active]="selectedLevelTab === 'ALL'" (click)="changeLevelTab('ALL')">
+      <span class="chip-label">All Available</span>
+      <span class="chip-count">{{questionList.length}}</span>
+    </div>
+
+    <div *ngFor="let lvl of levelDefinitions" 
+         class="summary-chip lvl-chip"
+         [class.active]="selectedLevelTab === lvl.levelNumber"
+         [style.--chip-color]="lvl.color"
+         [style.--chip-bg]="lvl.bgLight"
+         (click)="changeLevelTab(lvl.levelNumber)">
+      <div class="chip-icon">
+        <ion-icon [name]="lvl.icon"></ion-icon>
+      </div>
+      <div class="chip-details">
+        <span class="chip-title">L{{lvl.levelNumber}}: {{lvl.tag}}</span>
+        <span class="chip-count" [style.color]="lvl.color">{{getLevelCount(lvl.levelNumber)}} / {{lvl.defaultQuestions}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Bulk Filter Row -->
+  <div class="search-filter-row">
+    <div class="search-box">
+      <ion-searchbar [(ngModel)]="searchTerm" placeholder="Search question text..." debounce="200"></ion-searchbar>
+    </div>
+    <div class="select-all-box">
+      <ion-checkbox color="primary" (ionChange)="checkUncheckAll($event)"></ion-checkbox>
+      <span class="ms-2">Select All in Tab ({{selectedLevelTab === 'ALL' ? 'All' : 'L' + selectedLevelTab}})</span>
+    </div>
   </div>
 </ion-header>
+
 <ion-content>
   <div class="page-container">
-    <div class="custom-card" *ngIf="questionList?.length>0">
-      <div class="d-flex align-items-center justify-content-end pe-3">
-        <ion-button class="save-btn" *ngIf="isClicked" (click)="save()">save</ion-button>
-      </div>
-      <div class="question-list" *ngFor="let question of questionList; let i=index">
-        <div class="d-flex justify-content-between align-items-start">
-          <h5 class="question-label">{{i+1}}. {{question.text}}</h5>
-          <ion-checkbox color="primary" [(ngModel)]="question.isSelected"
-            (ionChange)="selectQuestion($event, question)">
-          </ion-checkbox>
-          <div class="tags">
-            <ion-badge *ngIf="question?.type=='MULTI_CHOICE_OPTION'">
-              <span>Multi Option</span>
-            </ion-badge>
-            <ion-badge *ngIf="question?.type=='SINGLE_CHOICE_OPTION'">
-              <span>Single Option</span>
-            </ion-badge>
-            <ion-badge *ngIf="question?.type=='SUBJECTIVE_NO_OPTION'">
-              <span>Subjective</span>
-            </ion-badge>
-            <ion-badge *ngIf="question?.board">
-              <span>{{question?.board}}
-              </span>
-            </ion-badge>
+    <div class="loading-state" *ngIf="isLoading">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading questions for this module...</p>
+    </div>
 
-            <ion-badge *ngIf="question?.class?.id">
-              <span>Class {{question?.class?.displayName}}
-              </span>
-            </ion-badge>
-            <ion-badge *ngIf="question?.subject?.id">
-              <span>{{question?.subject?.displayName}}
-              </span>
-            </ion-badge>
-            <ion-badge *ngIf="question?.module?.id">
-              <span>{{question?.module?.displayName}}
-              </span>
-            </ion-badge>
+    <div class="empty-state" *ngIf="!isLoading && getFilteredQuestions().length === 0">
+      <ion-icon name="file-tray-outline"></ion-icon>
+      <p *ngIf="selectedLevelTab !== 'ALL'">No questions assigned to Level {{selectedLevelTab}} yet. Click 'All Available' tab to assign questions.</p>
+      <p *ngIf="selectedLevelTab === 'ALL'">No questions found matching your criteria.</p>
+    </div>
+
+    <div class="custom-card" *ngIf="!isLoading && getFilteredQuestions().length > 0">
+      <div class="question-list" *ngFor="let question of getFilteredQuestions(); let i = index">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="d-flex align-items-start flex-grow-1 me-3">
+            <ion-checkbox color="primary" 
+                          [(ngModel)]="question.isSelected" 
+                          (ionChange)="selectQuestion($event, question)">
+            </ion-checkbox>
+            <div class="ms-2 flex-grow-1">
+              <h5 class="question-label">{{i + 1}}. {{question.text}}</h5>
+              <div class="question-img" *ngIf="question?.url">
+                <ion-img [src]="question?.url"></ion-img>
+              </div>
+              <div class="assigned-level-indicator" *ngIf="question.isSelected && question.level">
+                <ion-badge [style.background]="levelDefinitions[question.level - 1]?.color">
+                  Assigned to: Level {{question.level}} - {{levelDefinitions[question.level - 1]?.levelName}} ({{levelDefinitions[question.level - 1]?.tag}})
+                </ion-badge>
+              </div>
+            </div>
+          </div>
+
+          <div class="tags flex-shrink-0">
+            <ion-badge *ngIf="question?.type=='MULTI_CHOICE_OPTION'">Multi Option</ion-badge>
+            <ion-badge *ngIf="question?.type=='SINGLE_CHOICE_OPTION'">Single Option</ion-badge>
+            <ion-badge *ngIf="question?.type=='SUBJECTIVE_NO_OPTION'">Subjective</ion-badge>
+            <ion-badge *ngIf="question?.class?.displayName">Class {{question?.class?.displayName}}</ion-badge>
+            <ion-badge *ngIf="question?.subject?.displayName">{{question?.subject?.displayName}}</ion-badge>
           </div>
         </div>
-        <!-- <ion-list>
-              <ion-radio-group [value]="question.answers[0]">
-                <ion-item *ngFor="let data of question.options">
-                  <ion-label>{{data.text}}</ion-label>
-                  <ion-radio slot="start" value="{{data.sequence}}" disabled></ion-radio>
-                </ion-item>
-              </ion-radio-group>
-            </ion-list> -->
-        <div class="option-list" *ngIf="question.type!='SUBJECTIVE_NO_OPTION'">
+
+        <!-- Level Quick Assign Row -->
+        <div class="level-assign-toolbar">
+          <span class="assign-label">Quick Assign Level:</span>
+          <div class="level-btn-group">
+            <button *ngFor="let def of levelDefinitions"
+                    type="button"
+                    class="level-pill-btn"
+                    [class.active]="question.isSelected && question.level === def.levelNumber"
+                    [style.--active-color]="def.color"
+                    (click)="setLevelForQuestion(question, def.levelNumber)">
+              <ion-icon [name]="def.icon"></ion-icon>
+              <span>L{{def.levelNumber}} ({{def.tag}})</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Options Preview -->
+        <div class="option-list" *ngIf="question.type != 'SUBJECTIVE_NO_OPTION'">
           <div class="option" *ngFor="let option of question?.options"
-            [ngClass]="{'answer': question?.answers.includes(option.sequence)}">
+               [ngClass]="{'answer': question?.answers && question?.answers.includes(option.sequence)}">
             <p *ngIf="option?.text">{{option.text}}</p>
             <div class="option-img" *ngIf="option?.url">
-              <ion-img [src]="option?.url"> </ion-img>
+              <ion-img [src]="option?.url"></ion-img>
             </div>
           </div>
         </div>
       </div>
-
     </div>
+    <div class="preview-bottom-spacer"></div>
   </div>
 </ion-content>
+
+<!-- Bottom Sticky Footer with Progress & Save -->
+<ion-footer class="preview-footer">
+  <div class="footer-content">
+    <div class="footer-stats">
+      <strong>Total Assigned:</strong> {{getTotalAssignedCount()}} Questions
+      <span class="stats-breakdown">
+        (L1: <b>{{getLevelCount(1)}}</b>, L2: <b>{{getLevelCount(2)}}</b>, L3: <b>{{getLevelCount(3)}}</b>, L4: <b>{{getLevelCount(4)}}</b>, L5: <b>{{getLevelCount(5)}}</b>)
+      </span>
+    </div>
+    <div class="footer-btn">
+      <ion-button class="save-footer-btn" color="success" (click)="save()">
+        <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+        Save 5-Level Structure
+      </ion-button>
+    </div>
+  </div>
+</ion-footer>
