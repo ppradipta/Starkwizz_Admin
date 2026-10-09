@@ -52,7 +52,7 @@
           </tbody>
           <tbody *ngIf="questionDetails?.length">
             <tr *ngFor="let question of questionDetails;let i=index;">
-              <th scope="row">{{i + 1}}</th>
+              <th scope="row">{{question?.seqno != null ? question?.seqno : (i + 1)}}</th>
               <td class="c-pointer" (click)="imageQUestion(question)" *ngIf="question?.url!=null">{{question?.text}}
               </td>
               <td>{{question?.text}}

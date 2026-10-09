@@ -136,7 +136,7 @@ export class QuestionPreviewComponent implements OnInit {
 
     const processResults = (data: any) => {
       this.isLoading = false;
-      this.questionList = [];
+      const rawList: any[] = [];
       data.forEach((res: any) => {
         const qus: any = res.data();
         if (existingQuestionLevels.has(qus.id)) {
@@ -147,8 +147,9 @@ export class QuestionPreviewComponent implements OnInit {
           qus.isSelected = false;
           qus.level = null;
         }
-        this.questionList.push(qus);
+        rawList.push(qus);
       });
+      this.questionList = this.sortQuestionsDeterministically(rawList);
     };
 
     if (this.eventData?.moduleId) {
@@ -383,5 +384,58 @@ export class QuestionPreviewComponent implements OnInit {
 
   goBack() {
     this.navCtrl.back();
+  }
+
+  sortQuestionsDeterministically(questions: any[]): any[] {
+    if (!questions || !Array.isArray(questions)) return [];
+
+    return questions.slice().sort((a, b) => {
+      // 1. Primary: seqno (assigned upload sequence)
+      const aSeq = a.seqno != null && !isNaN(Number(a.seqno)) ? Number(a.seqno) : null;
+      const bSeq = b.seqno != null && !isNaN(Number(b.seqno)) ? Number(b.seqno) : null;
+      if (aSeq !== null && bSeq !== null && aSeq !== bSeq) {
+        return aSeq - bSeq;
+      }
+      if (aSeq !== null && bSeq === null) return -1;
+      if (aSeq === null && bSeq !== null) return 1;
+
+      // 2. Secondary: order
+      const aOrder = a.order != null && !isNaN(Number(a.order)) ? Number(a.order) : null;
+      const bOrder = b.order != null && !isNaN(Number(b.order)) ? Number(b.order) : null;
+      if (aOrder !== null && bOrder !== null && aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+      if (aOrder !== null && bOrder === null) return -1;
+      if (aOrder === null && bOrder !== null) return 1;
+
+      // 3. Tertiary: Leading question number from question text (e.g. "1. ", "Q1", "1)")
+      const aNum = this.extractLeadingNumber(a.text);
+      const bNum = this.extractLeadingNumber(b.text);
+      if (aNum !== null && bNum !== null && aNum !== bNum) {
+        return aNum - bNum;
+      }
+
+      // 4. Quaternary: createdAt
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      if (aTime && bTime && aTime !== bTime) {
+        return aTime - bTime;
+      }
+
+      // 5. Final deterministic tie-breaker: document ID
+      const aId = String(a.id || '');
+      const bId = String(b.id || '');
+      return aId.localeCompare(bId);
+    });
+  }
+
+  private extractLeadingNumber(text: string): number | null {
+    if (!text || typeof text !== 'string') return null;
+    const match = text.trim().match(/^(?:q(?:uestion)?\s*[\.\:\-]?\s*)?(\d+)[\.\)\:\s]/i);
+    if (match && match[1]) {
+      const num = parseInt(match[1], 10);
+      return !isNaN(num) ? num : null;
+    }
+    return null;
   }
 }
