@@ -55,8 +55,16 @@ export class SingleChoicePreviewComponent implements OnInit {
 
 
   onClickConfirmQuestion() {
-    this.questionService.setQuestionToCollection(this.question);
-    this.presentToast('Question Saved sucessfully!!');
+    if (this.question) {
+      if (!this.question.createdAt) {
+        this.question.createdAt = new Date().getTime();
+      }
+      if (this.question.seqno != null) {
+        this.question.order = this.question.seqno;
+      }
+      this.questionService.setQuestionToCollection(this.question);
+      this.presentToast('Question Saved sucessfully!!');
+    }
   }
 
   onClickAddMoreQuestion() {

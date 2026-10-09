@@ -47,11 +47,11 @@ export class AddQuestionComponent implements OnInit {
     }
     this.getAllBoards();
     this.questionService.getQuestionsPreview().subscribe((qs: Questions[]) => {
-      this.questions = qs;
-    })
+      this.questions = qs ? qs.slice().sort((a, b) => (Number(a.seqno || a.order || 0) - Number(b.seqno || b.order || 0))) : [];
+    });
     this.questionService.getRejectedQuestionsPreview().subscribe((rqs: Questions[]) => {
       this.recejctedRecords = rqs;
-    })
+    });
   }
 
   ionViewWillEnter() {
@@ -63,11 +63,11 @@ export class AddQuestionComponent implements OnInit {
     }
     this.getAllBoards();
     this.questionService.getQuestionsPreview().subscribe((qs: Questions[]) => {
-      this.questions = qs;
-    })
+      this.questions = qs ? qs.slice().sort((a, b) => (Number(a.seqno || a.order || 0) - Number(b.seqno || b.order || 0))) : [];
+    });
     this.questionService.getRejectedQuestionsPreview().subscribe((rqs: Questions[]) => {
       this.recejctedRecords = rqs;
-    })
+    });
   }
 
 
@@ -144,10 +144,24 @@ export class AddQuestionComponent implements OnInit {
 
   confirmPreviewUpload() {
     if (this.questions.length > 0) {
-      this.questions.forEach((ques: Questions) => {
+      this.questions.forEach((ques: Questions, index: number) => {
         if (ques.id == undefined || ques.id == null) {
           ques.id = this.utilityService.generateAlphaNumericId();
         }
+
+        // Strictly preserve deterministic sequence matching upload preview order
+        const determinedSeq = (ques.seqno != null && !isNaN(Number(ques.seqno)))
+          ? Number(ques.seqno)
+          : (ques.order != null && !isNaN(Number(ques.order)))
+            ? Number(ques.order)
+            : (index + 1);
+
+        ques.seqno = determinedSeq;
+        ques.order = determinedSeq;
+        if (!ques.createdAt) {
+          ques.createdAt = new Date().getTime();
+        }
+
         let ansExplain = ques.ansExplanationText;
         let quesExplain = ques.questionExplanationText;
         if (null != ansExplain || null != quesExplain) {
@@ -186,6 +200,11 @@ export class AddQuestionComponent implements OnInit {
     let findIndex = this.questions.findIndex(qus => qus.id == question.id);
     if (findIndex != -1) {
       this.questions.splice(findIndex, 1);
+      // Re-index preview items so order remains 1..N
+      this.questions.forEach((q, idx) => {
+        q.seqno = idx + 1;
+        q.order = idx + 1;
+      });
       this.presentToast('Question removed form review Sucessfully!!');
     }
   }

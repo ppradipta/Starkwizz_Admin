@@ -107,22 +107,98 @@ export class AllQuestionComponent implements OnInit {
     this.questionService.setSelectedModule(this.filterModule);
   }
 
-  search() {
-    this.loaderService.present;
+  async search() {
+    await this.loaderService.present();
     this.questionDetails = [];
-    let query;
     if (this.filterBoard && this.filterClass && this.filterSubject && this.filterModule) {
-      query = this.firestore.collection(FirebaseCollection.QUESTIONS).ref
-        .where('board', '==', this.filterBoard.name)
-        .where('class.id', '==', this.filterClass.id)
-        .where('subject.id', '==', this.filterSubject.id)
-        .where('module.id', '==', this.filterModule.id);
-      query.get().then((questionDetails: any) => {
-        questionDetails.forEach(data => {
-          this.questionDetails.push(data.data());
-        });
+      const runQuery = (boardName: string) => {
+        return this.firestore.collection(FirebaseCollection.QUESTIONS).ref
+          .where('board', '==', boardName)
+          .where('class.id', '==', this.filterClass.id)
+          .where('subject.id', '==', this.filterSubject.id)
+          .where('module.id', '==', this.filterModule.id)
+          .get();
+      };
+
+      const primaryBoard = this.filterBoard.displayName || this.filterBoard.name;
+      const fallbackBoard = this.filterBoard.name || this.filterBoard.displayName;
+
+      runQuery(primaryBoard).then((questionDetails: any) => {
+        if ((!questionDetails || questionDetails.empty) && fallbackBoard !== primaryBoard) {
+          return runQuery(fallbackBoard);
+        }
+        return questionDetails;
+      }).then((questionDetails: any) => {
+        const rawList: any[] = [];
+        if (questionDetails && !questionDetails.empty) {
+          questionDetails.forEach(data => {
+            rawList.push(data.data());
+          });
+        }
+        this.questionDetails = this.sortQuestionsDeterministically(rawList);
+        this.loaderService.dismiss();
+      }).catch(err => {
+        console.error('Error loading questions:', err);
+        this.loaderService.dismiss();
+        this.presentToast('Error loading questions');
       });
+    } else {
+      this.loaderService.dismiss();
+      this.presentToast('Please select Board, Class, Subject and Module');
     }
+  }
+
+  sortQuestionsDeterministically(questions: any[]): any[] {
+    if (!questions || !Array.isArray(questions)) return [];
+
+    return questions.slice().sort((a, b) => {
+      // 1. Primary: seqno (assigned upload sequence)
+      const aSeq = a.seqno != null && !isNaN(Number(a.seqno)) ? Number(a.seqno) : null;
+      const bSeq = b.seqno != null && !isNaN(Number(b.seqno)) ? Number(b.seqno) : null;
+      if (aSeq !== null && bSeq !== null && aSeq !== bSeq) {
+        return aSeq - bSeq;
+      }
+      if (aSeq !== null && bSeq === null) return -1;
+      if (aSeq === null && bSeq !== null) return 1;
+
+      // 2. Secondary: order
+      const aOrder = a.order != null && !isNaN(Number(a.order)) ? Number(a.order) : null;
+      const bOrder = b.order != null && !isNaN(Number(b.order)) ? Number(b.order) : null;
+      if (aOrder !== null && bOrder !== null && aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+      if (aOrder !== null && bOrder === null) return -1;
+      if (aOrder === null && bOrder !== null) return 1;
+
+      // 3. Tertiary: Leading question number from question text (e.g. "1. ", "Q1", "1)")
+      const aNum = this.extractLeadingNumber(a.text);
+      const bNum = this.extractLeadingNumber(b.text);
+      if (aNum !== null && bNum !== null && aNum !== bNum) {
+        return aNum - bNum;
+      }
+
+      // 4. Quaternary: createdAt
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      if (aTime && bTime && aTime !== bTime) {
+        return aTime - bTime;
+      }
+
+      // 5. Final deterministic tie-breaker: document ID
+      const aId = String(a.id || '');
+      const bId = String(b.id || '');
+      return aId.localeCompare(bId);
+    });
+  }
+
+  private extractLeadingNumber(text: string): number | null {
+    if (!text || typeof text !== 'string') return null;
+    const match = text.trim().match(/^(?:q(?:uestion)?\s*[\.\:\-]?\s*)?(\d+)[\.\)\:\s]/i);
+    if (match && match[1]) {
+      const num = parseInt(match[1], 10);
+      return !isNaN(num) ? num : null;
+    }
+    return null;
   }
 
   async viewOptionsForSelectQuestion(question: Questions) {
@@ -147,7 +223,9 @@ export class AllQuestionComponent implements OnInit {
       cssClass: 'addQuestion-modal',
       backdropDismiss: true
     });
-    return await modal.present();
+    await modal.present();
+    await modal.onDidDismiss();
+    this.search();
   }
 
   deleteSelectedQuestion(question: Questions) {

@@ -286,9 +286,11 @@ export class UploadQuestionComponent implements OnInit {
           let dataStrings: string[] = datastr.split("\n");
           if (dataStrings.length > 0) {
             dataStrings.shift();
-            dataStrings.forEach(data => {
-              let dataList: string[] = data.split("#@@#");
-              this.insertQuestionToDataBaseForTXT(dataList);
+            dataStrings.forEach((data, index) => {
+              if (data && data.trim()) {
+                let dataList: string[] = data.split("#@@#");
+                this.insertQuestionToDataBaseForTXT(dataList, index);
+              }
             });
           }
         };
@@ -314,10 +316,11 @@ export class UploadQuestionComponent implements OnInit {
 
     this.insertQuestionToDataBaseForXLXS(result)
   }
-  insertQuestionToDataBaseForTXT(data: string[]) {
+  insertQuestionToDataBaseForTXT(data: string[], index?: number) {
     let ques: Questions = new Questions();
     ques.id = this.utilityService.generateAlphaNumericId();
     ques.questionType = 'TEXT';
+    ques.createdAt = new Date().getTime();
     ques.board = this.board.displayName;
     ques.class.displayName = this.cls.displayName;
     ques.class.id = this.cls.id;
@@ -325,47 +328,54 @@ export class UploadQuestionComponent implements OnInit {
     ques.subject.id = this.subject.id;
     ques.module.displayName = this.module.displayName;
     ques.module.id = this.module.id;
+
+    // data[0] is seqno in TXT format
+    const parsedSeq = data[0] ? parseInt(data[0].trim(), 10) : NaN;
+    const finalSeq = (!isNaN(parsedSeq) && parsedSeq > 0) ? parsedSeq : ((index != null ? index : this.questions.length) + 1);
+    ques.seqno = finalSeq;
+    ques.order = finalSeq;
+
     ques.text = data[1];
 
-    if (data[2].includes('#')) {
+    if (data[2] && data[2].includes('#')) {
       let multiAns = data[2].split('#');
       multiAns.forEach(ans => {
         ques.answers.push(ans.trim());
-      })
-    } else {
+      });
+    } else if (data[2]) {
       ques.answers.push(data[2].trim());
     }
 
     let opt1: Options = new Options();
     opt1.id = this.utilityService.generateAlphaNumericId();
     opt1.sequence = "A";
-    opt1.text = data[3].trim();
+    opt1.text = data[3] ? data[3].trim() : '';
     opt1.type = 'TEXT';
     ques.options.push(opt1);
 
     let opt2: Options = new Options();
     opt2.id = this.utilityService.generateAlphaNumericId();
     opt2.sequence = "B";
-    opt2.text = data[4].trim();
+    opt2.text = data[4] ? data[4].trim() : '';
     opt2.type = 'TEXT';
     ques.options.push(opt2);
 
     let opt3: Options = new Options();
     opt3.id = this.utilityService.generateAlphaNumericId();
     opt3.sequence = "C";
-    opt3.text = data[5].trim();
+    opt3.text = data[5] ? data[5].trim() : '';
     opt3.type = 'TEXT';
     ques.options.push(opt3);
 
     let opt4: Options = new Options();
     opt4.id = this.utilityService.generateAlphaNumericId();
     opt4.sequence = "D";
-    opt4.text = data[6].trim();
+    opt4.text = data[6] ? data[6].trim() : '';
     opt4.type = 'TEXT';
     ques.options.push(opt4);
 
     ques.mark = parseFloat(data[7]);
-    ques.type = data[8].trim();
+    ques.type = data[8] ? data[8].trim() : '';
     if (null != data[9]) {
       ques.perQuestionTimer = parseInt(data[9]);
     } else {
@@ -400,14 +410,16 @@ export class UploadQuestionComponent implements OnInit {
     } else {
       this.questions.push(ques);
     }
+    this.questions.sort((a, b) => (Number(a.seqno || a.order || 0) - Number(b.seqno || b.order || 0)));
   }
 
   insertQuestionToDataBaseForXLXS(result: any[]) {
-    result.forEach((csvMap: Map<string, string>) => {
+    result.forEach((csvMap: Map<string, string>, index: number) => {
       let ques: Questions = new Questions();
       let evnt: Events = new Events();
       ques.id = this.utilityService.generateAlphaNumericId();
       ques.questionType = 'TEXT';
+      ques.createdAt = new Date().getTime();
 
       ques.board = this.board.displayName;
 
@@ -423,137 +435,94 @@ export class UploadQuestionComponent implements OnInit {
       ques.module.id = this.module.id;
       evnt.moduleId = this.module.id;
 
-      csvMap.forEach((value: string, key: string) => {
-        if (key.toLowerCase().indexOf('type') >= 0) {
-          ques.type = value;
-        } else if (key.toLowerCase().indexOf('question') >= 0) {
-          if (value.includes("###")) {
-            let quesmix: any[] = value.split("###");
+      let extractedSeq: number | null = null;
+
+      csvMap.forEach((value: any, key: string) => {
+        const cleanKey = key ? key.toLowerCase().trim() : '';
+        const strVal = value != null ? String(value).trim() : '';
+
+        if (cleanKey === 'seqno' || cleanKey === 'seq' || cleanKey === 'seq_no' || cleanKey === 'order' || cleanKey === 'slno' || cleanKey === 'sno' || cleanKey === '#') {
+          const parsed = parseInt(strVal, 10);
+          if (!isNaN(parsed) && parsed > 0) {
+            extractedSeq = parsed;
+          }
+        } else if (cleanKey.indexOf('type') >= 0) {
+          ques.type = strVal;
+        } else if (cleanKey.indexOf('question') >= 0) {
+          if (strVal.includes("###")) {
+            let quesmix: any[] = strVal.split("###");
             ques.text = quesmix[0];
             ques.url = this.buildQuestionAssetUrl(ques, quesmix[1]);
           } else {
-            ques.text = value;
+            ques.text = strVal;
           }
 
-        } else if (key.toLowerCase().indexOf('mark') >= 0) {
-          ques.mark = parseFloat(value);
-        } else if (key.toLowerCase().indexOf('point') >= 0) {
-          ques.point = parseFloat(value);
-        } else if (key.toLowerCase().indexOf('answers') >= 0) {
-          if (value) {
-            if (value.includes('#')) {
-              let multiAns = value.split('#');
+        } else if (cleanKey.indexOf('mark') >= 0) {
+          ques.mark = parseFloat(strVal);
+          evnt.eventMarks = parseFloat(strVal);
+        } else if (cleanKey.indexOf('point') >= 0) {
+          ques.point = parseFloat(strVal) || strVal;
+        } else if (cleanKey.indexOf('answers') >= 0) {
+          if (strVal) {
+            if (strVal.includes('#')) {
+              let multiAns = strVal.split('#');
               multiAns.forEach(ans => {
-                ques.answers.push(ans);
-              })
+                ques.answers.push(ans.trim());
+              });
             } else {
-              ques.answers.push(value);
+              ques.answers.push(strVal);
             }
           }
-        } else if (key.toLowerCase().indexOf('option1') >= 0) {
+        } else if (cleanKey.indexOf('option1') >= 0) {
           let opt: Options = new Options();
           opt.id = this.utilityService.generateAlphaNumericId();
           opt.sequence = "A";
-          opt.text = value;
+          opt.text = strVal;
           opt.type = 'TEXT';
-          // if (value.indexOf("###") > -1) {
-          //   let optmix: any[] = value.split("###");
-          //   opt.text = optmix[0];
-          //   opt.url = this.buildQuestionOptionAssetUrl(ques, opt, optmix[1]);
-          //   opt.type = 'IMAGE';
-          // } else {
-          //   opt.text =""+value;
-          // }
           ques.options.push(opt);
-        } else if (key.toLowerCase().indexOf('option2') >= 0) {
+        } else if (cleanKey.indexOf('option2') >= 0) {
           let opt: Options = new Options();
           opt.id = this.utilityService.generateAlphaNumericId();
           opt.sequence = "B";
-          opt.text = value;
+          opt.text = strVal;
           opt.type = 'TEXT';
-          // if (value.indexOf("###") > -1) {
-          //   let optmix: any[] = value.split("###");
-          //   opt.text = optmix[0];
-          //   opt.url = this.buildQuestionOptionAssetUrl(ques, opt, optmix[1]);
-          //   opt.type = 'IMAGE';
-          // } else {
-          //   opt.text =""+value;
-          // }
           ques.options.push(opt);
-        } else if (key.toLowerCase().indexOf('option3') >= 0) {
+        } else if (cleanKey.indexOf('option3') >= 0) {
           let opt: Options = new Options();
           opt.id = this.utilityService.generateAlphaNumericId();
           opt.sequence = "C";
-          opt.text = value;
+          opt.text = strVal;
           opt.type = 'TEXT';
-          //Update for image upload question
-          // if (value.indexOf("###") > -1) {
-          //   let optmix: any[] = value.split("###");
-          //   opt.text = optmix[0];
-          //   opt.url = this.buildQuestionOptionAssetUrl(ques, opt, optmix[1]);
-          //   opt.type = 'IMAGE';
-          // } else {
-          //   opt.text =""+value;
-          // }
           ques.options.push(opt);
-        } else if (key.toLowerCase().indexOf('option4') >= 0) {
+        } else if (cleanKey.indexOf('option4') >= 0) {
           let opt: Options = new Options();
           opt.id = this.utilityService.generateAlphaNumericId();
           opt.sequence = "D";
-          opt.text = value;
+          opt.text = strVal;
           opt.type = 'TEXT';
-          // if (value.indexOf("###") > -1) {
-          //   let optmix: any[] = value.split("###");
-          //   opt.text = optmix[0];
-          //   opt.url = this.buildQuestionOptionAssetUrl(ques, opt, optmix[1]);
-          //   opt.type = 'IMAGE';
-          // } else {
-          //   opt.text =""+value;
-          // }
-
-
           ques.options.push(opt);
         }
-        else if (key.toLowerCase().indexOf('mark') >= 0) {
-          if (value) {
-            evnt.eventMarks = parseFloat(value);
-          }
+        else if (cleanKey.indexOf('time') >= 0) {
+          ques.perQuestionTimer = strVal ? parseInt(strVal, 10) : 60;
         }
-        else if (key.toLowerCase().indexOf('time') >= 0) {
-          if (value) {
-            ques.perQuestionTimer = value;
-          } else {
-            ques.perQuestionTimer = 60;
-          }
+        else if (cleanKey.indexOf('isnegativeallow') >= 0) {
+          ques.isnegativeallow = (strVal.toUpperCase() === 'Y');
         }
-        else if (key.toLowerCase().indexOf('point') >= 0) {
-          if (value) {
-            ques.point = value;
-          }
+        else if (cleanKey.indexOf('hinttext') >= 0) {
+          ques.hinttext = strVal;
         }
-        else if (key.toLowerCase().indexOf('isnegativeallow') >= 0) {
-          if (value == 'Y') {
-            ques.isnegativeallow = true;
-          } else {
-            ques.isnegativeallow = false;
-          }
+        else if (cleanKey.indexOf('ansexplanation') >= 0) {
+          ques.ansExplanationText = strVal;
         }
-        else if (key.toLowerCase().indexOf('hinttext') >= 0) {
-          if (value) {
-            ques.hinttext = value;
-          }
-        }
-        else if (key.toLowerCase().indexOf('ansexplanation') >= 0) {
-          if (value) {
-            ques.ansExplanationText = value;
-          }
-        }
-        else if (key.toLowerCase().indexOf('qexplanation') >= 0) {
-          if (value) {
-            ques.questionExplanationText = value;
-          }
+        else if (cleanKey.indexOf('qexplanation') >= 0) {
+          ques.questionExplanationText = strVal;
         }
       });
+
+      const finalSeq = extractedSeq != null ? extractedSeq : (index + 1);
+      ques.seqno = finalSeq;
+      ques.order = finalSeq;
+
       if (ques.type == 'SUBJECTIVE_NO_OPTION') {
         ques.options = [];
       }
@@ -569,6 +538,8 @@ export class UploadQuestionComponent implements OnInit {
       }
 
     });
+
+    this.questions.sort((a, b) => (Number(a.seqno || a.order || 0) - Number(b.seqno || b.order || 0)));
   }
 
 

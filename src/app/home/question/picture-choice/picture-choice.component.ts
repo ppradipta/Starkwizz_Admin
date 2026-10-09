@@ -214,6 +214,12 @@ export class PictureChoiceComponent implements OnInit {
 
 
   onClickConfirmQuestion() {
+    if (!this.newQuestion.createdAt) {
+      this.newQuestion.createdAt = new Date().getTime();
+    }
+    if (this.newQuestion.seqno != null) {
+      this.newQuestion.order = this.newQuestion.seqno;
+    }
     this.questionService.setQuestionToCollection(this.newQuestion);
     this.presentToast('Question Saved sucessfully!!');
   }

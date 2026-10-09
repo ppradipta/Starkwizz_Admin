@@ -19,6 +19,9 @@ export class Questions {
     public hinttext: string;
     public ansExplanationText: string;
     public questionExplanationText: string;
+    public seqno?: number;
+    public order?: number;
+    public createdAt?: any;
 }
 
 export class Options {
