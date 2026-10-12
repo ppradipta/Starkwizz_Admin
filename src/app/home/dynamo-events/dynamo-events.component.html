@@ -152,7 +152,7 @@
               <span>Total Questions :</span>
               <ion-label class="card-label">{{event?.questions?.length}}</ion-label>
             </div>
-            <div class="event-info w-100" *ngIf="event?.levels && event.levels.length > 0">
+            <div class="event-info w-100" *ngIf="event?.category !== 'Progressive Test' && event?.levels && event.levels.length > 0">
               <span>5 Levels :</span>
               <ion-label class="card-label">
                 L1: {{event.levels[0]?.totalQuestions || event.levels[0]?.questions?.length || 0}} | 

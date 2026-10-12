@@ -110,13 +110,19 @@ export class QuestionPreviewComponent implements OnInit {
     }
   }
 
+  get isProgressiveTest(): boolean {
+    return this.eventData?.category === 'Progressive Test';
+  }
+
   getAllQuestionsForEvent() {
     this.isLoading = true;
     this.questionList = [];
 
     // Helper map of existing level allocations
     const existingQuestionLevels = new Map<string, number>();
-    if (this.eventData?.levels && Array.isArray(this.eventData.levels)) {
+    const existingQuestionIds = new Set<string>();
+
+    if (this.eventData?.levels && Array.isArray(this.eventData.levels) && !this.isProgressiveTest) {
       this.eventData.levels.forEach((lvl: any) => {
         if (lvl.questions && Array.isArray(lvl.questions)) {
           lvl.questions.forEach((q: any) => {
@@ -128,8 +134,11 @@ export class QuestionPreviewComponent implements OnInit {
 
     if (this.eventData?.questions && Array.isArray(this.eventData.questions)) {
       this.eventData.questions.forEach((q: any) => {
-        if (q?.id && !existingQuestionLevels.has(q.id)) {
-          existingQuestionLevels.set(q.id, Number(q.level) || 1);
+        if (q?.id) {
+          existingQuestionIds.add(q.id);
+          if (!this.isProgressiveTest && !existingQuestionLevels.has(q.id)) {
+            existingQuestionLevels.set(q.id, Number(q.level) || 1);
+          }
         }
       });
     }
@@ -139,13 +148,23 @@ export class QuestionPreviewComponent implements OnInit {
       const rawList: any[] = [];
       data.forEach((res: any) => {
         const qus: any = res.data();
-        if (existingQuestionLevels.has(qus.id)) {
-          qus.isSelected = true;
-          qus.level = existingQuestionLevels.get(qus.id);
-          qus.isExistPreviously = true;
-        } else {
-          qus.isSelected = false;
+        if (this.isProgressiveTest) {
+          if (existingQuestionIds.has(qus.id)) {
+            qus.isSelected = true;
+            qus.isExistPreviously = true;
+          } else {
+            qus.isSelected = false;
+          }
           qus.level = null;
+        } else {
+          if (existingQuestionLevels.has(qus.id)) {
+            qus.isSelected = true;
+            qus.level = existingQuestionLevels.get(qus.id);
+            qus.isExistPreviously = true;
+          } else {
+            qus.isSelected = false;
+            qus.level = null;
+          }
         }
         rawList.push(qus);
       });
@@ -210,12 +229,14 @@ export class QuestionPreviewComponent implements OnInit {
     this.isClicked = true;
     if (event.detail.checked) {
       question.isSelected = true;
-      if (!question.level) {
+      if (!this.isProgressiveTest && !question.level) {
         question.level = typeof this.selectedLevelTab === 'number' ? this.selectedLevelTab : 1;
       }
     } else {
       question.isSelected = false;
-      question.level = null;
+      if (!this.isProgressiveTest) {
+        question.level = null;
+      }
     }
   }
 
@@ -229,6 +250,11 @@ export class QuestionPreviewComponent implements OnInit {
     return this.questionList.filter(q => q.isSelected && q.level).length;
   }
 
+  // Total selected questions count (used for Progressive Test and general events)
+  getSelectedCount(): number {
+    return this.questionList.filter(q => q.isSelected === true).length;
+  }
+
   // Tab switch
   changeLevelTab(tab: any) {
     this.selectedLevelTab = tab;
@@ -238,7 +264,7 @@ export class QuestionPreviewComponent implements OnInit {
   getFilteredQuestions(): any[] {
     let list = this.questionList;
 
-    if (this.selectedLevelTab !== 'ALL') {
+    if (!this.isProgressiveTest && this.selectedLevelTab !== 'ALL') {
       const targetLevel = Number(this.selectedLevelTab);
       list = list.filter(q => q.isSelected && Number(q.level) === targetLevel);
     }
@@ -288,11 +314,18 @@ export class QuestionPreviewComponent implements OnInit {
     this.presentToast(`Auto-assigned ${assigned} questions across 5 levels (${perLevel} per level).`);
   }
 
-  // Select all visible questions for current tab level
+  // Select all visible questions for current tab level or all questions in Progressive Test
   checkUncheckAll(event: any) {
     this.isClicked = true;
     const isChecked = event.detail.checked;
     const visibleQuestions = this.getFilteredQuestions();
+
+    if (this.isProgressiveTest) {
+      visibleQuestions.forEach(q => {
+        q.isSelected = isChecked;
+      });
+      return;
+    }
 
     if (isChecked) {
       const targetLevel = typeof this.selectedLevelTab === 'number' ? this.selectedLevelTab : 1;
@@ -308,7 +341,7 @@ export class QuestionPreviewComponent implements OnInit {
     }
   }
 
-  // Clear all level selections
+  // Clear all selections
   clearAllSelections() {
     this.isClicked = true;
     this.questionList.forEach(q => {
@@ -321,7 +354,34 @@ export class QuestionPreviewComponent implements OnInit {
   save() {
     const selectedQuestions = this.questionList.filter(qus => qus.isSelected === true);
 
-    // Default any selected without level to Level 1
+    if (this.isProgressiveTest) {
+      // Save without level-wise structure (back to old concept for Progressive Test part)
+      const questionAppearanceList: QuestionAppearanceView[] = selectedQuestions.map(q => ({
+        id: q.id,
+        correctAnswer: q.answers && q.answers.length > 0 ? q.answers[0] : ''
+      }));
+
+      const updatePayload: any = {
+        questions: questionAppearanceList,
+        levels: [], // remove level structure
+        totalQuestions: selectedQuestions.length,
+        status: 'UPCOMING'
+      };
+
+      this.firestore.collection('events').doc(this.eventData.id)
+        .set(JSON.parse(JSON.stringify(updatePayload)), { merge: true })
+        .then(() => {
+          this.presentToast(`Saved ${selectedQuestions.length} questions for Progressive Test successfully!`);
+          this.navCtrl.back();
+        })
+        .catch((err) => {
+          console.error(err);
+          this.presentToast('Error saving progressive test questions.');
+        });
+      return;
+    }
+
+    // Default any selected without level to Level 1 for level-based tests
     selectedQuestions.forEach(q => {
       if (!q.level) q.level = 1;
     });
