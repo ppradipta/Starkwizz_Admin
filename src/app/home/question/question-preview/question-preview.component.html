@@ -1,4 +1,4 @@
-<!-- Level Wise Question Selection for Dynamo Events -->
+<!-- Question Selection (Level-wise for Diagnostic, Simple for Progressive Test) -->
 <ion-header class="preview-header">
   <div class="heading">
     <div class="d-flex align-items-center">
@@ -6,27 +6,31 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
       <div>
-        <h4 class="title">Assign Questions Level-wise</h4>
+        <h4 class="title" *ngIf="!isProgressiveTest">Assign Questions Level-wise</h4>
+        <h4 class="title" *ngIf="isProgressiveTest">Select Questions</h4>
         <span class="sub-title">{{eventData?.eventName}}</span>
       </div>
     </div>
 
     <div class="header-actions">
-      <ion-button color="secondary" size="small" fill="outline" (click)="autoDistributeQuestions(20)">
-        <ion-icon name="flash-outline" slot="start"></ion-icon>
-        Auto-Distribute (20/Lvl)
-      </ion-button>
-      <ion-button color="tertiary" size="small" fill="outline" (click)="autoDistributeQuestions(25)">
-        <ion-icon name="flash-outline" slot="start"></ion-icon>
-        Auto-Distribute (25/Lvl)
-      </ion-button>
+      <ng-container *ngIf="!isProgressiveTest">
+        <ion-button color="secondary" size="small" fill="outline" (click)="autoDistributeQuestions(20)">
+          <ion-icon name="flash-outline" slot="start"></ion-icon>
+          Auto-Distribute (20/Lvl)
+        </ion-button>
+        <ion-button color="tertiary" size="small" fill="outline" (click)="autoDistributeQuestions(25)">
+          <ion-icon name="flash-outline" slot="start"></ion-icon>
+          Auto-Distribute (25/Lvl)
+        </ion-button>
+      </ng-container>
       <ion-button color="medium" size="small" fill="outline" (click)="clearAllSelections()">
         <ion-icon name="refresh-outline" slot="start"></ion-icon>
         Clear All
       </ion-button>
       <ion-button class="save-header-btn" color="success" (click)="save()">
         <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
-        Save Levels ({{getTotalAssignedCount()}})
+        <span *ngIf="!isProgressiveTest">Save Levels ({{getTotalAssignedCount()}})</span>
+        <span *ngIf="isProgressiveTest">Save ({{getSelectedCount()}})</span>
       </ion-button>
     </div>
   </div>
@@ -52,8 +56,8 @@
     <ion-button class="card-btn" (click)="viewQuestionRelatedToEvent()">Reload Questions</ion-button>
   </div>
 
-  <!-- Level Summary Counters Bar -->
-  <div class="level-summary-bar">
+  <!-- Level Summary Counters Bar (Hidden for Progressive Test) -->
+  <div class="level-summary-bar" *ngIf="!isProgressiveTest">
     <div class="summary-chip all" [class.active]="selectedLevelTab === 'ALL'" (click)="changeLevelTab('ALL')">
       <span class="chip-label">All Available</span>
       <span class="chip-count">{{questionList.length}}</span>
@@ -82,7 +86,8 @@
     </div>
     <div class="select-all-box">
       <ion-checkbox color="primary" (ionChange)="checkUncheckAll($event)"></ion-checkbox>
-      <span class="ms-2">Select All in Tab ({{selectedLevelTab === 'ALL' ? 'All' : 'L' + selectedLevelTab}})</span>
+      <span class="ms-2" *ngIf="!isProgressiveTest">Select All in Tab ({{selectedLevelTab === 'ALL' ? 'All' : 'L' + selectedLevelTab}})</span>
+      <span class="ms-2" *ngIf="isProgressiveTest">Select / Unselect All</span>
     </div>
   </div>
 </ion-header>
@@ -96,8 +101,8 @@
 
     <div class="empty-state" *ngIf="!isLoading && getFilteredQuestions().length === 0">
       <ion-icon name="file-tray-outline"></ion-icon>
-      <p *ngIf="selectedLevelTab !== 'ALL'">No questions assigned to Level {{selectedLevelTab}} yet. Click 'All Available' tab to assign questions.</p>
-      <p *ngIf="selectedLevelTab === 'ALL'">No questions found matching your criteria.</p>
+      <p *ngIf="!isProgressiveTest && selectedLevelTab !== 'ALL'">No questions assigned to Level {{selectedLevelTab}} yet. Click 'All Available' tab to assign questions.</p>
+      <p *ngIf="isProgressiveTest || selectedLevelTab === 'ALL'">No questions found matching your criteria.</p>
     </div>
 
     <div class="custom-card" *ngIf="!isLoading && getFilteredQuestions().length > 0">
@@ -113,7 +118,7 @@
               <div class="question-img" *ngIf="question?.url">
                 <ion-img [src]="question?.url"></ion-img>
               </div>
-              <div class="assigned-level-indicator" *ngIf="question.isSelected && question.level">
+              <div class="assigned-level-indicator" *ngIf="!isProgressiveTest && question.isSelected && question.level">
                 <ion-badge [style.background]="levelDefinitions[question.level - 1]?.color">
                   Assigned to: Level {{question.level}} - {{levelDefinitions[question.level - 1]?.levelName}} ({{levelDefinitions[question.level - 1]?.tag}})
                 </ion-badge>
@@ -130,8 +135,8 @@
           </div>
         </div>
 
-        <!-- Level Quick Assign Row -->
-        <div class="level-assign-toolbar">
+        <!-- Level Quick Assign Row (Only for non-Progressive Test) -->
+        <div class="level-assign-toolbar" *ngIf="!isProgressiveTest">
           <span class="assign-label">Quick Assign Level:</span>
           <div class="level-btn-group">
             <button *ngFor="let def of levelDefinitions"
@@ -165,16 +170,20 @@
 <!-- Bottom Sticky Footer with Progress & Save -->
 <ion-footer class="preview-footer">
   <div class="footer-content">
-    <div class="footer-stats">
+    <div class="footer-stats" *ngIf="!isProgressiveTest">
       <strong>Total Assigned:</strong> {{getTotalAssignedCount()}} Questions
       <span class="stats-breakdown">
         (L1: <b>{{getLevelCount(1)}}</b>, L2: <b>{{getLevelCount(2)}}</b>, L3: <b>{{getLevelCount(3)}}</b>, L4: <b>{{getLevelCount(4)}}</b>, L5: <b>{{getLevelCount(5)}}</b>)
       </span>
     </div>
+    <div class="footer-stats" *ngIf="isProgressiveTest">
+      <strong>Total Selected:</strong> {{getSelectedCount()}} Questions
+    </div>
     <div class="footer-btn">
       <ion-button class="save-footer-btn" color="success" (click)="save()">
         <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
-        Save 5-Level Structure
+        <span *ngIf="!isProgressiveTest">Save 5-Level Structure</span>
+        <span *ngIf="isProgressiveTest">Save Questions</span>
       </ion-button>
     </div>
   </div>
