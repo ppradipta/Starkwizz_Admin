@@ -65,76 +65,242 @@ export class AddEventsComponent implements OnInit {
       this.eventsService.getEventData().subscribe(event => {
         this.eventDetails = event;
         if (null != event) {
-          let indexapt = this.applicableTypes.findIndex(at => at.id === event.applicableType);
-          if (indexapt == -1) {
-            this.applicableTypes.push({
-              id: event.applicableType,
-              displayName: event.applicableType
-            });
-          }
-          let indexqp = this.questionPatterns.findIndex(at => at.id === event.questionPattern);
-          if (indexqp == -1) {
-            this.questionPatterns.push({
-              id: event.questionPattern,
-              displayName: event.questionPattern
-            });
-          }
-          let indexet = this.eventTypes.findIndex(at => at.id === event.typeId);
-          if (indexet == -1) {
-            this.eventTypes.push({
-              id: event.typeId,
-              displayName: event.type
-            });
-          }
-          let indexcid = this.categories.findIndex(at => at.id === event.categoryId);
-          if (indexcid == -1) {
-            this.categories.push({
-              id: event.categoryId,
-              displayName: event.category
-            });
-          }
-          let indexecid = this.eventCategories.findIndex(at => at.id === event.eventCategoryId);
-          if (indexecid == -1) {
-            this.eventCategories.push({
-              id: event.eventCategoryId,
-              displayName: event.eventCategory
-            });
-          }
+          this.populateDropdowns(event);
+        }
+      });
+    } else {
+      const prevEvent = this.eventsService.getLastCreatedEvent(this.quizType);
+      if (prevEvent) {
+        this.eventDetails = Object.assign(new Events(), prevEvent);
+        this.eventDetails.id = null;
+        this.eventDetails.eventCode = null;
+        this.populateDropdowns(this.eventDetails);
+      } else {
+        this.fetchLastEventFromFirestore();
+      }
+    }
+  }
 
-          // this.boardDetails.findIndex(at => at.id === event.boardId);
-          // if (indexboard == -1) {
-          //   this.boardDetails.push({
-          //     id: event.boardId,
-          //     displayName: event.boardName
-          //   });
-          // }
-
-          let indexclass = this.classDetails.findIndex(at => at.id === event.classId);
-          if (indexclass == -1) {
-            this.classDetails.push({
-              id: event.classId,
-              displayName: event.className
-            })
-          }
-          let indexsubjectid = this.subjectDetails.findIndex(at => at.id === event.subjectId);
-          if (indexsubjectid == -1) {
-            this.subjectDetails.push({
-              id: event.subjectId,
-              displayName: event.subjectName
-            })
-          }
-          let indexmoduleid = this.moduleDetails.findIndex(at => at.id === event.moduleId);
-          if (indexmoduleid == -1) {
-            this.moduleDetails.push({
-              id: event.moduleId,
-              displayName: event.moduleName
-            })
+  fetchLastEventFromFirestore() {
+    if (this.quizType == 'QUIZWHIZZ') {
+      this.firestore.collection(FirebaseCollection.EVENTS, ref => ref
+        .orderBy('creationDateUnix', 'desc')
+        .limit(10)
+      ).get().subscribe((snapshot: any) => {
+        if (snapshot && !snapshot.empty) {
+          let docs = [];
+          snapshot.forEach((d: any) => docs.push(d.data()));
+          let match = docs.find((d: any) => d.typeId == 'quizwhizzexam' || d.typeId == 'quizwhizz2exam') || docs[0];
+          if (match) {
+            this.eventDetails = Object.assign(new Events(), match);
+            this.eventDetails.id = null;
+            this.eventDetails.eventCode = null;
+            this.populateDropdowns(this.eventDetails);
+            this.eventsService.setLastCreatedEvent(this.eventDetails, this.quizType);
           }
         }
-
+      });
+    } else {
+      this.firestore.collection(FirebaseCollection.EVENTS, ref => ref
+        .where('type', '==', 'EVENT')
+        .orderBy('creationDateUnix', 'desc')
+        .limit(1)
+      ).get().subscribe((snapshot: any) => {
+        if (snapshot && !snapshot.empty) {
+          let lastDoc = snapshot.docs[0].data();
+          this.eventDetails = Object.assign(new Events(), lastDoc);
+          this.eventDetails.id = null;
+          this.eventDetails.eventCode = null;
+          this.populateDropdowns(this.eventDetails);
+          this.eventsService.setLastCreatedEvent(this.eventDetails, this.quizType);
+        }
+      }, (error) => {
+        this.firestore.collection(FirebaseCollection.EVENTS, ref => ref
+          .orderBy('creationDateUnix', 'desc')
+          .limit(5)
+        ).get().subscribe((snapshot: any) => {
+          if (snapshot && !snapshot.empty) {
+            let docs = [];
+            snapshot.forEach((d: any) => docs.push(d.data()));
+            let match = docs.find((d: any) => d.type == 'EVENT') || docs[0];
+            if (match) {
+              this.eventDetails = Object.assign(new Events(), match);
+              this.eventDetails.id = null;
+              this.eventDetails.eventCode = null;
+              this.populateDropdowns(this.eventDetails);
+              this.eventsService.setLastCreatedEvent(this.eventDetails, this.quizType);
+            }
+          }
+        });
       });
     }
+  }
 
+  populateDropdowns(event: any) {
+    if (null != event) {
+      if (event.applicableType) {
+        let indexapt = this.applicableTypes.findIndex(at => at.id === event.applicableType);
+        if (indexapt == -1) {
+          this.applicableTypes.push({
+            id: event.applicableType,
+            displayName: event.applicableType
+          });
+        }
+      }
+      if (event.questionPattern) {
+        let indexqp = this.questionPatterns.findIndex(at => at.id === event.questionPattern);
+        if (indexqp == -1) {
+          this.questionPatterns.push({
+            id: event.questionPattern,
+            displayName: event.questionPattern
+          });
+        }
+      }
+      if (event.typeId) {
+        let indexet = this.eventTypes.findIndex(at => at.id === event.typeId);
+        if (indexet == -1) {
+          this.eventTypes.push({
+            id: event.typeId,
+            displayName: event.type || event.typeId
+          });
+        }
+      }
+      if (event.categoryId) {
+        let indexcid = this.categories.findIndex(at => at.id === event.categoryId);
+        if (indexcid == -1) {
+          this.categories.push({
+            id: event.categoryId,
+            displayName: event.category || event.categoryId
+          });
+        }
+      }
+      if (event.eventCategoryId) {
+        let indexecid = this.eventCategories.findIndex(at => at.id === event.eventCategoryId);
+        if (indexecid == -1) {
+          this.eventCategories.push({
+            id: event.eventCategoryId,
+            displayName: event.eventCategory || event.eventCategoryId
+          });
+        }
+      }
+
+      if (event.boardId && event.boardName) {
+        let indexboard = this.boardDetails.findIndex(at => at.id === event.boardId);
+        if (indexboard == -1) {
+          this.boardDetails.push({
+            id: event.boardId,
+            displayName: event.boardName,
+            name: event.boardName
+          });
+        }
+      }
+
+      if (event.classId) {
+        let indexclass = this.classDetails.findIndex(at => at.id === event.classId);
+        if (indexclass == -1) {
+          this.classDetails.push({
+            id: event.classId,
+            displayName: event.className || event.classId,
+            name: event.className || event.classId
+          });
+        }
+      }
+      if (event.subjectId) {
+        let indexsubjectid = this.subjectDetails.findIndex(at => at.id === event.subjectId);
+        if (indexsubjectid == -1) {
+          this.subjectDetails.push({
+            id: event.subjectId,
+            displayName: event.subjectName || event.subjectId
+          });
+        }
+      }
+      if (event.moduleId) {
+        let indexmoduleid = this.moduleDetails.findIndex(at => at.id === event.moduleId);
+        if (indexmoduleid == -1) {
+          this.moduleDetails.push({
+            id: event.moduleId,
+            displayName: event.moduleName || event.moduleId
+          });
+        }
+      }
+
+      if (event.stateId) {
+        let indexst = this.stateList.findIndex(st => st.id === event.stateId);
+        if (indexst == -1) {
+          this.stateList.push({
+            id: event.stateId,
+            displayName: event.stateName || event.stateId
+          });
+        }
+      }
+      if (event.districtId) {
+        let indexdt = this.districts.findIndex(dt => dt.id === event.districtId);
+        if (indexdt == -1) {
+          this.districts.push({
+            id: event.districtId,
+            displayName: event.districtName || event.districtId
+          });
+        }
+      }
+      if (event.cityId) {
+        let indexct = this.cities.findIndex(ct => ct.id === event.cityId);
+        if (indexct == -1) {
+          this.cities.push({
+            id: event.cityId,
+            displayName: event.cityName || event.cityId
+          });
+        }
+      }
+      if (event.schoolId) {
+        let indexsc = this.schools.findIndex(sc => sc.id === event.schoolId);
+        if (indexsc == -1) {
+          this.schools.push({
+            id: event.schoolId,
+            displayName: event.schoolName || event.schoolId
+          });
+        }
+      }
+
+      // Pre-fetch related dropdown lists if parent values exist
+      if (event.boardId) {
+        this.firestore.collection("classes", ref => ref.where("boardId", "==", event.boardId)).get().subscribe(data => {
+          let arr = [];
+          data.forEach((res: any) => {
+            arr.push(res.data());
+          });
+          if (arr.length > 0) {
+            this.classDetails = arr.sort((a, b) => (a.displayName > b.displayName) ? 1 : -1);
+          }
+        });
+      }
+
+      if (event.classId && event.eventCategory) {
+        this.firestore.collection("subjects", ref => ref
+          .where("classId", "==", event.classId)
+          .where("category", "==", event.eventCategory))
+          .get().subscribe(data => {
+            let arr = [];
+            data.forEach((res: any) => {
+              arr.push(res.data());
+            });
+            if (arr.length > 0) {
+              this.subjectDetails = arr;
+            }
+          });
+      }
+
+      if (event.subjectId) {
+        this.firestore.collection("modules", ref => ref.where("subjectId", "==", event.subjectId)).get().subscribe(data => {
+          let arr = [];
+          data.forEach((res: any) => {
+            arr.push(res.data());
+          });
+          if (arr.length > 0) {
+            this.moduleDetails = arr;
+          }
+        });
+      }
+    }
   }
 
   close() {
@@ -293,11 +459,20 @@ export class AddEventsComponent implements OnInit {
         }
       }
 
+      if (this.actionType !== 'EDIT') {
+        this.eventDetails.id = null;
+        this.eventDetails.eventCode = null;
+      }
+
       let eventData = this.eventsService.populateEventDetailsToCollection(this.eventDetails);
       eventData.status = 'NOQUESTION';
       this.eventsService.setEventDetailsToCollecton(eventData).then((data) => {
         this.presentToast("Event Details saved Successfully !!!");
       });
+
+      if (this.actionType !== 'EDIT') {
+        this.eventsService.setLastCreatedEvent(this.eventDetails, this.quizType);
+      }
     }
 
     this.close();
