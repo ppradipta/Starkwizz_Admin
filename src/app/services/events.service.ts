@@ -87,6 +87,51 @@ export class EventsService {
         return this.event.asObservable();
     }
 
+    private lastCreatedEvent: { [key: string]: any } = {};
+
+    setLastCreatedEvent(event: any, type: string = 'EVENT') {
+        const key = type || 'EVENT';
+        if (event) {
+            const copy = JSON.parse(JSON.stringify(event));
+            copy.id = null;
+            copy.eventCode = null;
+            this.lastCreatedEvent[key] = copy;
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('lastCreatedEvent_' + key, JSON.stringify(copy));
+                }
+            } catch (e) {
+                console.error('Error saving to localStorage', e);
+            }
+        } else {
+            delete this.lastCreatedEvent[key];
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem('lastCreatedEvent_' + key);
+                }
+            } catch (e) {
+                console.error('Error removing from localStorage', e);
+            }
+        }
+    }
+
+    getLastCreatedEvent(type: string = 'EVENT') {
+        const key = type || 'EVENT';
+        if (!this.lastCreatedEvent[key]) {
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    const stored = localStorage.getItem('lastCreatedEvent_' + key);
+                    if (stored) {
+                        this.lastCreatedEvent[key] = JSON.parse(stored);
+                    }
+                }
+            } catch (e) {
+                console.error('Error reading from localStorage', e);
+            }
+        }
+        return this.lastCreatedEvent[key] ? JSON.parse(JSON.stringify(this.lastCreatedEvent[key])) : null;
+    }
+
     setIsGenerateQuestionSequence(isGenerate: boolean) {
         this.isGenerate.next(isGenerate);
     }
